@@ -1,0 +1,22 @@
+<!-- customer.component.html -->
+
+
+<router-outlet><h2>Customer List</h2>
+  <!-- src/app/customers/customers.component.html -->
+  <div class="container">
+    <h2>Customers</h2>
+    <ul *ngIf="customers.length > 0; else noData">
+      <li *ngFor="let c of customers">
+        <strong>ID:</strong> {{ c.customer_id }},
+        <strong>Name:</strong> {{ c.first_name }} {{ c.last_name || '' }},
+        <strong>Email:</strong> {{ c.email || 'N/A' }},
+        <strong>Country:</strong> {{ c.country || 'N/A' }}
+      </li>
+    </ul>
+    <ng-template #noData>
+      <p>No customers to display.</p>
+    </ng-template>
+  </div>
+
+</router-outlet>
+
