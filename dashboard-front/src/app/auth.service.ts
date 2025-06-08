@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {API_BASE_URL} from '../api.config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey = 'acess_token';
+  private tokenKey = 'access_token';
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string){
-    return this.http.post<any>('http://localhost:8080/api/token/',{
+    return this.http.post<any>(`${API_BASE_URL}/token/`,{
       username,
       password
     });

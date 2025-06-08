@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+/* Museo Sans 100 */
+@font-face {
+  font-family: 'Museo Sans';
+  src: url('/fonts/museo-sans/MuseoSans-100.woff2') format('woff2'),
+  url('/fonts/museo-sans/MuseoSans-100.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Museo Sans 300 */
+@font-face {
+  font-family: 'Museo Sans';
+  src: url('/fonts/museo-sans/MuseoSans-300.woff2') format('woff2'),
+  url('/fonts/museo-sans/MuseoSans-300.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Museo Sans 700 */
+@font-face {
+  font-family: 'Museo Sans';
+  src: url('/fonts/museo-sans/MuseoSans-700.woff2') format('woff2'),
+  url('/fonts/museo-sans/MuseoSans-700.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Univers LT Std Ultra Condensed */
+@font-face {
+  font-family: 'Univers LT Std';
+  src: url('/fonts/univers/UniversLTStd-UltraCn.woff2') format('woff2'),
+  url('/fonts/univers/UniversLTStd-UltraCn.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

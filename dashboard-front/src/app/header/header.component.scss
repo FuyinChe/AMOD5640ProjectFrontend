@@ -1,0 +1,387 @@
+/* app-header.component.css - BEM Methodology */
+
+/* Block: header */
+.header {
+  display: flex;
+  color: #fff;
+  background-color: #154734; /* Dark green inferred from the image */
+  background-image: url('/images/farm.jpg');
+  background-position: bottom; /* <-- Add this line */
+  background-repeat: no-repeat; /* <-- Add this to prevent tiling if image is smaller */
+  background-size: cover; /* <-- Add this if you want it to cover the entire area */
+  width: 100%;
+  height:35rem;
+  flex-direction: column;
+  justify-content: space-between;
+  //position: fixed; /* Make the header fixed at the top */
+  top: 0; /* Align to the top of the viewport */
+  left: 0; /* Align to the left of the viewport */
+  z-index: 1000; /* Ensure the header stays on top of other content */
+  /*
+    IMPORTANT: When using position: fixed, other page content will flow underneath the header.
+    You will need to add padding-top to your main page content (e.g., the <body> or a
+    wrapper div for your main content) equal to the header's height to prevent content
+    from being obscured.
+    Approximate header height is around 150px (this might vary based on screen size due to responsiveness).
+    Example: body { padding-top: 150px; }
+  */
+
+  &__top-bar {
+    display: flex;
+    background-color: #154734;
+    width: 100%;
+    opacity: 0.8;
+    flex-direction: row;
+    justify-content:space-around;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.2rem;
+
+
+  }
+
+  &__logo-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 1.5rem;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+  /* Element: header__logo-container */
+  &__logo-container {
+    display: flex;
+    align-items: center;
+    max-height: 90%;
+    padding: 0.5rem 1.5rem;
+
+    img {
+        max-height:5rem;
+        max-width: 100%;
+        height: auto ;
+        width: auto;
+      }
+  }
+
+
+  &__top-nav-item {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    //padding: 0 0;
+    align-items: center ;
+    transition: color 0.3s ease;
+  }
+
+  &__menuSearch {
+    display: flex;
+    width: 100% ;
+    flex-direction:column;
+    justify-content: flex-end;
+    vertical-align: middle;
+    gap: 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  /* Element: header__top-nav */
+  &__top-nav {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+  &__top-nav-item:hover {
+    color: #a0a0a0;
+    text-decoration: underline;
+  }
+
+  /* Modifier: header__top-nav-item--mytrent */
+  &__top-nav-item--mytrent {
+    font-weight: bold;
+  }
+
+
+  /* Element: header__search-menu-container */
+  &__search-menu-container {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85rem;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+
+  /* Element: header__search */
+  &__search {
+    display: flex;
+    background-color: #fff;
+    //border-radius: 20px;
+    overflow: hidden;
+    height: 35px;
+  }
+
+  /* Element: header__search-input */
+  &__search-input {
+    border: none;
+    padding: 0 15px;
+    font-size: 0.9rem;
+    outline: none;
+    flex-grow: 1;
+    color: #333;
+  }
+
+  /* Element: header__search-button */
+  &__search-button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+  }
+
+  &__search-button:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* Element: header__search-icon */
+  &__search-icon {
+    width: 20px;
+    height: 20px;
+    color: #333;
+  }
+
+
+  /* Element: header__bottom-nav-title */
+  &__bottom-nav-title {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    white-space: nowrap; /* Prevent title from breaking */
+    margin-right: 20px; /* Space between title and nav items */
+  }
+
+  &__bottom-nav-title:hover{
+    color: #fff;
+    text-decoration:underline;
+  }
+
+
+}
+
+
+
+
+
+/* Element: header__main-row */
+.header__main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background-color: #006b3e; /* Slightly lighter green for the main row */
+}
+
+
+
+
+
+
+
+
+
+/* Element: header__menu-button */
+.header__menu-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #004d26;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.header__menu-button:hover {
+  background-color: #003a1f;
+}
+
+/* Element: header__menu-text */
+.header__menu-text {
+  margin-right: 5px; /* Spacing between text and icon */
+}
+
+/* Element: header__menu-icon-lines */
+.header__menu-icon-lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 15px;
+  width: 20px;
+}
+
+/* Element: header__menu-icon-line */
+.header__menu-icon-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 1px;
+}
+
+/* Element: header__bottom-bar */
+.header__bottom-bar {
+  background-color: #004d26; /* Dark green for the bottom bar */
+  padding-top: 1rem;
+  box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
+}
+
+/* Element: header__bottom-nav */
+.header__bottom-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  gap: 20px; /* Gap between main title and nav list */
+}
+
+
+
+/* Element: header__bottom-nav-list */
+.header__bottom-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap */
+
+}
+
+/* Element: header__bottom-nav-item */
+.header__bottom-nav-item {
+  position: relative;
+  transition: background-color 0.3s ease;
+
+}
+
+/* Modifier: header__bottom-nav-item--active */
+.header__bottom-nav-item--active {
+  background-color: white;
+  a{
+    color: #154734;
+  }
+}
+
+.header__bottom-nav-item--active .header__bottom-nav-link {
+  font-weight: bold;
+}
+
+
+/* Element: header__bottom-nav-link */
+.header__bottom-nav-link {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  display: block; /* Make the whole area clickable */
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.header__bottom-nav-link:hover {
+  background-color: #B15533;;
+
+}
+
+/* Basic Responsiveness */
+@media (max-width: 768px) {
+  .header__top-bar {
+    justify-content: center;
+    padding: 8px 10px;
+  }
+
+  .header__top-nav {
+    font-size: 0.75rem;
+    gap: 10px;
+  }
+
+  .header__main-row {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .header__search-menu-container {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .header__search {
+    flex-grow: 1;
+    max-width: 250px;
+  }
+
+  .header__menu-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .header__bottom-bar {
+    padding: 10px;
+  }
+
+  .header__bottom-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header__bottom-nav-title {
+    margin-right: 0;
+    text-align: center;
+    margin-bottom: 10px; /* Space below title */
+  }
+
+  .header__bottom-nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .header__bottom-nav-item {
+    width: 90%;
+    text-align: center;
+  }
+
+  .header__bottom-nav-link {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__top-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .header__search {
+    width: 100%;
+  }
+}
