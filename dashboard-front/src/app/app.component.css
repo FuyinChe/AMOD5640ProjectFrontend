@@ -1,0 +1,67 @@
+/* Trent University Typography */
+:root {
+  --font-primary: 'Museo Sans', Arial, sans-serif;
+  --font-heading: 'Univers LT Std', 'Museo Sans', Arial, sans-serif;
+  --font-weight-light: 100;
+  --font-weight-normal: 300;
+  --font-weight-bold: 700;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.6;
+}
+
+/* Headings following Trent style */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Specific classes based on the typography guide */
+.museo-100 {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-light);
+}
+
+.museo-300 {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-normal);
+}
+
+.museo-700 {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.univers-condensed {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* Trent University specific styles */
+.trent-logo {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.campaign-title {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.body-copy {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-normal);
+}
+
+.emphasis {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+}
