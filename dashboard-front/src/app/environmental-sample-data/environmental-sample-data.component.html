@@ -1,0 +1,59 @@
+<!--<router-outlet><h2>Environmental Sample Data</h2>-->
+<!--  &lt;!&ndash; src/app/customers/customers.component.html &ndash;&gt;-->
+<!--  <div class="container">-->
+<!--    <h2>Environmental Sample Data</h2>-->
+<!--    <ul *ngIf="environmentalSampleData.length > 0; else noData">-->
+<!--      <li *ngFor="let e of environmentalSampleData">-->
+<!--        <strong>ID:</strong> {{ e.id }},-->
+<!--        <strong>TimeStamp:</strong> {{ e.Timestamp }} ,-->
+<!--        <strong>AirTemp:</strong> {{ e.AirTemperature_degC || 'N/A' }},-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--    <ng-template #noData>-->
+<!--      <p>No environmental data to display.</p>-->
+<!--    </ng-template>-->
+<!--  </div>-->
+
+<!--</router-outlet>-->
+<router-outlet>
+<!-- environmental-sample-data.component.html -->
+<div class="container mx-auto p-4 bg-white shadow-lg rounded-lg">
+  <h2 class="text-3xl font-extrabold mb-6 text-gray-800 text-center">Environmental Sample Data</h2>
+
+  <div *ngIf="environmentalSampleData.length > 0; else noData" class="overflow-x-auto rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+      <tr>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">ID</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Timestamp</th>
+        <!-- Updated unit for Air Temp -->
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Air Temp (&deg;C)</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rel. Humidity (%)</th>
+        <!-- Updated unit for Shortwave Radiation -->
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Shortwave Rad. (W/m&sup2;)</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rainfall (mm)</th>
+        <!-- Updated unit for Soil Temp 5cm -->
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Soil Temp 5cm (&deg;C)</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">Wind Speed (m/s)</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let e of environmentalSampleData" class="hover:bg-blue-50 transition-colors duration-200 ease-in-out">
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ e.id }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.Timestamp }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.AirTemperature_degC !== null ? (e.AirTemperature_degC | number:'1.2-2') : 'N/A' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.RelativeHumidity_Pct !== null ? (e.RelativeHumidity_Pct | number:'1.2-2') : 'N/A' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.ShortwaveRadiation_Wm2 !== null ? (e.ShortwaveRadiation_Wm2 | number:'1.2-2') : 'N/A' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.Rainfall_mm !== null ? (e.Rainfall_mm | number:'1.2-2') : 'N/A' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.SoilTemperature_5cm_degC !== null ? (e.SoilTemperature_5cm_degC | number:'1.2-2') : 'N/A' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ e.WindSpeed_ms !== null ? (e.WindSpeed_ms | number:'1.2-2') : 'N/A' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-center text-gray-600 text-lg py-8">No environmental data to display.</p>
+  </ng-template>
+</div>
+</router-outlet>

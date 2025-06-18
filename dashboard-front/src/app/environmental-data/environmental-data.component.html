@@ -1,0 +1,18 @@
+<router-outlet><h2>Environmental Data</h2>
+  <!-- src/app/customers/customers.component.html -->
+  <div class="container">
+    <h2>Environmental Data</h2>
+    <ul *ngIf="environmentalData.length > 0; else noData">
+      <li *ngFor="let e of environmentalData">
+        <strong>ID:</strong> {{ e.id }},
+        <strong>TimeStamp:</strong> {{ e.Timestamp }} ,
+        <strong>AirTemp:</strong> {{ e.AirTemperature_degC || 'N/A' }},
+      </li>
+    </ul>
+    <ng-template #noData>
+      <p>No environmental data to display.</p>
+    </ng-template>
+  </div>
+
+</router-outlet>
+
