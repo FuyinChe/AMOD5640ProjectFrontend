@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environments';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {EnvironmentalRecord} from '../interfaces/environmental-record';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class EnvironmentalDataService {
 
   constructor(private http:HttpClient) { }
 
-  getEnvironmentalData():Observable<any>{
-
-    return this.http.get(this.apiUrl);}
+  getEnvironmentalData(): Observable<EnvironmentalRecord[]> {
+    return this.http.get<EnvironmentalRecord[]>(this.apiUrl);
+  }
 
 }
