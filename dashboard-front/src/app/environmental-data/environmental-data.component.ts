@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {EnvironmentalDataService} from '../environmental-data.service';
+import {EnvironmentalDataService} from '../services/environmental-data.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 
