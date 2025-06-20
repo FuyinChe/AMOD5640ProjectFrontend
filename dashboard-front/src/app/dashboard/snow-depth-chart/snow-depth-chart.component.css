@@ -1,0 +1,24 @@
+/* === Snow Depth Chart Styling === */
+.snow-depth-chart {
+  background: linear-gradient(145deg, #f0f4f8, #ffffff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 1rem;
+  max-width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.snow-depth-chart:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.snow-depth-chart__canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}

@@ -1,0 +1,50 @@
+/* === Dashboard Layout Styling === */
+.dashboard {
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.dashboard__filter {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard__filter label {
+  font-weight: 500;
+  color: #333;
+}
+
+.dashboard__filter input[type='date'] {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.dashboard__filter button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard__filter button:hover {
+  background-color: #0056b3;
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}

@@ -1,2 +1,26 @@
-<app-sample-chart>
-</app-sample-chart>
+<!--<app-sample-chart>-->
+<!--</app-sample-chart>-->
+
+<div class="dashboard">
+  <!-- Date Range Slicer -->
+  <div class="dashboard__filter">
+    <label>
+      From:
+      <input type="date" [(ngModel)]="dateRange.start">
+    </label>
+    <label>
+      To:
+      <input type="date" [(ngModel)]="dateRange.end">
+    </label>
+    <button (click)="applyDateFilter()">Apply</button>
+  </div>
+
+  <!-- Subcomponents -->
+  <div class="dashboard__charts">
+    <app-snow-depth-chart [envData]="filteredData"></app-snow-depth-chart>
+    <!-- Add other chart components here -->
+
+    <app-humidity-chart [envData]="filteredData"></app-humidity-chart>
+
+  </div>
+</div>
