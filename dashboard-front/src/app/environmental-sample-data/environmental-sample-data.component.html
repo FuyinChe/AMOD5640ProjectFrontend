@@ -1,6 +1,10 @@
 <router-outlet>
   <div class="sample-data">
     <h2 class="sample-data__title">Environmental Sample Data</h2>
+    <div class="sample-data__buttons">
+      <button (click)="downloadAsCSV()" class="sample-data__button sample-data__button--csv">Download CSV</button>
+      <button (click)="downloadAsExcel()" class="sample-data__button sample-data__button--excel">Download Excel</button>
+    </div>
 
     <div *ngIf="environmentalSampleData.length > 0; else noData" class="sample-data__table-container">
       <table class="sample-data__table">
@@ -29,10 +33,6 @@
       </table>
     </div>
 
-    <div class="sample-data__buttons">
-      <button (click)="downloadAsCSV()" class="sample-data__button sample-data__button--csv">Download CSV</button>
-      <button (click)="downloadAsExcel()" class="sample-data__button sample-data__button--excel">Download Excel</button>
-    </div>
 
     <ng-template #noData>
       <p class="sample-data__no-data">No environmental data to display.</p>
