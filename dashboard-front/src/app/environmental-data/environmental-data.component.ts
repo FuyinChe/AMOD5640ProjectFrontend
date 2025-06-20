@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {EnvironmentalDataService} from '../environmental-data.service';
+import {EnvironmentalDataService} from '../services/environmental-data.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
-
+import {EnvironmentalRecord} from '../interfaces/environmental-record';
 
 @Component({
   selector: 'app-environmental-data',
@@ -15,7 +15,7 @@ import {RouterOutlet} from '@angular/router';
   styleUrl: './environmental-data.component.css'
 })
 export class EnvironmentalDataComponent implements OnInit {
-  environmentalData:any [] = [];
+  environmentalData:EnvironmentalRecord [] = [];
   constructor(private environmentalDataService:EnvironmentalDataService){}
 
   ngOnInit() {
