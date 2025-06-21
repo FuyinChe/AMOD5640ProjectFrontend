@@ -6,13 +6,17 @@ import {EnvironmentalDataService} from '../../services/environmental-data.servic
 import {EnvironmentalRecord} from '../../interfaces/environmental-record';
 import {EnvironmentalSampleDataService} from '../../services/environmental-sample-data.service';
 import {HumidityChartComponent} from '../humidity-chart/humidity-chart.component';
+import {RainfallChartComponent} from '../rainfall-chart/rainfall-chart.component';
+import {SoilTemp5cmChartComponent} from '../soil-temp5cm-chart/soil-temp5cm-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     SnowDepthChartComponent,
     FormsModule,
-    HumidityChartComponent
+    HumidityChartComponent,
+    RainfallChartComponent,
+    SoilTemp5cmChartComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

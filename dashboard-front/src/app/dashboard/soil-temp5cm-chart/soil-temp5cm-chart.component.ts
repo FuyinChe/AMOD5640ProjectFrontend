@@ -5,13 +5,13 @@ import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
-  selector: 'app-humidity-chart',
-  templateUrl: './humidity-chart.component.html',
+  selector: 'app-soil-temp5cm-chart',
+  templateUrl: './soil-temp5cm-chart.component.html',
   standalone: true,
   imports: [BaseChartDirective],
-  styleUrls: ['./humidity-chart.component.css']
+  styleUrls: ['./soil-temp5cm-chart.component.css']
 })
-export class HumidityChartComponent implements OnChanges {
+export class SoilTemp5cmChartComponent implements OnChanges {
   @Input() envData: EnvironmentalRecord[] = [];
 
   chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
@@ -22,7 +22,7 @@ export class HumidityChartComponent implements OnChanges {
     plugins: {
       title: {
         display: true,
-        text: 'Relative Humidity (%) Over Time'
+        text: 'Soil Temperature (5cm) °C Over Time'
       },
       legend: { display: false }
     },
@@ -40,14 +40,12 @@ export class HumidityChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Time'
-        },
-        min: undefined,
-        max: undefined
+        }
       },
       y: {
         title: {
           display: true,
-          text: 'Humidity (%)'
+          text: 'Soil Temp (°C)'
         }
       }
     }
@@ -56,41 +54,32 @@ export class HumidityChartComponent implements OnChanges {
   ngOnChanges(): void {
     const pad = (n: number) => n.toString().padStart(2, '0');
 
-    const humidityPoints = this.envData
-      .filter(d => d.RelativeHumidity_Pct !== null)
+    const tempPoints = this.envData
+      .filter(d => d.SoilTemperature_5cm_degC !== null)
       .map(d => {
         const dateStr = `${d.Year}-${pad(d.Month)}-${pad(d.Day)}T${d.Time}`;
         const date = new Date(dateStr);
-
-        if (isNaN(date.getTime())) {
-          console.warn('Invalid date:', dateStr);
-        }
-
         return {
           x: date,
-          y: d.RelativeHumidity_Pct as number
+          y: d.SoilTemperature_5cm_degC as number
         };
       })
       .sort((a, b) => a.x.getTime() - b.x.getTime());
 
     this.chartData = [
       {
-        data: humidityPoints,
-        label: 'Relative Humidity (%)',
-        borderColor: '#28a745',
-        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+        data: tempPoints,
+        label: 'Soil Temp (5cm)',
+        borderColor: '#fd7e14',
+        backgroundColor: 'rgba(253, 126, 20, 0.1)',
         tension: 0.3
       }
     ];
 
-    if (humidityPoints.length > 0) {
-      const firstDate = humidityPoints[0].x;
-      const year = firstDate.getFullYear();
-      const month = firstDate.getMonth(); // 0-based
-      const day = firstDate.getDate();
-
-      const minTime = new Date(year, month, day, 0, 0, 0).getTime();
-      const maxTime = new Date(year, month, day + 1, 0, 0, 0).getTime();
+    if (tempPoints.length > 0) {
+      const firstDate = tempPoints[0].x;
+      const minTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate(), 0).getTime();
+      const maxTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + 1, 0).getTime();
 
       this.chartOptions = {
         ...this.chartOptions,

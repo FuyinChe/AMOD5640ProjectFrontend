@@ -56,12 +56,25 @@ export class SnowDepthChartComponent implements OnChanges {
   chartLabels: string[] = [];
 
   ngOnChanges(): void {
+    console.log('envData:', this.envData);
+    // const snowPoints = this.envData
+    //   .filter(d => d.SnowDepth_cm !== null && d.SnowDepth_cm > -100)
+    //   .map(d => ({
+    //     x: new Date(`${d.Year}-${d.Month}-${d.Day}T${d.Time}`),
+    //     y: d.SnowDepth_cm as number
+    //   }))
+    //   .sort((a, b) => a.x.getTime() - b.x.getTime());
+
     const snowPoints = this.envData
       .filter(d => d.SnowDepth_cm !== null && d.SnowDepth_cm > -100)
-      .map(d => ({
-        x: new Date(`${d.Year}-${d.Month}-${d.Day}T${d.Time}`),
-        y: d.SnowDepth_cm as number
-      }))
+      .map(d => {
+        const dateStr = `${d.Year}-${String(d.Month).padStart(2, '0')}-${String(d.Day).padStart(2, '0')}T${d.Time}`;
+        const x = new Date(dateStr);
+        if (isNaN(x.getTime())) {
+          console.warn('Invalid date:', dateStr);
+        }
+        return { x, y: d.SnowDepth_cm as number };
+      })
       .sort((a, b) => a.x.getTime() - b.x.getTime());
 
     this.chartData = [
