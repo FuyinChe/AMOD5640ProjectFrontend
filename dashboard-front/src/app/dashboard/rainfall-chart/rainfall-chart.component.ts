@@ -5,13 +5,13 @@ import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
-  selector: 'app-humidity-chart',
-  templateUrl: './humidity-chart.component.html',
+  selector: 'app-rainfall-chart',
+  templateUrl: './rainfall-chart.component.html',
   standalone: true,
   imports: [BaseChartDirective],
-  styleUrls: ['./humidity-chart.component.css']
+  styleUrls: ['./rainfall-chart.component.css']
 })
-export class HumidityChartComponent implements OnChanges {
+export class RainfallChartComponent implements OnChanges {
   @Input() envData: EnvironmentalRecord[] = [];
 
   chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
@@ -22,7 +22,7 @@ export class HumidityChartComponent implements OnChanges {
     plugins: {
       title: {
         display: true,
-        text: 'Relative Humidity (%) Over Time'
+        text: 'Rainfall (mm) Over Time'
       },
       legend: { display: false }
     },
@@ -40,14 +40,12 @@ export class HumidityChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Time'
-        },
-        min: undefined,
-        max: undefined
+        }
       },
       y: {
         title: {
           display: true,
-          text: 'Humidity (%)'
+          text: 'Rainfall (mm)'
         }
       }
     }
@@ -56,41 +54,32 @@ export class HumidityChartComponent implements OnChanges {
   ngOnChanges(): void {
     const pad = (n: number) => n.toString().padStart(2, '0');
 
-    const humidityPoints = this.envData
-      .filter(d => d.RelativeHumidity_Pct !== null)
+    const rainfallPoints = this.envData
+      .filter(d => d.Rainfall_mm !== null)
       .map(d => {
         const dateStr = `${d.Year}-${pad(d.Month)}-${pad(d.Day)}T${d.Time}`;
         const date = new Date(dateStr);
-
-        if (isNaN(date.getTime())) {
-          console.warn('Invalid date:', dateStr);
-        }
-
         return {
           x: date,
-          y: d.RelativeHumidity_Pct as number
+          y: d.Rainfall_mm as number
         };
       })
       .sort((a, b) => a.x.getTime() - b.x.getTime());
 
     this.chartData = [
       {
-        data: humidityPoints,
-        label: 'Relative Humidity (%)',
-        borderColor: '#28a745',
-        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+        data: rainfallPoints,
+        label: 'Rainfall (mm)',
+        borderColor: '#17a2b8',
+        backgroundColor: 'rgba(23, 162, 184, 0.1)',
         tension: 0.3
       }
     ];
 
-    if (humidityPoints.length > 0) {
-      const firstDate = humidityPoints[0].x;
-      const year = firstDate.getFullYear();
-      const month = firstDate.getMonth(); // 0-based
-      const day = firstDate.getDate();
-
-      const minTime = new Date(year, month, day, 0, 0, 0).getTime();
-      const maxTime = new Date(year, month, day + 1, 0, 0, 0).getTime();
+    if (rainfallPoints.length > 0) {
+      const firstDate = rainfallPoints[0].x;
+      const minTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate(), 0).getTime();
+      const maxTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + 1, 0).getTime();
 
       this.chartOptions = {
         ...this.chartOptions,
