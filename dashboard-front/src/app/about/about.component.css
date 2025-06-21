@@ -1,0 +1,95 @@
+.about {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about__title {
+  font-size: 2rem;
+  color: #154734; /* Trent green */
+  margin-bottom: 1rem;
+}
+
+.about__section-title {
+  font-size: 1.5rem;
+  color: #154734;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about__description {
+  margin-bottom: 1rem;
+}
+
+.about__team-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* or whatever spacing you want */
+}
+
+.about__team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.about__member {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.about__avatar {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%; /* makes the avatar circular */
+  border: none;
+}
+
+.about__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.about__name {
+  font-weight: bold;
+}
+
+.about__role {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.about__links {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.about__link {
+  color: #154734;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.about__link:hover {
+  color: #0e3c25;
+}
+
+.about__tech-list {
+  list-style: disc;
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+.about__tech-item {
+  margin-bottom: 0.5rem;
+}
