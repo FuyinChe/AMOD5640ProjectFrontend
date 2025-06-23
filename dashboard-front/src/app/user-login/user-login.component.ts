@@ -8,7 +8,8 @@ import {CommonModule} from '@angular/common';
   imports: [
     FormsModule,CommonModule
   ],
-  styleUrls: ['./user-login.component.css']
+  styleUrls: ['./user-login.component.css'],
+  standalone: true
 })
 export class UserLoginComponent {
   credentials = {
