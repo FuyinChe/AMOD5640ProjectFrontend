@@ -15,9 +15,12 @@
     max-width: 30%;
 
     .footer__logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      width: 100%;
+      //font-size: 1.5rem;
+      //font-weight: bold;
+      //width: 100%;
+      width: 20rem; /* ↓ Adjust this value */
+      height: auto; /* Maintain aspect ratio */
+      margin-bottom: 1rem;
 
       span {
         font-size: 1rem;
@@ -111,6 +114,36 @@
     a:hover {
       color: #00d4aa;
       text-decoration: underline;
+    }
+  }
+}
+
+
+@media (max-width: 768px) {
+  .footer {
+    &__container {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    &__left,
+    &__right {
+      max-width: 100%;
+    }
+
+    &__right-top {
+      flex-direction: column;
+    }
+
+    &__social {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    &__links {
+      flex-direction: column;
+      align-items: center;
     }
   }
 }
