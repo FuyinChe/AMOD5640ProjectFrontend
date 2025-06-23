@@ -9,17 +9,16 @@ import {DashboardComponent} from './dashboard/dashboard/dashboard.component';
 import {AboutComponent} from './about/about.component';
 
 export const routes: Routes = [
-  {path:'environmentalData', component:EnvironmentalDataComponent,},
-  {path:'environmentalSampleData', component:EnvironmentalSampleDataComponent,},
-  {path:'dashboard', component:DashboardComponent,},
-  {path:'about', component:AboutComponent,},
-
-  {path: '', redirectTo:'/environmentalSampleData', pathMatch:'full'},
-  {path:'register', component: UserRegistrationComponent},
-  {path:'login', component:UserLoginComponent},
-  {path: '**', redirectTo: 'login' }
-
+  { path: 'environmentalData', loadComponent: () => import('./environmental-data/environmental-data.component').then(m => m.EnvironmentalDataComponent) },
+  { path: 'environmentalSampleData', loadComponent: () => import('./environmental-sample-data/environmental-sample-data.component').then(m => m.EnvironmentalSampleDataComponent) },
+  { path: 'dashboard', loadComponent: () => import('./dashboard/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+  { path: 'about', loadComponent: () => import('./about/about.component').then(m => m.AboutComponent) },
+  { path: 'register', loadComponent: () => import('./user-registration/user-registration.component').then(m => m.UserRegistrationComponent) },
+  { path: 'login', loadComponent: () => import('./user-login/user-login.component').then(m => m.UserLoginComponent) },
+  { path: '', redirectTo: '/environmentalSampleData', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];
+
 
 
 @NgModule({

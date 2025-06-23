@@ -1,32 +1,39 @@
 import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
-import {API_BASE_URL} from '../../api.config';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-user-login',
-  imports: [
-    FormsModule
-  ],
   templateUrl: './user-login.component.html',
-  styleUrl: './user-login.component.css'
+  imports: [
+    FormsModule,CommonModule
+  ],
+  styleUrls: ['./user-login.component.css'],
+  standalone: true
 })
 export class UserLoginComponent {
   credentials = {
-    username: '',
+    email: '',
     password: ''
   };
 
-  constructor(private http: HttpClient) {}
-
   login() {
-    this.http.post(`${API_BASE_URL}/token/`, this.credentials)
-      .subscribe((response: any) => {
-        localStorage.setItem('access_token', response.access);
-        alert('Logged in successfully!');
-      }, error => {
-        alert('Login failed');
-        console.error(error);
-      });
+    const email = this.credentials.email.trim();
+
+    if (!email) {
+      alert('Please enter your email.');
+      return;
+    }
+
+    // Validate email ends with @trentu.ca
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@trentu\.ca$/;
+    if (!emailPattern.test(email)) {
+      alert('Please use a valid @trentu.ca email address.');
+      return;
+    }
+
+    console.log('Logging in with:', email, this.credentials.password);
+
+    // Add your login logic here, e.g., call API
   }
 }
