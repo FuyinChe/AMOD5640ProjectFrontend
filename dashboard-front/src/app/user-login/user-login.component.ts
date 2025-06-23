@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-user-login',
   templateUrl: './user-login.component.html',
   imports: [
-    FormsModule,CommonModule
+    FormsModule, CommonModule, RouterOutlet
   ],
   styleUrls: ['./user-login.component.css'],
   standalone: true
