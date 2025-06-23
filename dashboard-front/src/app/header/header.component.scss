@@ -172,6 +172,13 @@
     text-decoration:underline;
   }
 
+  &__bottom-nav-item--active {
+    background-color: white;
+    a{
+      color: #154734;
+    }
+  }
+
 
 }
 
@@ -278,12 +285,12 @@
 }
 
 /* Modifier: header__bottom-nav-item--active */
-.header__bottom-nav-item--active {
-  background-color: white;
-  a{
-    color: #154734;
-  }
-}
+//.header__bottom-nav-item--active {
+//  background-color: white;
+//  a{
+//    color: #154734;
+//  }
+//}
 
 .header__bottom-nav-item--active .header__bottom-nav-link {
   font-weight: bold;
