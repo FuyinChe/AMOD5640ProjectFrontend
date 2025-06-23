@@ -1,7 +1,37 @@
-<h2>User Registration</h2>
-<form (ngSubmit)="register()">
-  <input type="text" placeholder="Username" [(ngModel)]="user.username" name="username" required>
-  <input type="email" placeholder="Email" [(ngModel)]="user.email" name="email" required>
-  <input type="password" placeholder="Password" [(ngModel)]="user.password" name="password" required>
-  <button type="submit">Register</button>
-</form>
+<div class="login">
+  <h2 class="login__title">User Login</h2>
+
+  <form class="login__form" (ngSubmit)="login()" #form="ngForm">
+    <div class="login__email-group">
+      <input
+        class="login__input login__input--email-prefix"
+        type="text"
+        placeholder="Email ID"
+        [(ngModel)]="emailPrefix"
+        name="emailPrefix"
+        required
+        pattern="^[a-zA-Z0-9._%+-]+$"
+        #emailPrefixInput="ngModel"
+        autocomplete="off"
+      />
+      <span class="login__email-domain">&#64;trentu.ca</span>
+    </div>
+    <div *ngIf="emailPrefixInput.invalid && emailPrefixInput.touched" class="login__error">
+      Invalid email ID
+    </div>
+
+    <input
+      class="login__input"
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="credentials.password"
+      name="password"
+      required
+      autocomplete="current-password"
+    />
+
+    <button class="login__button" type="submit" [disabled]="form.invalid">
+      Login
+    </button>
+  </form>
+</div>
