@@ -19,7 +19,7 @@ import {SoilTemp5cmChartComponent} from '../soil-temp5cm-chart/soil-temp5cm-char
     SoilTemp5cmChartComponent
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
   rawData: EnvironmentalRecord[] = [];

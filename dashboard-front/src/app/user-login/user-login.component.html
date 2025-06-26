@@ -12,10 +12,10 @@
       required
       autocomplete="email"
       #emailInput="ngModel"
-      pattern="^[a-zA-Z0-9._%+-]+@trentu\.ca$"
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     />
     <div *ngIf="emailInput.invalid && emailInput.touched" class="login__error">
-      Please enter a valid &#64;trentu.ca email.
+      Please enter a valid email address.
     </div>
 
     <input

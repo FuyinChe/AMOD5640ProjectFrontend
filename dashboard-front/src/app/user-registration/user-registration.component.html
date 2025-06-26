@@ -3,31 +3,25 @@
 <div class="registration">
   <h2 class="registration__title">User Registration</h2>
 
+  <!-- Response Message Display -->
+  <div *ngIf="responseMessage" class="registration__response" [class.registration__response--success]="isSuccess" [class.registration__response--error]="!isSuccess">
+    {{ responseMessage }}
+  </div>
+
   <form class="registration__form" (ngSubmit)="register()" #form="ngForm">
     <input
       class="registration__input"
-      type="text"
-      placeholder="Username"
-      [(ngModel)]="user.username"
-      name="username"
+      type="email"
+      placeholder="Email Address"
+      [(ngModel)]="user.email"
+      name="email"
       required
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      #emailInput="ngModel"
+      [disabled]="showVerificationStep || isLoading"
     />
-
-    <div class="registration__email-group">
-      <input
-        class="registration__input registration__input--email-prefix"
-        type="text"
-        placeholder="Email ID"
-        [(ngModel)]="emailPrefix"
-        name="emailPrefix"
-        required
-        pattern="^[a-zA-Z0-9._%+-]+$"
-        #emailPrefixInput="ngModel"
-      />
-      <span class="registration__email-domain">&#64;trentu.ca</span>
-    </div>
-    <div *ngIf="emailPrefixInput.invalid && emailPrefixInput.touched" class="registration__error">
-      Invalid email ID
+    <div *ngIf="emailInput.invalid && emailInput.touched" class="registration__error">
+      Please enter a valid email address
     </div>
 
     <input
@@ -37,13 +31,50 @@
       [(ngModel)]="user.password"
       name="password"
       required
+      [disabled]="showVerificationStep || isLoading"
     />
-    <div class="registration__warning">
-      ⚠️ For security reason, please do NOT use your TrentU password for this registration.
+
+    <input
+      class="registration__input"
+      type="password"
+      placeholder="Confirm Password"
+      [(ngModel)]="retryPassword"
+      name="retryPassword"
+      required
+      (input)="checkPasswordsMatch()"
+      [disabled]="showVerificationStep || isLoading"
+    />
+    <div *ngIf="!passwordsMatch && retryPassword" class="registration__error">
+      Passwords do not match
     </div>
 
-    <button class="registration__button" type="submit" [disabled]="form.invalid">
-      Register
+    <div *ngIf="!showVerificationStep" class="registration__warning">
+      ⚠️ Please do NOT use school or organization email addresses (e.g., &#64;trentu.ca) as verification emails may be blocked by firewalls. Use a personal email address instead.
+    </div>
+
+    <div *ngIf="showVerificationStep" class="registration__verification">
+      <h3>Email Verification</h3>
+      <p>Please check your email for the verification code and enter it below:</p>
+      
+      <input
+        class="registration__input"
+        type="text"
+        placeholder="Verification Code"
+        [(ngModel)]="verificationCode"
+        name="verificationCode"
+        required
+        maxlength="6"
+        pattern="[0-9]{6}"
+        [disabled]="isLoading"
+      />
+      <div class="registration__info">
+        Enter the 6-digit code sent to your email address.
+      </div>
+    </div>
+
+    <button class="registration__button" type="submit" [disabled]="form.invalid || (!showVerificationStep && !passwordsMatch) || isLoading">
+      <span *ngIf="isLoading">Processing...</span>
+      <span *ngIf="!isLoading">{{ showVerificationStep ? 'Verify & Complete Registration' : 'Register' }}</span>
     </button>
   </form>
 </div>

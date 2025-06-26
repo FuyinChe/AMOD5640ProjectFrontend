@@ -1,0 +1,65 @@
+.environmental-data {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &__title {
+    font-size: 2rem;
+    color: #154734;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  &__container {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    background-color: #ffffff;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    font-weight: 600;
+    color: #154734;
+    margin-right: 0.5rem;
+  }
+
+  &__value {
+    color: #495057;
+  }
+
+  &__no-data {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1.1rem;
+    padding: 2rem 0;
+    font-style: italic;
+  }
+} 

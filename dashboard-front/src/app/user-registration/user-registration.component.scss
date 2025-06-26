@@ -1,0 +1,130 @@
+.registration {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #333;
+
+  &__title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #222;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  &__input {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    outline-offset: 2px;
+
+    &:focus {
+      border-color: #0078d4;
+      outline: none;
+      box-shadow: 0 0 4px #0078d4aa;
+    }
+  }
+
+  &__error {
+    color: #d93025;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: -0.8rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0.3rem;
+  }
+
+  &__button {
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    background-color: #0078d4;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:disabled {
+      background-color: #a0a0a0;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background-color: #005a9e;
+    }
+  }
+
+  &__warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 0.8rem;
+    user-select: none;
+  }
+
+  &__response {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-size: 0.9rem;
+
+    &--success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    &--error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  }
+
+  &__verification {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: #005a9e;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0 0 1rem 0;
+      color: #333;
+      font-size: 0.9rem;
+    }
+  }
+
+  &__info {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+} 
