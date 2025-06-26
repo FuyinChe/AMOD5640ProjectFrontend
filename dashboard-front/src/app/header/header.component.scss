@@ -284,18 +284,22 @@
 
 }
 
-/* Modifier: header__bottom-nav-item--active */
-//.header__bottom-nav-item--active {
-//  background-color: white;
-//  a{
-//    color: #154734;
-//  }
-//}
+/* Fix active nav item text color on white background */
+.header__bottom-nav-item--active {
+  background-color: white;
 
-.header__bottom-nav-item--active .header__bottom-nav-link {
-  font-weight: bold;
+  .header__bottom-nav-link {
+    color: #154734; // dark green for readability
+    font-weight: bold;
+  }
 }
 
+/* Fix active link color visibility */
+.header__bottom-nav-item--active .header__bottom-nav-link {
+  background-color: white;
+  color: #154734 !important;
+  font-weight: bold;
+}
 
 /* Element: header__bottom-nav-link */
 .header__bottom-nav-link {
@@ -310,8 +314,8 @@
 }
 
 .header__bottom-nav-link:hover {
-  background-color: #B15533;;
-
+  background-color: #B15533 !important;
+  color: #fff !important;
 }
 
 /* Basic Responsiveness */
@@ -377,7 +381,7 @@
   }
 
   .header__bottom-nav-link {
-    padding: 6px 10px;
+    //padding: 6px 10px;
     font-size: 0.8rem;
   }
 }
@@ -391,4 +395,62 @@
   .header__search {
     width: 100%;
   }
+}
+
+/* === General header layout already exists, only updating additional parts === */
+
+/* User Info (welcome message) */
+.header__user-info {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  background-color: #004d26;
+  border-radius: 8px;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Logout button */
+.header__logout-btn {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: transparent;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header__logout-btn:hover {
+  background-color: #ffffff;
+  color: #004d26;
+}
+
+/* Auth-related links (register/login) styled same as nav items */
+.header__bottom-nav-list li a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  //border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.header__bottom-nav-list li a:hover {
+  background-color: #005c2e;
+}
+
+/* Optional: align login/logout on the right side */
+.header__bottom-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.header__bottom-nav-list {
+  justify-content: space-between; /* 或用 flex-end if you want them far right */
 }

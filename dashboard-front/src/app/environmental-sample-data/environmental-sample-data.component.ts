@@ -16,7 +16,7 @@ import { saveAs } from 'file-saver';
     RouterOutlet
   ],
   templateUrl: './environmental-sample-data.component.html',
-  styleUrl: './environmental-sample-data.component.css'
+  styleUrl: './environmental-sample-data.component.scss'
 })
 export class EnvironmentalSampleDataComponent implements OnInit {
   environmentalSampleData:EnvironmentalRecord [] = [];

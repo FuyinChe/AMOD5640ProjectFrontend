@@ -7,6 +7,6 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   selector: 'app-welcome',
   imports: [CommonModule, RouterLink, RouterOutlet],
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.css'],
+  styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent {}

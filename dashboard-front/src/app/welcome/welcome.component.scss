@@ -1,0 +1,121 @@
+.welcome {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1e1e1e;
+
+  &__hero {
+    background: url('/assets/farm.jpg') no-repeat center center/cover;
+    height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  &__overlay {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 2rem 3rem;
+    border-radius: 16px;
+    text-align: center;
+    width: 70%;
+    max-width: 900px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1.5s ease-in-out;
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #064420;
+  }
+
+  &__subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #222;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__button {
+    padding: 0.75rem 1.8rem;
+    font-size: 1.05rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    display: inline-block;
+
+    &--primary {
+      background-color: #064420;
+      color: #fff;
+
+      &:hover {
+        background-color: #042f17;
+        transform: scale(1.05);
+      }
+    }
+
+    &--secondary {
+      background-color: transparent;
+      color: #064420;
+      border: 2px solid #064420;
+
+      &:hover {
+        background-color: #064420;
+        color: white;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  &__features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 3rem 2rem;
+    background-color: #f8fdf8;
+  }
+
+  &__feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
+  &__feature-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #064420;
+  }
+
+  &__feature-desc {
+    font-size: 1rem;
+    color: #333;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

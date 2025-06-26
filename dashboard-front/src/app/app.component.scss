@@ -22,46 +22,55 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Specific classes based on the typography guide */
-.museo-100 {
+.museo {
   font-family: var(--font-primary);
-  font-weight: var(--font-weight-light);
+
+  &--100 {
+    font-weight: var(--font-weight-light);
+  }
+
+  &--300 {
+    font-weight: var(--font-weight-normal);
+  }
+
+  &--700 {
+    font-weight: var(--font-weight-bold);
+  }
 }
 
-.museo-300 {
-  font-family: var(--font-primary);
-  font-weight: var(--font-weight-normal);
-}
-
-.museo-700 {
-  font-family: var(--font-primary);
-  font-weight: var(--font-weight-bold);
-}
-
-.univers-condensed {
-  font-family: var(--font-heading);
-  font-weight: 400;
-  text-transform: uppercase;
+.univers {
+  &--condensed {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    text-transform: uppercase;
+  }
 }
 
 /* Trent University specific styles */
-.trent-logo {
-  font-family: var(--font-primary);
-  font-weight: var(--font-weight-bold);
+.trent {
+  &__logo {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+  }
 }
 
-.campaign-title {
-  font-family: var(--font-heading);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.campaign {
+  &__title {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 }
 
-.body-copy {
-  font-family: var(--font-primary);
-  font-weight: var(--font-weight-normal);
+.body {
+  &__copy {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+  }
 }
 
 .emphasis {
   font-family: var(--font-primary);
   font-weight: var(--font-weight-bold);
-}
+} 

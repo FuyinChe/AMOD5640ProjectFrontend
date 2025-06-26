@@ -62,15 +62,72 @@
         <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
           <a class="header__bottom-nav-link" routerLink="/about">ABOUT US</a>
         </li>
+        <!-- Logged-in user dropdown -->
+        <li
+          class="header__bottom-nav-item header__user-dropdown"
+          tabindex="0"
+          (blur)="dropdownOpen = false"
+          [hidden]="!auth.isLoggedIn()"
+        >
+          <div
+            class="header__user-toggle"
+            (click)="dropdownOpen = !dropdownOpen"
+            aria-haspopup="true"
+            [attr.aria-expanded]="dropdownOpen"
+          >
+            <img
+              src="/images/default-avatar.png"
+              alt="User Avatar"
+              class="header__user-avatar"
+              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 24 24%27 fill=%27%23777%27><circle cx=%2712%27 cy=%2712%27 r=%2710%27/></svg>'"
+            />
+            <span class="header__user-name">{{ auth.getUsername() }}</span>
+            <svg
+              class="header__dropdown-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
 
-        <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
+          <ul
+            class="header__user-menu"
+            [class.header__user-menu--open]="dropdownOpen"
+            role="menu"
+            aria-label="User menu"
+          >
+            <li role="menuitem">
+              <button (click)="logout()" class="header__logout-btn">Logout</button>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Guest links -->
+        <li
+          class="header__bottom-nav-item"
+          routerLinkActive="header__bottom-nav-item--active"
+          [hidden]="auth.isLoggedIn()"
+        >
           <a class="header__bottom-nav-link" routerLink="/register">REGISTER</a>
         </li>
-
-        <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
+        <li
+          class="header__bottom-nav-item"
+          routerLinkActive="header__bottom-nav-item--active"
+          [hidden]="auth.isLoggedIn()"
+        >
           <a class="header__bottom-nav-link" routerLink="/login">LOGIN</a>
         </li>
-
+<!--        <li class="header__user-info">Welcome, {{ auth.getUsername() }}</li>-->
+<!--        <li><button (click)="logout()" class="header__logout-btn">Logout</button></li>-->
       </ul>
     </nav>
   </div>

@@ -9,7 +9,7 @@ import {RouterOutlet} from '@angular/router';
   imports: [
     FormsModule, CommonModule, RouterOutlet
   ],
-  styleUrls: ['./user-login.component.css'],
+  styleUrls: ['./user-login.component.scss'],
   standalone: true
 })
 export class UserLoginComponent {
@@ -26,10 +26,10 @@ export class UserLoginComponent {
       return;
     }
 
-    // Validate email ends with @trentu.ca
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@trentu\.ca$/;
+    // Basic email validation
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(email)) {
-      alert('Please use a valid @trentu.ca email address.');
+      alert('Please enter a valid email address.');
       return;
     }
 

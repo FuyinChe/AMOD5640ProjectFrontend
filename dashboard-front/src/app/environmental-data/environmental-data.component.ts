@@ -12,7 +12,7 @@ import {EnvironmentalRecord} from '../interfaces/environmental-record';
     RouterOutlet
   ],
   templateUrl: './environmental-data.component.html',
-  styleUrl: './environmental-data.component.css'
+  styleUrl: './environmental-data.component.scss'
 })
 export class EnvironmentalDataComponent implements OnInit {
   environmentalData:EnvironmentalRecord [] = [];
