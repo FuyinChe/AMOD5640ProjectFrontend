@@ -21,14 +21,8 @@ export class HeaderComponent {
     public auth: AuthService,
     private router: Router
   ) {}
-  // dropdownOpen = false;
 
-  dropdownOpen = true;
-
-  // 🔒 Hardcoded login status
-  isLoggedIn = true;
-  username = 'Alice';
-
+  dropdownOpen = false;
 
   // Called when user clicks the "Logout" button
   logout() {
@@ -41,12 +35,29 @@ export class HeaderComponent {
       }
     });      // Navigate to home (or login page if you prefer)
     this.dropdownOpen = false;
-
   }
-
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
+  formatUsername(email: string | null): string {
+    if (!email) return '';
+    
+    // If email is short, display as is
+    if (email.length <= 20) return email;
+    
+    // For longer emails, show first part + @ + domain
+    const atIndex = email.indexOf('@');
+    if (atIndex === -1) return email;
+    
+    const username = email.substring(0, atIndex);
+    const domain = email.substring(atIndex + 1);
+    
+    if (username.length <= 12) {
+      return email;
+    } else {
+      return `${username.substring(0, 12)}...@${domain}`;
+    }
+  }
 }

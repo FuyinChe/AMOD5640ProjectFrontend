@@ -77,6 +77,11 @@
       <span *ngIf="!isLoading">{{ showVerificationStep ? 'Verify & Complete Registration' : 'Register' }}</span>
     </button>
   </form>
+
+  <!-- Additional Links -->
+  <div class="registration__links">
+    <p>Already have an account? <a routerLink="/login" class="registration__link">Login here</a></p>
+  </div>
 </div>
 
 

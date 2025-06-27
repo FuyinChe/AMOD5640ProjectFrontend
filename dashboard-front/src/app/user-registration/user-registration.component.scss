@@ -127,4 +127,27 @@
     margin-top: 0.5rem;
     font-style: italic;
   }
+
+  &__links {
+    margin-top: 1.5rem;
+    text-align: center;
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+
+  &__link {
+    color: #154734;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #0d2e23;
+      text-decoration: underline;
+    }
+  }
 } 
