@@ -3,12 +3,13 @@ import { ChartDataset, ChartOptions } from 'chart.js';
 import { EnvironmentalRecord } from '../../interfaces/environmental-record';
 import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
+import { ChartCardComponent } from '../chart-card/chart-card.component';
 
 @Component({
   selector: 'app-soil-temp5cm-chart',
   templateUrl: './soil-temp5cm-chart.component.html',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ChartCardComponent],
   styleUrls: ['./soil-temp5cm-chart.component.css']
 })
 export class SoilTemp5cmChartComponent implements OnChanges {
@@ -92,6 +93,30 @@ export class SoilTemp5cmChartComponent implements OnChanges {
           }
         }
       };
+    }
+  }
+
+  downloadCSV() {
+    const headers = ['Date', 'Soil Temp 5cm'];
+    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.SoilTemperature_5cm_degC]);
+    let csvContent = headers.join(',') + '\n';
+    csvContent += rows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'soil-temp5cm-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadPNG() {
+    const canvas = document.querySelector('.soil-temp5cm-chart .chart-container canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'soil-temp5cm-chart.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
   }
 }

@@ -3,12 +3,13 @@ import { ChartDataset, ChartOptions } from 'chart.js';
 import { EnvironmentalRecord } from '../../interfaces/environmental-record';
 import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
+import { ChartCardComponent } from '../chart-card/chart-card.component';
 
 @Component({
   selector: 'app-snow-depth-chart',
   templateUrl: './snow-depth-chart.component.html',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ChartCardComponent],
   styleUrls: ['./snow-depth-chart.component.css']
 })
 export class SnowDepthChartComponent implements OnChanges {
@@ -107,6 +108,33 @@ export class SnowDepthChartComponent implements OnChanges {
           }
         }
       };
+    }
+  }
+
+  downloadCSV() {
+    // Replace with your actual data variable and structure
+    const headers = ['Date', 'Snow Depth'];
+    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.SnowDepth_cm]); // Adjust property names as needed
+
+    let csvContent = headers.join(',') + '\n';
+    csvContent += rows.map(e => e.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'snow-depth-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadPNG() {
+    const canvas = document.querySelector('.snow-depth-chart__canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'snow-depth-chart.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
   }
 }
