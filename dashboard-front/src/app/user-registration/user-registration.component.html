@@ -72,7 +72,12 @@
       </div>
     </div>
 
-    <button class="registration__button" type="submit" [disabled]="form.invalid || (!showVerificationStep && !passwordsMatch) || isLoading">
+    <button 
+      class="registration__button" 
+      [class.registration__button--enabled]="form.valid && passwordsMatch && !isLoading"
+      type="submit" 
+      [disabled]="form.invalid || (!showVerificationStep && !passwordsMatch) || isLoading"
+    >
       <span *ngIf="isLoading">Processing...</span>
       <span *ngIf="!isLoading">{{ showVerificationStep ? 'Verify & Complete Registration' : 'Register' }}</span>
     </button>

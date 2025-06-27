@@ -44,6 +44,7 @@
 
     <button 
       class="login__button" 
+      [class.login__button--enabled]="loginForm.valid && !isLoading"
       type="submit" 
       [disabled]="loginForm.invalid || isLoading"
     >
