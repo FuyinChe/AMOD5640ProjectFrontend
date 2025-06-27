@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts'; // <--- Import BaseChartDirective, NOT NgCharts
 import {ChartConfiguration, ChartDataset, ChartType} from 'chart.js';
 import { ChartEvent } from 'chart.js'; // <--- Add this import
+import { ChartCardComponent } from '../chart-card/chart-card.component';
 
 
 interface ChartData<TType extends ChartType, TData, TLabel> {
@@ -11,7 +12,7 @@ interface ChartData<TType extends ChartType, TData, TLabel> {
 
 @Component({
   selector: 'app-sample-chart',
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ChartCardComponent],
   standalone: true, // <--- This indicates it's a standalone component
   templateUrl: './sample-chart.component.html',
   styleUrl: './sample-chart.component.css'
@@ -40,5 +41,31 @@ export class SampleChartComponent {
 
   public chartHovered({ event, active }: { event?: ChartEvent, active?: {}[] }): void {
     console.log(event, active);
+  }
+
+  downloadCSV() {
+    const headers = ['Label', ...this.barChartData.datasets.map(ds => ds.label)];
+    const rows = this.barChartLabels.map((label, i) => {
+      return [label, ...this.barChartData.datasets.map(ds => ds.data[i])];
+    });
+    let csvContent = headers.join(',') + '\n';
+    csvContent += rows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample-chart-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadPNG() {
+    const canvas = document.querySelector('app-sample-chart .chart-container canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'sample-chart.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
   }
 }

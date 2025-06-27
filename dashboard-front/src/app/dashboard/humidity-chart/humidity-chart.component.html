@@ -1,9 +1,10 @@
-<div class="humidity-chart">
-  <canvas baseChart
-          [datasets]="chartData"
-          [options]="chartOptions"
-          [type]="chartType">
-  </canvas>
-
-</div>
+<app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
+  <div class="chart-container">
+    <canvas baseChart
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [type]="chartType">
+    </canvas>
+  </div>
+</app-chart-card>
 

@@ -3,12 +3,13 @@ import { ChartDataset, ChartOptions } from 'chart.js';
 import { EnvironmentalRecord } from '../../interfaces/environmental-record';
 import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
+import { ChartCardComponent } from '../chart-card/chart-card.component';
 
 @Component({
   selector: 'app-humidity-chart',
   templateUrl: './humidity-chart.component.html',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ChartCardComponent],
   styleUrls: ['./humidity-chart.component.css']
 })
 export class HumidityChartComponent implements OnChanges {
@@ -103,6 +104,30 @@ export class HumidityChartComponent implements OnChanges {
           }
         }
       };
+    }
+  }
+
+  downloadCSV() {
+    const headers = ['Date', 'Relative Humidity'];
+    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.RelativeHumidity_Pct]);
+    let csvContent = headers.join(',') + '\n';
+    csvContent += rows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'humidity-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadPNG() {
+    const canvas = document.querySelector('.humidity-chart .chart-container canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'humidity-chart.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
   }
 }

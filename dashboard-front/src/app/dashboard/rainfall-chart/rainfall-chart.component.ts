@@ -3,12 +3,13 @@ import { ChartDataset, ChartOptions } from 'chart.js';
 import { EnvironmentalRecord } from '../../interfaces/environmental-record';
 import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
+import { ChartCardComponent } from '../chart-card/chart-card.component';
 
 @Component({
   selector: 'app-rainfall-chart',
   templateUrl: './rainfall-chart.component.html',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ChartCardComponent],
   styleUrls: ['./rainfall-chart.component.css']
 })
 export class RainfallChartComponent implements OnChanges {
@@ -92,6 +93,30 @@ export class RainfallChartComponent implements OnChanges {
           }
         }
       };
+    }
+  }
+
+  downloadCSV() {
+    const headers = ['Date', 'Rainfall'];
+    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.Rainfall_mm]);
+    let csvContent = headers.join(',') + '\n';
+    csvContent += rows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rainfall-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  downloadPNG() {
+    const canvas = document.querySelector('.rainfall-chart .chart-container canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.download = 'rainfall-chart.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
   }
 }

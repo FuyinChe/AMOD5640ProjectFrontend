@@ -1,8 +1,10 @@
-<div class="rainfall-chart">
-  <canvas baseChart
-          class="rainfall-chart__canvas"
-          [datasets]="chartData"
-          [options]="chartOptions"
-          [type]="chartType">
-  </canvas>
-</div>
+<app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
+  <div class="chart-container">
+    <canvas baseChart
+            class="rainfall-chart__canvas"
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [type]="chartType">
+    </canvas>
+  </div>
+</app-chart-card>

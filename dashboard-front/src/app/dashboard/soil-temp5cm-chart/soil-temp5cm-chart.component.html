@@ -1,8 +1,10 @@
-<div class="soil-temp5cm-chart">
-  <canvas baseChart
-          class="soil-temp5cm-chart__canvas"
-          [datasets]="chartData"
-          [options]="chartOptions"
-          [type]="chartType">
-  </canvas>
-</div>
+<app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
+  <div class="chart-container">
+    <canvas baseChart
+            class="soil-temp5cm-chart__canvas"
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [type]="chartType">
+    </canvas>
+  </div>
+</app-chart-card>
