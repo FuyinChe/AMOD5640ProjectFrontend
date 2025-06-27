@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { API_BASE_URL } from '../../api.config';
-import {RouterOutlet, Router} from '@angular/router';
+import {RouterOutlet, Router, RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 
 @Component({
@@ -10,7 +10,8 @@ import {CommonModule} from '@angular/common';
   standalone: true,
   imports: [CommonModule,
         FormsModule,
-        RouterOutlet],
+        RouterOutlet,
+        RouterLink],
   // templateUrl: './user-registration.component.html',
   templateUrl: './user-registration.component.html',
   styleUrls: ['./user-registration.component.scss']

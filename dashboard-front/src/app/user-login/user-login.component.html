@@ -2,6 +2,16 @@
 <div class="login">
   <h2 class="login__title">User Login</h2>
 
+  <!-- Success Message -->
+  <div *ngIf="isSuccess" class="login__success">
+    Login successful! Redirecting to dashboard...
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="login__error-message">
+    {{ errorMessage }}
+  </div>
+
   <form class="login__form" (ngSubmit)="login()" #loginForm="ngForm">
     <input
       class="login__input"
@@ -13,6 +23,8 @@
       autocomplete="email"
       #emailInput="ngModel"
       pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      [disabled]="isLoading"
+      (input)="onInputChange()"
     />
     <div *ngIf="emailInput.invalid && emailInput.touched" class="login__error">
       Please enter a valid email address.
@@ -26,11 +38,24 @@
       name="password"
       required
       autocomplete="current-password"
+      [disabled]="isLoading"
+      (input)="onInputChange()"
     />
 
-    <button class="login__button" type="submit" [disabled]="loginForm.invalid">
-      Login
+    <button 
+      class="login__button" 
+      [class.login__button--enabled]="loginForm.valid && !isLoading"
+      type="submit" 
+      [disabled]="loginForm.invalid || isLoading"
+    >
+      <span *ngIf="isLoading">Logging in...</span>
+      <span *ngIf="!isLoading">Login</span>
     </button>
   </form>
+
+  <!-- Additional Links -->
+  <div class="login__links">
+    <p>Don't have an account? <a routerLink="/register" class="login__link">Register here</a></p>
+  </div>
 </div>
 </router-outlet>

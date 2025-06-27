@@ -75,13 +75,10 @@
             aria-haspopup="true"
             [attr.aria-expanded]="dropdownOpen"
           >
-            <img
-              src="/images/default-avatar.png"
-              alt="User Avatar"
-              class="header__user-avatar"
-              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 24 24%27 fill=%27%23777%27><circle cx=%2712%27 cy=%2712%27 r=%2710%27/></svg>'"
-            />
-            <span class="header__user-name">{{ auth.getUsername() }}</span>
+            <div class="header__user-avatar">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <span class="header__user-name">{{ formatUsername(auth.getEmail()) }}</span>
             <svg
               class="header__dropdown-icon"
               xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +103,10 @@
             aria-label="User menu"
           >
             <li role="menuitem">
-              <button (click)="logout()" class="header__logout-btn">Logout</button>
+              <button (click)="logout()" class="header__logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </button>
             </li>
           </ul>
         </li>

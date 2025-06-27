@@ -1,28 +1,39 @@
 <router-outlet>
   <div class="welcome">
-    <div class="welcome__hero">
-      <div class="welcome__overlay">
-        <h1 class="welcome__title">🌿 Trent Farm Data</h1>
-        <p class="welcome__subtitle">Discover environmental insights with real-time agricultural data</p>
-        <div class="welcome__actions">
-          <a routerLink="/register" class="welcome__button welcome__button--primary">Register</a>
-          <a routerLink="/login" class="welcome__button welcome__button--secondary">Login</a>
+ 
+    <!-- Testimonials Section -->
+    <section class="welcome__section welcome__section--testimonials">
+      <h2 class="welcome__heading">Trent Farm Data</h2>
+      <p class="welcome__subtitle">
+        Discover environmental insights with real-time agricultural data</p>
+      <div class="welcome__testimonial-wrapper">
+        <button class="welcome__arrow welcome__arrow--left" (click)="prevTestimonial()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="welcome__testimonial-image-container">
+          <img [src]="testimonials[currentTestimonial].image" alt="Testimonial image" class="welcome__testimonial-big-img" />
+          <div class="welcome__testimonial-image-overlay">
+            <a routerLink="/register" class="welcome__button welcome__button--primary">Get Started</a>
+          </div>
         </div>
+        <button class="welcome__arrow welcome__arrow--right" (click)="nextTestimonial()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-    </div>
+    </section>
 
-    <section class="welcome__features">
-      <div class="welcome__feature-card">
-        <h3 class="welcome__feature-title">📊 Real-time Charts</h3>
-        <p class="welcome__feature-desc">Visualize temperature, humidity, rainfall and more with dynamic dashboards.</p>
-      </div>
-      <div class="welcome__feature-card">
-        <h3 class="welcome__feature-title">📁 Easy Downloads</h3>
-        <p class="welcome__feature-desc">Export environmental data as CSV or Excel for offline analysis.</p>
-      </div>
-      <div class="welcome__feature-card">
-        <h3 class="welcome__feature-title">🌐 Research Ready</h3>
-        <p class="welcome__feature-desc">Perfect for agriculture, climate science, and environmental education.</p>
+    <!-- Blog Section -->
+    <section class="welcome__section welcome__section--blog">
+      <h2 class="welcome__heading">Our Project</h2>
+      <p class="welcome__subtitle">
+        Explore the latest trends, research, and stories in sustainable agriculture and environmental science. </p>
+      <div class="welcome__blog-list">
+        <div class="welcome__blog-card" *ngFor="let post of blogPosts">
+          <img [src]="post.image" alt="{{post.title}}" class="welcome__blog-img" />
+          <div class="welcome__blog-title">{{ post.title }}</div>
+          <div class="welcome__blog-desc">{{ post.description }}</div>
+          <a [href]="post.link" class="welcome__blog-link">More</a>
+        </div>
       </div>
     </section>
   </div>
