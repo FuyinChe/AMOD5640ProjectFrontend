@@ -47,8 +47,22 @@
   }
 
   &__charts {
+    display: flex;
+    flex-direction: column;
+  
+    // display: grid;
+    // grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    // gap: 1.5rem;
+  }
+
+  &__charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
   }
 } 
