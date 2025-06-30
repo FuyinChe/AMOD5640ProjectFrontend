@@ -4,6 +4,50 @@
     Access and download environmental data for your research and analysis needs.
   </p>
   <div class="download__content">
-    <p class="download__message">Download functionality coming soon!</p>
+    <!-- Date Row -->
+    <div class="filters-row align-left">
+      <div class="filter-group">
+        <label for="start-date">Start Date:</label>
+        <input id="start-date" type="date" [(ngModel)]="startDate" name="startDate">
+      </div>
+      <div class="filter-group">
+        <label for="end-date">End Date:</label>
+        <input id="end-date" type="date" [(ngModel)]="endDate" name="endDate">
+      </div>
+    </div>
+    <!-- Variables Row as Dropdown -->
+    <div class="filters-row align-left variables-dropdown-row">
+      <div class="filter-group variable-dropdown-group">
+        <label>Variables:</label>
+        <div class="dropdown" [class.open]="dropdownOpen">
+          <button type="button" class="dropdown-toggle" (click)="toggleDropdown($event)">
+            Select Variables
+            <span class="arrow" [class.open]="dropdownOpen"></span>
+          </button>
+          <div class="dropdown-menu" *ngIf="dropdownOpen">
+            <div class="dropdown-item select-all">
+              <input type="checkbox" [checked]="allSelected()" (change)="toggleSelectAll($event)"> Select All
+            </div>
+            <div class="dropdown-item" *ngFor="let variable of variables">
+              <input type="checkbox" [checked]="selectedVariables.includes(variable)" (change)="toggleVariable(variable, $event)"> {{ variable }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="selected-chips">
+        <span *ngFor="let variable of selectedVariables" class="selected-chip">
+          {{ variable }}
+          <span class="close-chip" (click)="removeVariable(variable)">&times;</span>
+        </span>
+      </div>
+    </div>
+    <!-- Apply/Filter Button Row -->
+    <div class="filters-row align-left filter-btn-row">
+      <button type="button" (click)="filterData()">Apply</button>
+    </div>
+    <div class="download-actions">
+      <span *ngIf="filteredData.length > 0" class="filtered-records">Filtered records: {{ filteredData.length }}</span>
+      <button [disabled]="!selectedVariables.length || filteredData.length === 0" (click)="downloadCSV()">Download CSV</button>
+    </div>
   </div>
 </div>
