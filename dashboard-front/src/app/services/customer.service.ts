@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable} from 'rxjs';
-import {API_BASE_URL} from '../../api.config';
+import { environment } from '../../environments/environments';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private apiUrl = `${API_BASE_URL}/customers`
+  private apiUrl = `${environment.API_BASE_URL}/customers`
   constructor(private http:HttpClient) { }
   getCustomers():Observable<any>{
 
