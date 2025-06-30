@@ -22,6 +22,7 @@ export class UserLoginComponent {
   isLoading = false;
   errorMessage = '';
   isSuccess = false;
+  redirectMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -66,9 +67,22 @@ export class UserLoginComponent {
         
         console.log('Login successful:', response);
         
-        // Show success message briefly, then redirect
+        // Set redirect message based on intended destination
+        const intendedDestination = localStorage.getItem('intendedDestination');
+        if (intendedDestination) {
+          this.redirectMessage = `Login successful! Redirecting to ${this.getDestinationName(intendedDestination)}...`;
+        } else {
+          this.redirectMessage = 'Login successful! Redirecting to dashboard...';
+        }
+        
+        // Show success message briefly, then redirect to intended destination or dashboard
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          if (intendedDestination) {
+            localStorage.removeItem('intendedDestination'); // Clear the stored destination
+            this.router.navigate([intendedDestination]);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         }, 1000);
       },
       error: (error) => {
@@ -88,6 +102,23 @@ export class UserLoginComponent {
     // Clear error when user starts typing
     if (this.errorMessage) {
       this.clearError();
+    }
+  }
+
+  private getDestinationName(destination: string): string {
+    switch (destination) {
+      case '/download':
+        return 'Download Data page';
+      case '/dashboard':
+        return 'Dashboard';
+      case '/about':
+        return 'About page';
+      case '/environmental-data':
+        return 'Environmental Data page';
+      case '/environmental-sample-data':
+        return 'Environmental Sample Data page';
+      default:
+        return destination.replace('/', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {CommonModule} from '@angular/common';
 
 
 @Component({
@@ -11,6 +12,7 @@ import {AuthService} from '../services/auth.service';
   imports: [
     RouterLinkActive,
     RouterLink,
+    CommonModule
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']

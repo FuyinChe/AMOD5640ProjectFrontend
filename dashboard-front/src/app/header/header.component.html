@@ -40,7 +40,13 @@
   <!-- Bottom Navigation Bar -->
   <div class="header__bottom-bar">
     <nav class="header__bottom-nav">
-      <a routerLink="/home" class="header__bottom-nav-title">TRENT FARM DATA</a>
+      <div class="header__bottom-nav-title-group">
+        <a routerLink="/home" class="header__bottom-nav-title">TRENT FARM DATA</a>
+        <ng-container *ngIf="auth.isLoggedIn()">
+          <span class="header__user-separator">|</span>
+          <span class="header__user-email">{{ formatUsername(auth.getEmail()) }}</span>
+        </ng-container>
+      </div>
       <ul class="header__bottom-nav-list">
 
         <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active" [routerLinkActiveOptions]="{ exact: true }">
@@ -78,7 +84,6 @@
             <div class="header__user-avatar">
               <i class="fas fa-user-circle"></i>
             </div>
-            <span class="header__user-name">{{ formatUsername(auth.getEmail()) }}</span>
             <svg
               class="header__dropdown-icon"
               xmlns="http://www.w3.org/2000/svg"
