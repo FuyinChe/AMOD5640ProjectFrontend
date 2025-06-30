@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { API_BASE_URL } from '../../api.config';
+import { environment } from '../../environments/environments';
 import {RouterOutlet, Router, RouterLink} from '@angular/router';
 import {CommonModule} from '@angular/common';
 
@@ -49,7 +49,7 @@ export class UserRegistrationComponent {
 
     if (!this.showVerificationStep) {
       // First step: Submit email and password
-      this.http.post(`${API_BASE_URL}/register/`, this.user).subscribe({
+      this.http.post(`${environment.API_BASE_URL}/register/`, this.user).subscribe({
         next: () => {
           this.showVerificationStep = true;
           this.responseMessage = 'Registration initiated! Please check your email for verification code.';
@@ -65,7 +65,7 @@ export class UserRegistrationComponent {
       });
     } else {
       // Second step: Submit verification code
-      this.http.post(`${API_BASE_URL}/verify/`, {
+      this.http.post(`${environment.API_BASE_URL}/verify/`, {
         email: this.user.email,
         code: this.verificationCode
       }).subscribe({

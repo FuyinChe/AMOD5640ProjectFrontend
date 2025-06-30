@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { API_BASE_URL } from '../../api.config';
+import { environment } from '../../environments/environments';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${API_BASE_URL}/token`, {
+    return this.http.post<LoginResponse>(`${environment.API_BASE_URL}/token`, {
       username: email,
       password
     }).pipe(
@@ -59,7 +59,7 @@ export class AuthService {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<RefreshResponse>(`${API_BASE_URL}/token/refresh`, {
+    return this.http.post<RefreshResponse>(`${environment.API_BASE_URL}/token/refresh`, {
       refresh: refreshToken
     }).pipe(
       tap(response => {
@@ -148,7 +148,7 @@ export class AuthService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<any>(`${API_BASE_URL}/userinfo/`, { headers }).pipe(
+    return this.http.get<any>(`${environment.API_BASE_URL}/userinfo/`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
@@ -175,14 +175,16 @@ export class AuthService {
       errorMessage = error.error.message;
     } else {
       // Server-side error
-      if (error.status === 401) {
+      if (error.status === 0) {
+        errorMessage = 'Unable to connect to the server. Please check your network connection or try again later.';
+      } else if (error.status === 401) {
         errorMessage = 'Invalid credentials. Please check your email and password.';
       } else if (error.status === 400) {
         errorMessage = error.error?.detail || 'Bad request. Please check your input.';
       } else if (error.status === 500) {
         errorMessage = 'Server error. Please try again later.';
       } else {
-        errorMessage = `Error ${error.status}: ${error.error?.detail || error.message}`;
+        errorMessage = error.error?.detail || 'An unexpected error occurred. Please try again.';
       }
     }
     
