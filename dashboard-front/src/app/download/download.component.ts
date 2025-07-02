@@ -5,6 +5,8 @@ import { EnvironmentalSampleDataService } from '../services/environmental-sample
 import { EnvironmentalRecord } from '../interfaces/environmental-record';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-download',
@@ -29,6 +31,7 @@ export class DownloadComponent implements OnInit {
   startDate: string = '';
   endDate: string = '';
   dropdownOpen = false;
+  downloadDropdownOpen = false;
 
   constructor(
     public auth: AuthService,
@@ -90,6 +93,28 @@ export class DownloadComponent implements OnInit {
     window.URL.revokeObjectURL(url);
   }
 
+  downloadExcel() {
+    if (!this.selectedVariables.length) return;
+    const header = ['Timestamp', ...this.selectedVariables];
+    const rows = this.filteredData.map(record => [record.Timestamp, ...this.selectedVariables.map(v => record[v as keyof EnvironmentalRecord])]);
+    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Data');
+    let filename = 'trentfarmdata';
+    if (this.filteredData.length > 0) {
+      const dates = this.filteredData.map(record => new Date(record.Timestamp));
+      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+      const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
+      const startDateFormatted = minDate.toISOString().split('T')[0].replace(/-/g, '');
+      const endDateFormatted = maxDate.toISOString().split('T')[0].replace(/-/g, '');
+      filename += `_${startDateFormatted}_${endDateFormatted}`;
+    }
+    filename += '.xlsx';
+    const excelData = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelData], { type: 'application/octet-stream' });
+    saveAs(blob, filename);
+  }
+
   toggleDropdown(event: Event) {
     event.stopPropagation();
     this.dropdownOpen = !this.dropdownOpen;
@@ -121,13 +146,26 @@ export class DownloadComponent implements OnInit {
     this.selectedVariables = this.selectedVariables.filter(v => v !== variable);
   }
 
+  toggleDownloadDropdown(event: Event) {
+    event.stopPropagation();
+    this.downloadDropdownOpen = !this.downloadDropdownOpen;
+  }
+
+  closeDownloadDropdown() {
+    this.downloadDropdownOpen = false;
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     const target = event.target as HTMLElement;
     const dropdownElement = document.querySelector('.dropdown');
-    
     if (this.dropdownOpen && dropdownElement && !dropdownElement.contains(target)) {
       this.dropdownOpen = false;
+    }
+    // Close download dropdown if click outside
+    const downloadDropdownElement = document.querySelector('.download-dropdown');
+    if (this.downloadDropdownOpen && downloadDropdownElement && !downloadDropdownElement.contains(target)) {
+      this.downloadDropdownOpen = false;
     }
   }
 }
