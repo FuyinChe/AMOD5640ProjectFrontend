@@ -300,4 +300,11 @@
     width: 100%;
     justify-content: flex-start;
   }
+}
+
+.download-dropdown .dropdown-toggle .arrow {
+  border-top: 7px solid #fff !important;
+}
+.download-dropdown .dropdown-toggle .arrow.open {
+  border-top: 7px solid #fff !important;
 } 
