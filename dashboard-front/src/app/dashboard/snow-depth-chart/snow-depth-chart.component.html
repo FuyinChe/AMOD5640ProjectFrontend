@@ -3,7 +3,8 @@
     <canvas
       class="snow-depth-chart__canvas"
       baseChart
-      [data]="{ labels: chartLabels, datasets: chartData }"
+      [datasets]="chartData"
+      [labels]="chartLabels"
       [options]="chartOptions"
       [type]="chartType">
     </canvas>

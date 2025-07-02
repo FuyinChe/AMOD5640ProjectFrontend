@@ -20,6 +20,7 @@ export class HumidityChartComponent implements OnChanges {
 
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       title: {
         display: true,

@@ -20,9 +20,10 @@ export class SnowDepthChartComponent implements OnChanges {
 
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       title: {
-        display: true,
+        display: false,
         text: 'Snow Depth (cm) Over Time'
       },
       legend: { display: false }
