@@ -47,12 +47,11 @@
   }
 
   &__charts {
-    display: flex;
-    flex-direction: column;
-  
-    // display: grid;
-    // grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    // gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1rem;
   }
 
   &__charts-grid {
@@ -65,4 +64,109 @@
       grid-template-columns: 1fr;
     }
   }
+}
+
+.dashboard__tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  justify-content: center;
+}
+.dashboard__tab {
+  background: #f5f7fa;
+  border: none;
+  border-radius: 6px 6px 0 0;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.1rem;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-bottom 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  margin-bottom: -2px;
+  outline: none;
+  position: relative;
+}
+.dashboard__tab--active {
+  background: #fff;
+  color: #007bff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,123,255,0.08);
+  border-bottom: 2px solid #007bff;
+  z-index: 2;
+}
+.dashboard__tab:not(.dashboard__tab--active):hover {
+  background: #e9ecef;
+  color: #0056b3;
+}
+
+// Fade-in animation for tab content
+.dashboard__matrix,
+.dashboard__charts {
+  animation: dashboardTabFadeIn 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes dashboardTabFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.dashboard__subtabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  justify-content: center;
+}
+.dashboard__subtab {
+  background: #f0f4ff;
+  border: none;
+  border-radius: 4px 4px 0 0;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin-bottom: -1px;
+  outline: none;
+}
+.dashboard__subtab--active {
+  background: #fff;
+  color: #1890ff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(24,144,255,0.08);
+  border-bottom: 2px solid #1890ff;
+  z-index: 2;
+}
+.dashboard__subtab:not(.dashboard__subtab--active):hover {
+  background: #e6f7ff;
+  color: #096dd9;
+}
+
+.dashboard__charts-content {
+  overflow-x: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard__selected-range {
+  display: block;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+}
+
+.dashboard__matrix-title,
+.dashboard__charts-title {
+  text-align: center;
+  margin: 1.2rem 0 1.5rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.dashboard__matrix-table {
+  margin: 0 auto;
+  display: block;
 } 

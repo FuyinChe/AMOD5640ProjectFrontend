@@ -1,0 +1,86 @@
+.dashboard__matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem auto;
+  display: block;
+  max-width: 1100px;
+}
+.dashboard__matrix-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.dashboard__matrix-table__header {
+  background: #f5f7fa;
+  font-weight: bold;
+}
+.dashboard__matrix-table__row {
+  transition: background 0.2s;
+}
+.dashboard__matrix-table__row:hover {
+  background: #f0f4ff;
+}
+.dashboard__matrix-table__cell,
+.dashboard__matrix-table__header-cell {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e0e6ed;
+  text-align: center;
+  border: 1px solid #d0d7e2;
+  vertical-align: middle;
+}
+.dashboard__matrix-table__header-cell {
+  background: #f5f7fa;
+  font-weight: 600;
+  color: #333;
+}
+.dashboard__matrix-table__cell--highlight {
+  font-weight: bold;
+  background: #e6f7ff;
+}
+.dashboard__matrix-table__cell--null {
+  color: #bbb;
+  background: #fafbfc;
+}
+.dashboard__matrix-table__row:last-child .dashboard__matrix-table__cell {
+  border-bottom: none;
+}
+
+.env-matrix-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+.env-matrix-table th, .env-matrix-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+.env-matrix-table th {
+  background: #f5f5f5;
+}
+.env-matrix-table .metric-label {
+  text-align: left;
+  font-weight: bold;
+  background: #fafafa;
+}
+.env-matrix-table .unit {
+  font-size: 0.85em;
+  color: #888;
+}
+.env-matrix-table td {
+  color: #222;
+  transition: background 0.2s;
+}
+.env-matrix-table td[title]:hover {
+  outline: 2px solid #333;
+  cursor: pointer;
+}
+
+.dashboard__matrix-table__table {
+  margin: 0 auto;
+  display: table;
+} 
