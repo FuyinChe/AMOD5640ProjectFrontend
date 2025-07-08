@@ -1,9 +1,8 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartDataset, ChartOptions } from 'chart.js';
-import { EnvironmentalRecord } from '../../interfaces/environmental-record';
-import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
+import { RainfallService } from '../../services/rainfall.service';
 
 @Component({
   selector: 'app-rainfall-chart',
@@ -13,13 +12,16 @@ import { ChartCardComponent } from '../chart-card/chart-card.component';
   styleUrls: ['./rainfall-chart.component.css']
 })
 export class RainfallChartComponent implements OnChanges {
-  @Input() envData: EnvironmentalRecord[] = [];
+  @Input() startDate: string = '';
+  @Input() endDate: string = '';
+  @Input() limit: number = 1000;
 
   chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
   chartType: 'line' = 'line';
 
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -29,21 +31,14 @@ export class RainfallChartComponent implements OnChanges {
     },
     scales: {
       x: {
-        type: 'time',
-        time: {
-          unit: 'hour',
-          tooltipFormat: 'MMM dd, HH:mm',
-          displayFormats: {
-            hour: 'HH:mm',
-            day: 'MMM dd'
-          }
-        },
+        type: 'category',
         title: {
           display: true,
-          text: 'Time'
+          text: 'Period'
         }
       },
       y: {
+        type: 'linear',
         title: {
           display: true,
           text: 'Rainfall (mm)'
@@ -52,55 +47,69 @@ export class RainfallChartComponent implements OnChanges {
     }
   };
 
-  ngOnChanges(): void {
-    const pad = (n: number) => n.toString().padStart(2, '0');
+  private latestRainfallRawData: { period: string, avg_rainfall_mm: number }[] = [];
 
-    const rainfallPoints = this.envData
-      .filter(d => d.Rainfall_mm !== null)
-      .map(d => {
-        const dateStr = `${d.Year}-${pad(d.Month)}-${pad(d.Day)}T${d.Time}`;
-        const date = new Date(dateStr);
-        return {
-          x: date,
-          y: d.Rainfall_mm as number
-        };
-      })
-      .sort((a, b) => a.x.getTime() - b.x.getTime());
+  constructor(private rainfallService: RainfallService) {}
 
-    this.chartData = [
-      {
-        data: rainfallPoints,
-        label: 'Rainfall (mm)',
-        borderColor: '#17a2b8',
-        backgroundColor: 'rgba(23, 162, 184, 0.1)',
-        tension: 0.3
-      }
-    ];
-
-    if (rainfallPoints.length > 0) {
-      const firstDate = rainfallPoints[0].x;
-      const minTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate(), 0).getTime();
-      const maxTime = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate() + 1, 0).getTime();
-
-      this.chartOptions = {
-        ...this.chartOptions,
-        scales: {
-          ...this.chartOptions.scales,
-          ['x']: {
-            ...this.chartOptions.scales!['x']!,
-            min: minTime,
-            max: maxTime
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.startDate && this.endDate) {
+      this.rainfallService.getHourlyRainfallData(this.startDate, this.endDate).subscribe((response: any) => {
+        this.latestRainfallRawData = response.data;
+        const avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+        const values = response.data.map((d: { avg: number }) => d.avg);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const padding = (max - min) * 0.2 || 1;
+        this.chartData = [
+          {
+            data: avgPoints,
+            label: `Avg Rainfall (${response.unit || 'mm'})`,
+            borderColor: '#0088cc',
+            backgroundColor: 'rgba(0, 136, 204, 0.2)',
+            tension: 0.3,
+            pointRadius: 3,
+            borderWidth: 3,
+            fill: true
           }
-        }
-      };
+        ];
+        this.chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Rainfall (mm) Over Time'
+            },
+            legend: { display: true }
+          },
+          scales: {
+            x: {
+              type: 'category',
+              title: {
+                display: true,
+                text: 'Period'
+              }
+            },
+            y: {
+              type: 'linear',
+              min: 0,
+              max: max + padding,
+              title: {
+                display: true,
+                text: `Rainfall (${response.unit || 'mm'})`
+              }
+            }
+          }
+        };
+      });
     }
   }
 
   downloadCSV() {
-    const headers = ['Date', 'Rainfall'];
-    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.Rainfall_mm]);
+    const headers = ['Period', 'Avg Rainfall (mm)'];
+    const rows = this.latestRainfallRawData.map((d: { period: string, avg_rainfall_mm: number }) => [d.period, d.avg_rainfall_mm]);
     let csvContent = headers.join(',') + '\n';
-    csvContent += rows.map(e => e.join(',')).join('\n');
+    csvContent += rows.map((e: (string | number)[]) => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

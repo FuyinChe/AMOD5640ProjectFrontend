@@ -1,9 +1,8 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartDataset, ChartOptions } from 'chart.js';
-import { EnvironmentalRecord } from '../../interfaces/environmental-record';
-import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
+import { SnowDepthService } from '../../services/snow-depth.service';
 
 @Component({
   selector: 'app-snow-depth-chart',
@@ -13,113 +12,111 @@ import { ChartCardComponent } from '../chart-card/chart-card.component';
   styleUrls: ['./snow-depth-chart.component.css']
 })
 export class SnowDepthChartComponent implements OnChanges {
-  @Input() envData: EnvironmentalRecord[] = [];
-  chartType: 'line' = 'line';
+  @Input() startDate: string = '';
+  @Input() endDate: string = '';
+  @Input() groupBy: string = 'hour';
 
   chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
-
+  chartType: 'line' = 'line';
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
-        display: false,
-        text: 'Snow Depth (cm) Over Time'
+        display: true,
+        text: 'Snow Depth Over Time'
       },
       legend: { display: false }
     },
     scales: {
       x: {
-        type: 'time',
-        time: {
-          unit: 'hour',
-          tooltipFormat: 'MMM dd, HH:mm',
-          displayFormats: {
-            hour: 'HH:mm',
-            day: 'MMM dd'
-          }
-        },
+        type: 'category',
         title: {
           display: true,
-          text: 'Time'
-        },
-        min: undefined,
-        max: undefined
+          text: 'Period'
+        }
       },
       y: {
+        type: 'linear',
         title: {
           display: true,
-          text: 'Snow Depth (cm)'
+          text: 'Snow Depth'
         }
       }
     }
   };
 
-  chartLabels: string[] = [];
+  private latestSnowDepthRawData: { period: string, avg: number, max: number, min: number }[] = [];
+  private unit: string = 'cm';
 
-  ngOnChanges(): void {
-    console.log('envData:', this.envData);
-    // const snowPoints = this.envData
-    //   .filter(d => d.SnowDepth_cm !== null && d.SnowDepth_cm > -100)
-    //   .map(d => ({
-    //     x: new Date(`${d.Year}-${d.Month}-${d.Day}T${d.Time}`),
-    //     y: d.SnowDepth_cm as number
-    //   }))
-    //   .sort((a, b) => a.x.getTime() - b.x.getTime());
+  constructor(private snowDepthService: SnowDepthService) {}
 
-    const snowPoints = this.envData
-      .filter(d => d.SnowDepth_cm !== null && d.SnowDepth_cm > -100)
-      .map(d => {
-        const dateStr = `${d.Year}-${String(d.Month).padStart(2, '0')}-${String(d.Day).padStart(2, '0')}T${d.Time}`;
-        const x = new Date(dateStr);
-        if (isNaN(x.getTime())) {
-          console.warn('Invalid date:', dateStr);
-        }
-        return { x, y: d.SnowDepth_cm as number };
-      })
-      .sort((a, b) => a.x.getTime() - b.x.getTime());
-
-    this.chartData = [
-      {
-        data: snowPoints,
-        label: 'Snow Depth (cm)',
-        borderColor: '#007bff',
-        backgroundColor: 'rgba(0,123,255,0.1)',
-        tension: 0.3
-      }
-    ];
-
-    if (snowPoints.length > 0) {
-      const firstDate = snowPoints[0].x;
-      const year = firstDate.getFullYear();
-      const month = firstDate.getMonth();
-      const day = firstDate.getDate();
-
-      const minTime = new Date(year, month, day, 0, 0, 0).getTime();
-      const maxTime = new Date(year, month, day + 1, 0, 0, 0).getTime();
-
-      this.chartOptions = {
-        ...this.chartOptions,
-        scales: {
-          ...this.chartOptions.scales,
-          ['x']: {
-            ...this.chartOptions.scales!['x']!,
-            min: minTime,
-            max: maxTime
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.startDate && this.endDate) {
+      this.snowDepthService.getSnowDepthData(this.startDate, this.endDate, this.groupBy).subscribe((response: any) => {
+        this.latestSnowDepthRawData = response.data;
+        this.unit = response.unit || 'cm';
+        const avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+        const values = response.data.map((d: { avg: number }) => d.avg);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const padding = (max - min) * 0.2 || 1;
+        this.chartData = [
+          {
+            data: avgPoints,
+            label: `Avg Snow Depth (${this.unit})`,
+            borderColor: '#0056b3',
+            backgroundColor: 'rgba(0, 86, 179, 0.2)',
+            tension: 0.3,
+            pointRadius: 3,
+            borderWidth: 3,
+            fill: true
           }
-        }
-      };
+        ];
+        this.chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Snow Depth Over Time'
+            },
+            legend: { display: true }
+          },
+          scales: {
+            x: {
+              type: 'category',
+              title: {
+                display: true,
+                text: 'Period'
+              }
+            },
+            y: {
+              type: 'linear',
+              min: 0,
+              max: max + padding,
+              title: {
+                display: true,
+                text: `Snow Depth (${this.unit})`
+              }
+            }
+          }
+        };
+      });
     }
   }
 
+  // Helper to parse 'period' (e.g., '01-01 00:00') to Date using the year from startDate
+  private parsePeriodToDate(period: string, startDate: string): Date {
+    const year = new Date(startDate).getFullYear();
+    return new Date(`${year}-${period}:00`); // e.g., '2023-01-01 00:00:00'
+  }
+
   downloadCSV() {
-    // Replace with your actual data variable and structure
-    const headers = ['Date', 'Snow Depth'];
-    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.SnowDepth_cm]); // Adjust property names as needed
-
+    const headers = ['Period', `Avg Snow Depth (${this.unit})`];
+    const rows = this.latestSnowDepthRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
-    csvContent += rows.map(e => e.join(',')).join('\n');
-
+    csvContent += rows.map((e: (string | number)[]) => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

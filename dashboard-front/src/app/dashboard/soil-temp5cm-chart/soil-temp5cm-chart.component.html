@@ -1,10 +1,10 @@
 <app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
   <div class="chart-container">
     <canvas baseChart
-            class="soil-temp5cm-chart__canvas"
+            [type]="chartType"
             [datasets]="chartData"
             [options]="chartOptions"
-            [type]="chartType">
+            [legend]="true">
     </canvas>
   </div>
 </app-chart-card>

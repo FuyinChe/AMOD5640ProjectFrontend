@@ -1,4 +1,14 @@
-<table class="dashboard__matrix-table__table">
+<div class="dashboard__matrix-table__actions download-buttons" style="justify-content: flex-end; gap: 1.2rem;">
+  <button class="chart__download-btn chart__download-btn--csv" (click)="downloadCSV()">
+    <i class="fas fa-file-csv"></i>
+    CSV
+  </button>
+  <button class="chart__download-btn chart__download-btn--png" (click)="downloadPNG()">
+    <i class="fas fa-file-image"></i>
+    PNG
+  </button>
+</div>
+<table #matrixTable class="dashboard__matrix-table__table">
   <thead>
     <tr class="dashboard__matrix-table__header">
       <th class="dashboard__matrix-table__header-cell">Metric</th>

@@ -1,12 +1,10 @@
 <app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
   <div class="chart-container">
-    <canvas
-      class="snow-depth-chart__canvas"
-      baseChart
-      [datasets]="chartData"
-      [labels]="chartLabels"
-      [options]="chartOptions"
-      [type]="chartType">
+    <canvas baseChart
+            [type]="chartType"
+            [datasets]="chartData"
+            [options]="chartOptions"
+            [legend]="true">
     </canvas>
   </div>
 </app-chart-card>

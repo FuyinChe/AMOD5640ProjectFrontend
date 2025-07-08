@@ -25,8 +25,8 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   dateRange = {
-    start: '',
-    end: ''
+    start: '2023-01-01',
+    end: '2023-12-31'
   };
 
   months: string[] = [];
@@ -38,10 +38,19 @@ export class DashboardComponent implements OnInit {
   //the sample data for demo
   constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
 
-  activeTab: 'matrix' | 'snow-depth' | 'soil-temp5cm' | 'rainfall' = 'matrix';
+  activeTab: 'matrix' | 'snow-depth' | 'soil-temp5cm' | 'rainfall' | 'humidity' = 'matrix';
 
-  setTab(tab: 'matrix' | 'snow-depth' | 'soil-temp5cm' | 'rainfall') {
+  setTab(tab: 'matrix' | 'snow-depth' | 'soil-temp5cm' | 'rainfall' | 'humidity') {
     this.activeTab = tab;
+  }
+
+  get rainfallLimit(): number {
+    if (!this.dateRange.start || !this.dateRange.end) return 1000;
+    const start = new Date(this.dateRange.start);
+    const end = new Date(this.dateRange.end);
+    // Add 1 to include the last hour of the end date
+    const hours = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60)) + 1;
+    return Math.max(hours, 1);
   }
 
   ngOnInit(): void {

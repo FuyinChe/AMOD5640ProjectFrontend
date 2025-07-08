@@ -33,7 +33,7 @@
 
     button {
       padding: 0.5rem 1rem;
-      background-color: #007bff;
+      background-color:#26a69a ;
       color: white;
       border: none;
       border-radius: 8px;
@@ -41,7 +41,7 @@
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: #0056b3;
+        background-color: #154734;
       }
     }
   }
@@ -68,35 +68,40 @@
 
 .dashboard__tabs {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
   margin-bottom: 0.5rem;
   justify-content: center;
+  border-radius:  0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 .dashboard__tab {
-  background: #f5f7fa;
+  background: #007844;
   border: none;
-  border-radius: 6px 6px 0 0;
-  padding: 0.7rem 2.2rem;
-  font-size: 1.1rem;
-  color: #555;
+  border-radius: 0;
+  padding: 0.7rem 1.5rem 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f5f7fa;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-bottom 0.3s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   margin-bottom: -2px;
   outline: none;
   position: relative;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
 }
 .dashboard__tab--active {
   background: #fff;
-  color: #007bff;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0,123,255,0.08);
-  border-bottom: 2px solid #007bff;
+  color: #007844;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(0,123,255,0.10);
+  border-bottom: 3px solid #007844;
   z-index: 2;
 }
 .dashboard__tab:not(.dashboard__tab--active):hover {
-  background: #e9ecef;
-  color: #0056b3;
+  background: #005f34;
+  color: #fff;
 }
 
 // Fade-in animation for tab content

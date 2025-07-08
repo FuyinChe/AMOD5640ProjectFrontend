@@ -31,6 +31,7 @@
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'snow-depth'" (click)="setTab('snow-depth')">Snow Depth</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'soil-temp5cm'" (click)="setTab('soil-temp5cm')">Soil Temp</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'rainfall'" (click)="setTab('rainfall')">Rainfall</button>
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'humidity'" (click)="setTab('humidity')">Humidity</button>
   </div>
 
   <!-- Tab Content -->
@@ -46,19 +47,38 @@
   <div *ngIf="activeTab === 'snow-depth'" class="dashboard__charts">
     <h4 class="dashboard__charts-title">Snow Depth</h4>
     <div class="dashboard__charts-content">
-      <app-snow-depth-chart></app-snow-depth-chart>
+      <app-snow-depth-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-snow-depth-chart>
     </div>
   </div>
   <div *ngIf="activeTab === 'soil-temp5cm'" class="dashboard__charts">
     <h4 class="dashboard__charts-title">Soil Temp 5cm</h4>
     <div class="dashboard__charts-content">
-      <app-soil-temp5cm-chart></app-soil-temp5cm-chart>
+      <app-soil-temp5cm-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-soil-temp5cm-chart>
     </div>
   </div>
   <div *ngIf="activeTab === 'rainfall'" class="dashboard__charts">
     <h4 class="dashboard__charts-title">Rainfall</h4>
     <div class="dashboard__charts-content">
-      <app-rainfall-chart></app-rainfall-chart>
+      <app-rainfall-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end"
+        [limit]="rainfallLimit">
+      </app-rainfall-chart>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'humidity'" class="dashboard__charts">
+    <h4 class="dashboard__charts-title">Humidity</h4>
+    <div class="dashboard__charts-content">
+      <app-humidity-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-humidity-chart>
     </div>
   </div>
 </div>

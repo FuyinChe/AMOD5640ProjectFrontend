@@ -83,4 +83,22 @@
 .dashboard__matrix-table__table {
   margin: 0 auto;
   display: table;
+}
+
+/* Remove all custom button styles for download buttons in the matrix table. Only keep icon size helper. */
+.dashboard__matrix-table__actions.download-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+}
+.chart__download-btn__icon {
+  margin-left: 0.35em;
+  display: inline-flex;
+  align-items: center;
+}
+.chart__download-btn__icon i {
+  font-size: 0.9em;
 } 
