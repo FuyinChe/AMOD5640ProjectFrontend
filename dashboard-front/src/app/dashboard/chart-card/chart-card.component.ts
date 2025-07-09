@@ -10,6 +10,24 @@ import { CommonModule } from '@angular/common';
 })
 export class ChartCardComponent {
   @Input() showDownloadButtons = true;
-  @Input() onDownloadCSV?: () => void;
-  @Input() onDownloadPNG?: () => void;
+  @Input() onDownloadCSV: (() => void) | undefined = undefined;
+  @Input() onDownloadPNG: (() => void) | undefined = undefined;
+
+  handleCSVDownload() {
+    console.log('CSV download button clicked');
+    if (this.onDownloadCSV) {
+      this.onDownloadCSV();
+    } else {
+      console.warn('onDownloadCSV function is not defined');
+    }
+  }
+
+  handlePNGDownload() {
+    console.log('PNG download button clicked');
+    if (this.onDownloadPNG) {
+      this.onDownloadPNG();
+    } else {
+      console.warn('onDownloadPNG function is not defined');
+    }
+  }
 } 

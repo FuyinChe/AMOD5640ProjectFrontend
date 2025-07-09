@@ -3,11 +3,11 @@
     <ng-content></ng-content>
   </div>
   <div class="download-buttons" *ngIf="showDownloadButtons">
-    <button class="chart__download-btn chart__download-btn--csv" (click)="onDownloadCSV && onDownloadCSV()">
+    <button class="chart__download-btn chart__download-btn--csv" (click)="handleCSVDownload()">
       <i class="fas fa-file-csv"></i>
       CSV
     </button>
-    <button class="chart__download-btn chart__download-btn--png" (click)="onDownloadPNG && onDownloadPNG()">
+    <button class="chart__download-btn chart__download-btn--png" (click)="handlePNGDownload()">
       <i class="fas fa-file-image"></i>
       PNG
     </button>

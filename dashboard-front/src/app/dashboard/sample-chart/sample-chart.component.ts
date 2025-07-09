@@ -79,29 +79,36 @@ export class SampleChartComponent {
     console.log(event, active);
   }
 
-  downloadCSV() {
+  downloadCSV = () => {
     const headers = ['Label', ...this.barChartData.datasets.map(ds => ds.label)];
     const rows = this.barChartLabels.map((label, i) => {
       return [label, ...this.barChartData.datasets.map(ds => ds.data[i])];
     });
     let csvContent = headers.join(',') + '\n';
     csvContent += rows.map(e => e.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    
+    // Add BOM for proper UTF-8 encoding in Excel
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'sample-chart-data.csv';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }
 
-  downloadPNG() {
+  downloadPNG = () => {
     const canvas = document.querySelector('app-sample-chart .chart-container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'sample-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }
