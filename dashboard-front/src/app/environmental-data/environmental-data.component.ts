@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import {EnvironmentalDataService} from '../services/environmental-data.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
@@ -16,9 +18,20 @@ import {EnvironmentalRecord} from '../interfaces/environmental-record';
 })
 export class EnvironmentalDataComponent implements OnInit {
   environmentalData:EnvironmentalRecord [] = [];
-  constructor(private environmentalDataService:EnvironmentalDataService){}
+  constructor(
+    private environmentalDataService:EnvironmentalDataService,
+    public auth: AuthService,
+    private router: Router
+  ){}
 
   ngOnInit() {
+    if (!this.auth.isLoggedIn()) {
+      // Store the intended destination before redirecting to login
+      localStorage.setItem('intendedDestination', '/environmentalData');
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     this.environmentalDataService.getEnvironmentalData().subscribe({
       next: data => this.environmentalData = data,
       error: err => console.error(err)

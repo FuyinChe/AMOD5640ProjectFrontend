@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { SampleChartComponent } from '../sample-chart/sample-chart.component';
 import {SnowDepthChartComponent} from '../snow-depth-chart/snow-depth-chart.component';
 import {FormsModule} from '@angular/forms';
@@ -36,7 +38,11 @@ export class DashboardComponent implements OnInit {
   // constructor(private dataService: EnvironmentalDataService) {}
 
   //the sample data for demo
-  constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
+  constructor(
+    private monthlySummaryService: EnvironmentalMonthlySummaryService,
+    public auth: AuthService,
+    private router: Router
+  ) {}
 
   activeTab: 'matrix' | 'snow-depth' | 'soil-temp5cm' | 'rainfall' | 'humidity' = 'matrix';
 
@@ -56,6 +62,13 @@ export class DashboardComponent implements OnInit {
   isMobile = false;
 
   ngOnInit(): void {
+    if (!this.auth.isLoggedIn()) {
+      // Store the intended destination before redirecting to login
+      localStorage.setItem('intendedDestination', '/dashboard');
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     this.checkMobile();
     window.addEventListener('resize', this.checkMobile.bind(this));
     const start = this.dateRange.start || '2023-01-01';
