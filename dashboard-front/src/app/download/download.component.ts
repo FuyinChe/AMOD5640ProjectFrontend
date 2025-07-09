@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { EnvironmentalSampleDataService } from '../services/environmental-sample-data.service';
+import { EnvironmentalDataService } from '../services/environmental-data.service';
 import { EnvironmentalRecord } from '../interfaces/environmental-record';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -28,15 +28,15 @@ export class DownloadComponent implements OnInit {
   filteredData: EnvironmentalRecord[] = [];
   variables: string[] = this.STATIC_VARIABLES;
   selectedVariables: string[] = [];
-  startDate: string = '';
-  endDate: string = '';
+  startDate: string = '2023-01-01';
+  endDate: string = '2023-12-31';
   dropdownOpen = false;
   downloadDropdownOpen = false;
 
   constructor(
     public auth: AuthService,
     private router: Router,
-    private sampleDataService: EnvironmentalSampleDataService
+    private dataService: EnvironmentalDataService
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class DownloadComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.sampleDataService.getEnvironmentalData().subscribe(data => {
+    this.dataService.getEnvironmentalData().subscribe(data => {
       this.data = data;
       this.filteredData = data;
     });
