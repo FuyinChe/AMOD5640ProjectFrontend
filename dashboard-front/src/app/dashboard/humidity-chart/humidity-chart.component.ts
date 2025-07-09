@@ -234,26 +234,113 @@ export class HumidityChartComponent implements OnChanges {
     }
   }
 
-  downloadCSV() {
+  downloadCSV = () => {
+    console.log('downloadCSV function called');
+    console.log('latestHumidityRawData:', this.latestHumidityRawData);
+    console.log('groupBy:', this.groupBy);
+    
     if (!this.latestHumidityRawData || this.latestHumidityRawData.length === 0) {
       console.warn('No data available for CSV download');
       return;
     }
     
-    const headers = ['Period', 'Avg Humidity'];
-    const rows = this.latestHumidityRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
+    // Check the first data item to determine the structure
+    const firstItem = this.latestHumidityRawData[0];
+    console.log('First data item:', firstItem);
+    
+    let headers: string[] = [];
+    let rows: (string | number)[][] = [];
+    
+    // Handle different data structures based on groupBy and available properties
+    if (this.groupBy === 'weekly') {
+      // For weekly data, check what properties are available
+      if (firstItem.hasOwnProperty('total')) {
+        // Some weekly data has total instead of min
+        headers = ['Week', 'Avg', 'Total', 'Max'];
+        rows = this.latestHumidityRawData.map((d: any) => [
+          `W${String(d.week).padStart(2, '0')}`, 
+          d.avg,
+          d.total || '',
+          d.max || ''
+        ]);
+      } else if (firstItem.hasOwnProperty('min')) {
+        // Weekly data with min value
+        headers = ['Week', 'Avg', 'Max', 'Min'];
+        rows = this.latestHumidityRawData.map((d: any) => [
+          `W${String(d.week).padStart(2, '0')}`, 
+          d.avg,
+          d.max || '',
+          d.min || ''
+        ]);
+      } else {
+        // Fallback for weekly data
+        headers = ['Week', 'Avg', 'Max'];
+        rows = this.latestHumidityRawData.map((d: any) => [
+          `W${String(d.week).padStart(2, '0')}`, 
+          d.avg,
+          d.max || ''
+        ]);
+      }
+    } else if (this.groupBy === 'month') {
+      headers = ['Month', 'Avg', 'Max', 'Min'];
+      rows = this.latestHumidityRawData.map((d: any) => [
+        d.period, 
+        d.avg,
+        d.max || '',
+        d.min || ''
+      ]);
+    } else {
+      // For hourly data - check if we have max/min values
+      if (firstItem.hasOwnProperty('max') && firstItem.hasOwnProperty('min')) {
+        headers = ['Period', 'Avg', 'Max', 'Min'];
+        rows = this.latestHumidityRawData.map((d: any) => [
+          d.period, 
+          d.avg,
+          d.max,
+          d.min
+        ]);
+      } else {
+        headers = ['Period', 'Avg'];
+        rows = this.latestHumidityRawData.map((d: any) => [d.period, d.avg]);
+      }
+    }
+    
     let csvContent = headers.join(',') + '\n';
     csvContent += rows.map((e: (string | number)[]) => e.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    
+    // Add BOM for proper UTF-8 encoding in Excel
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'humidity-data.csv';
+    
+    // Try to get the unit from the service response or use a default
+    let unit = '';
+    try {
+      // This is a bit of a workaround - we'll use the chart title to determine the unit
+      const chartTitle = this.chartOptions.plugins?.title?.text || '';
+      if (chartTitle.includes('Humidity')) {
+        unit = '%';
+      } else if (chartTitle.includes('Rainfall')) {
+        unit = 'mm';
+      } else if (chartTitle.includes('Snow')) {
+        unit = 'cm';
+      } else if (chartTitle.includes('Temperature')) {
+        unit = '°C';
+      }
+    } catch (e) {
+      unit = '';
+    }
+    
+    a.download = `humidity-data-${this.groupBy}${unit ? `-${unit}` : ''}.csv`;
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }
 
-  downloadPNG() {
+  downloadPNG = () => {
     const canvas = document.querySelector('app-humidity-chart .humidity-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
