@@ -6,28 +6,40 @@
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
 }
 .chart-card__content,
-.chart-container {
+.chart-container,
+.humidity-chart__container,
+.rainfall-chart__container,
+.snow-depth-chart__container,
+.soil-temp5cm-chart__container {
+  flex: 8 1 0%;
+  height: 80%;
+  min-height: 0;
+  max-height: 80%;
   width: 100%;
-  max-width: 100vw;
+  max-width: 800px;
   min-width: 0;
   box-sizing: border-box;
-  height: 400px !important;
   aspect-ratio: 16 / 9 !important;
-  min-height: unset !important;
-  max-height: unset !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 .chart-card__content canvas,
-.chart-container canvas {
+.chart-container canvas,
+.humidity-chart__container canvas,
+.rainfall-chart__container canvas,
+.snow-depth-chart__container canvas,
+.soil-temp5cm-chart__container canvas {
   width: 100% !important;
   height: 100% !important;
   min-width: 0;
@@ -37,6 +49,10 @@
   max-width: 100vw;
 }
 .download-buttons {
+  flex: 2 1 0%;
+  height: 20%;
+  min-height: 40px;
+  max-height: 20%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -45,6 +61,8 @@
   width: 100%;
   margin-top: 0.75rem;
   padding: 0 0.5rem;
+  z-index: 10;
+  position: relative;
 }
 .chart__download-btn {
   background: rgba(255, 255, 255, 0.95);
@@ -88,6 +106,20 @@
   font-size: 0.9em;
 }
 
+@media (max-width: 900px) {
+  .chart-card__content,
+  .chart-container,
+  .humidity-chart__container,
+  .rainfall-chart__container,
+  .snow-depth-chart__container,
+  .soil-temp5cm-chart__container {
+    max-width: 100vw;
+    height: auto !important;
+    min-height: 220px;
+    aspect-ratio: 1.2 / 1 !important;
+  }
+}
+
 @media (max-width: 700px) {
   .chart-card {
     padding: 0.5rem;
@@ -97,12 +129,21 @@
     box-sizing: border-box;
   }
   .chart-card__content,
-  .chart-container {
-    height: 220px !important;
+  .chart-container,
+  .humidity-chart__container,
+  .rainfall-chart__container,
+  .snow-depth-chart__container,
+  .soil-temp5cm-chart__container {
+    height: auto !important;
+    min-height: 180px;
     aspect-ratio: 1.2 / 1 !important;
   }
   .chart-card__content canvas,
-  .chart-container canvas {
+  .chart-container canvas,
+  .humidity-chart__container canvas,
+  .rainfall-chart__container canvas,
+  .snow-depth-chart__container canvas,
+  .soil-temp5cm-chart__container canvas {
     width: 100% !important;
     height: 100% !important;
     min-width: 0;
@@ -135,7 +176,11 @@
     box-sizing: border-box;
   }
   .chart-card__content,
-  .chart-container {
+  .chart-container,
+  .humidity-chart__container,
+  .rainfall-chart__container,
+  .snow-depth-chart__container,
+  .soil-temp5cm-chart__container {
     min-height: 0;
     height: auto;
     width: 100%;
@@ -158,7 +203,11 @@
 
 @media (min-width: 700px) {
   .chart-card__content,
-  .chart-container {
+  .chart-container,
+  .humidity-chart__container,
+  .rainfall-chart__container,
+  .snow-depth-chart__container,
+  .soil-temp5cm-chart__container {
     min-height: 400px;
   }
 } 

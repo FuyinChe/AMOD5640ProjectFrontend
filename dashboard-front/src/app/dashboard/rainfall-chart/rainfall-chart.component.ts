@@ -35,6 +35,11 @@ export class RainfallChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Period'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       },
       y: {
@@ -42,12 +47,25 @@ export class RainfallChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Rainfall (mm)'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        },
+        ticks: {
+          // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+          autoSkip: true,
+          maxTicksLimit: 8,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
         }
       }
     }
   };
 
-  private latestRainfallRawData: { period: string, avg_rainfall_mm: number }[] = [];
+  private latestRainfallRawData: { period: string, avg: number }[] = [];
 
   constructor(private rainfallService: RainfallService) {}
 
@@ -97,6 +115,20 @@ export class RainfallChartComponent implements OnChanges {
               title: {
                 display: true,
                 text: `Rainfall (${response.unit || 'mm'})`
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
+              },
+              ticks: {
+                // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+                autoSkip: true,
+                maxTicksLimit: 5, // fewer ticks for small range
+                // stepSize: 0.02, // optionally uncomment for more control
+                callback: function(value: string | number) {
+                  return Number(value).toFixed(2); // show two decimals
+                }
               }
             }
           }
@@ -106,8 +138,13 @@ export class RainfallChartComponent implements OnChanges {
   }
 
   downloadCSV() {
+    if (!this.latestRainfallRawData || this.latestRainfallRawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+    
     const headers = ['Period', 'Avg Rainfall (mm)'];
-    const rows = this.latestRainfallRawData.map((d: { period: string, avg_rainfall_mm: number }) => [d.period, d.avg_rainfall_mm]);
+    const rows = this.latestRainfallRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
     csvContent += rows.map((e: (string | number)[]) => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -120,12 +157,14 @@ export class RainfallChartComponent implements OnChanges {
   }
 
   downloadPNG() {
-    const canvas = document.querySelector('.rainfall-chart .chart-container canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('app-rainfall-chart .rainfall-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'rainfall-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }

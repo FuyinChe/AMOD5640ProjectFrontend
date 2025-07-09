@@ -36,6 +36,11 @@ export class HumidityChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Period'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       },
       y: {
@@ -43,6 +48,19 @@ export class HumidityChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Humidity (%)'
+        },
+        ticks: {
+          // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+          autoSkip: true,
+          maxTicksLimit: 8,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       }
     }
@@ -98,6 +116,19 @@ export class HumidityChartComponent implements OnChanges {
               title: {
                 display: true,
                 text: `Humidity (${response.unit || '%'})`
+              },
+              ticks: {
+                // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+                autoSkip: true,
+                maxTicksLimit: 8,
+                callback: function(value: string | number) {
+                  return Number(value).toFixed(1);
+                }
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
               }
             }
           }
@@ -107,6 +138,11 @@ export class HumidityChartComponent implements OnChanges {
   }
 
   downloadCSV() {
+    if (!this.latestHumidityRawData || this.latestHumidityRawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+    
     const headers = ['Period', 'Avg Humidity'];
     const rows = this.latestHumidityRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
@@ -121,12 +157,14 @@ export class HumidityChartComponent implements OnChanges {
   }
 
   downloadPNG() {
-    const canvas = document.querySelector('.humidity-chart .chart-container canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('app-humidity-chart .humidity-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'humidity-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }

@@ -34,6 +34,11 @@ export class SnowDepthChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Period'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       },
       y: {
@@ -41,6 +46,19 @@ export class SnowDepthChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Snow Depth'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        },
+        ticks: {
+          // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+          autoSkip: true,
+          maxTicksLimit: 8,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
         }
       }
     }
@@ -89,6 +107,11 @@ export class SnowDepthChartComponent implements OnChanges {
               title: {
                 display: true,
                 text: 'Period'
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
               }
             },
             y: {
@@ -98,6 +121,19 @@ export class SnowDepthChartComponent implements OnChanges {
               title: {
                 display: true,
                 text: `Snow Depth (${this.unit})`
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
+              },
+              ticks: {
+                // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+                autoSkip: true,
+                maxTicksLimit: 8,
+                callback: function(value: string | number) {
+                  return Number(value).toFixed(1);
+                }
               }
             }
           }
@@ -113,6 +149,11 @@ export class SnowDepthChartComponent implements OnChanges {
   }
 
   downloadCSV() {
+    if (!this.latestSnowDepthRawData || this.latestSnowDepthRawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+    
     const headers = ['Period', `Avg Snow Depth (${this.unit})`];
     const rows = this.latestSnowDepthRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
@@ -127,12 +168,14 @@ export class SnowDepthChartComponent implements OnChanges {
   }
 
   downloadPNG() {
-    const canvas = document.querySelector('.snow-depth-chart__canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('app-snow-depth-chart .snow-depth-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'snow-depth-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }

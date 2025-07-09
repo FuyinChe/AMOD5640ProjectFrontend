@@ -20,7 +20,44 @@ interface ChartData<TType extends ChartType, TData, TLabel> {
 export class SampleChartComponent {
   public barChartOptions = {
     responsive: true,
-    // Add other Chart.js options
+    plugins: {
+      legend: { display: true },
+      title: {
+        display: true,
+        text: 'Sample Chart'
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Year'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        }
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Value'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        },
+        ticks: {
+          stepSize: 0.1,
+          autoSkip: false,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
+        }
+      }
+    }
   };
   public barChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
   public barChartType: ChartType = 'bar'; // Use ChartType for type safety

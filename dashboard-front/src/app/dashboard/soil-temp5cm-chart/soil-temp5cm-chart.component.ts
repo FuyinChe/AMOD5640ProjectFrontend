@@ -35,6 +35,11 @@ export class SoilTemp5cmChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Period'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       },
       y: {
@@ -42,6 +47,19 @@ export class SoilTemp5cmChartComponent implements OnChanges {
         title: {
           display: true,
           text: 'Soil Temp (°C)'
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        },
+        ticks: {
+          // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+          autoSkip: true,
+          maxTicksLimit: 8,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
         }
       }
     }
@@ -88,6 +106,11 @@ export class SoilTemp5cmChartComponent implements OnChanges {
               title: {
                 display: true,
                 text: 'Period'
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
               }
             },
             y: {
@@ -96,7 +119,20 @@ export class SoilTemp5cmChartComponent implements OnChanges {
               max: max + padding,
               title: {
                 display: true,
-                text: `Soil Temp (${response.unit || '°C'})`
+                text: `Soil Temp (${response.unit || '\u00b0C'})`
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
+              },
+              ticks: {
+                // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+                autoSkip: true,
+                maxTicksLimit: 8,
+                callback: function(value: string | number) {
+                  return Number(value).toFixed(1);
+                }
               }
             }
           }
@@ -106,6 +142,11 @@ export class SoilTemp5cmChartComponent implements OnChanges {
   }
 
   downloadCSV() {
+    if (!this.latestSoilTempRawData || this.latestSoilTempRawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+    
     const headers = ['Period', 'Avg Soil Temp'];
     const rows = this.latestSoilTempRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
@@ -120,12 +161,14 @@ export class SoilTemp5cmChartComponent implements OnChanges {
   }
 
   downloadPNG() {
-    const canvas = document.querySelector('.chart-container canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('app-soil-temp5cm-chart .soil-temp5cm-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'soil-temp5cm-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }
