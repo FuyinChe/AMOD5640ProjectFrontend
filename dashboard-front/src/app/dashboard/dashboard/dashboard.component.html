@@ -26,13 +26,20 @@
   
 
   <!-- Main Tabs -->
-  <div class="dashboard__tabs">
+  <div *ngIf="!isMobile" class="dashboard__tabs">
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'matrix'" (click)="setTab('matrix')">Monthly Summary</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'snow-depth'" (click)="setTab('snow-depth')">Snow Depth</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'soil-temp5cm'" (click)="setTab('soil-temp5cm')">Soil Temp</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'rainfall'" (click)="setTab('rainfall')">Rainfall</button>
     <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'humidity'" (click)="setTab('humidity')">Humidity</button>
   </div>
+  <select *ngIf="isMobile" class="dashboard__tabs-dropdown" [(ngModel)]="activeTab" (change)="setTab(activeTab)">
+    <option value="matrix">Monthly Summary</option>
+    <option value="snow-depth">Snow Depth</option>
+    <option value="soil-temp5cm">Soil Temp</option>
+    <option value="rainfall">Rainfall</option>
+    <option value="humidity">Humidity</option>
+  </select>
 
   <!-- Tab Content -->
   <div *ngIf="activeTab === 'matrix'" class="dashboard__matrix">

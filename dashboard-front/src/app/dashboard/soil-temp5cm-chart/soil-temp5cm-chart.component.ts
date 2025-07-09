@@ -73,7 +73,12 @@ export class SoilTemp5cmChartComponent implements OnChanges {
     if (this.startDate && this.endDate) {
       this.soilTemperatureService.getSoilTemperatureData(this.startDate, this.endDate, '5cm', this.groupBy).subscribe((response: any) => {
         this.latestSoilTempRawData = response.data;
-        const avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+        let avgPoints;
+        if (this.groupBy === 'weekly') {
+          avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+        } else {
+          avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+        }
         const values = response.data.map((d: { avg: number }) => d.avg);
         const min = Math.min(...values);
         const max = Math.max(...values);
@@ -116,7 +121,7 @@ export class SoilTemp5cmChartComponent implements OnChanges {
             y: {
               type: 'linear',
               min: 0,
-              max: max + padding,
+              // max: max + padding, // Let Chart.js auto-calculate max
               title: {
                 display: true,
                 text: `Soil Temp (${response.unit || '\u00b0C'})`
@@ -135,6 +140,23 @@ export class SoilTemp5cmChartComponent implements OnChanges {
                 }
               }
             }
+          }
+        };
+        // X-axis ticks logic for groupBy
+        const groupByMode = this.groupBy;
+        (this.chartOptions.scales as any)['x'] = (this.chartOptions.scales as any)['x'] || {};
+        (this.chartOptions.scales as any)['x'].ticks = {
+          autoSkip: true,
+          maxTicksLimit: 10,
+          minRotation: 45,
+          maxRotation: 45,
+          callback: function(value: any, index: number, values: any) {
+            if (groupByMode === 'month' && typeof value === 'string' && value.length === 2 && !isNaN(Number(value))) {
+              const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              return months[Number(value) - 1] || value;
+            }
+            // For weekly and all other cases, display the period string as is
+            return value;
           }
         };
       });
@@ -169,6 +191,68 @@ export class SoilTemp5cmChartComponent implements OnChanges {
       link.click();
     } else {
       console.warn('Canvas element not found for PNG download');
+    }
+  }
+
+  setGroupBy(group: string) {
+    if (this.groupBy !== group) {
+      this.groupBy = group;
+      if (this.startDate && this.endDate) {
+        this.soilTemperatureService.getSoilTemperatureData(this.startDate, this.endDate, '5cm', this.groupBy).subscribe((response: any) => {
+          this.latestSoilTempRawData = response.data;
+          let avgPoints;
+          if (this.groupBy === 'weekly') {
+            avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+          } else {
+            avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+          }
+          const values = response.data.map((d: { avg: number }) => d.avg);
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          this.chartData = [
+            {
+              data: avgPoints,
+              label: `Avg Soil Temp (${response.unit || '°C'})`,
+              borderColor: '#e67e22',
+              backgroundColor: 'rgba(230, 126, 34, 0.2)',
+              tension: 0.3,
+              pointRadius: (response.data.length > 30) ? 2 : 3,
+              borderWidth: 3,
+              fill: true
+            }
+          ];
+          // Update chart title
+          let groupLabel = 'Hourly';
+          if (this.groupBy === 'weekly') groupLabel = 'Weekly';
+          else if (this.groupBy === 'month') groupLabel = 'Monthly';
+          this.chartOptions.plugins = this.chartOptions.plugins || {};
+          this.chartOptions.plugins.title = this.chartOptions.plugins.title || {};
+          this.chartOptions.plugins.title.text = `Soil Temp (${groupLabel}) Over Time`;
+          // X-axis ticks
+          const groupByMode = this.groupBy;
+          (this.chartOptions.scales as any)['x'] = (this.chartOptions.scales as any)['x'] || {};
+          (this.chartOptions.scales as any)['x'].ticks = {
+            autoSkip: true,
+            maxTicksLimit: 10,
+            minRotation: 45,
+            maxRotation: 45,
+            callback: function(value: any, index: number, values: any) {
+              if (groupByMode === 'month' && typeof value === 'string' && value.length === 2 && !isNaN(Number(value))) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return months[Number(value) - 1] || value;
+              }
+              if (groupByMode === 'weekly') {
+                return 'W' + value;
+              }
+              return value;
+            }
+          };
+          // Y-axis: let Chart.js auto-calculate max
+          (this.chartOptions.scales as any)['y'] = (this.chartOptions.scales as any)['y'] || {};
+          (this.chartOptions.scales as any)['y'].min = 0;
+          // (this.chartOptions.scales as any)['y'].max = max + padding; // removed
+        });
+      }
     }
   }
 }

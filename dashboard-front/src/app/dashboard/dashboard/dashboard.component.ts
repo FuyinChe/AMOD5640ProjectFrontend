@@ -53,10 +53,18 @@ export class DashboardComponent implements OnInit {
     return Math.max(hours, 1);
   }
 
+  isMobile = false;
+
   ngOnInit(): void {
+    this.checkMobile();
+    window.addEventListener('resize', this.checkMobile.bind(this));
     const start = this.dateRange.start || '2023-01-01';
     const end = this.dateRange.end || '2023-12-31';
     this.fetchMonthlySummary(start, end);
+  }
+
+  checkMobile() {
+    this.isMobile = window.innerWidth <= 700;
   }
 
   applyDateFilter(): void {

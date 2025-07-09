@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartDataset, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
@@ -15,8 +15,9 @@ export class SnowDepthChartComponent implements OnChanges {
   @Input() startDate: string = '';
   @Input() endDate: string = '';
   @Input() groupBy: string = 'hour';
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
+  chartData: ChartDataset<'line', { x: string; y: number }[]>[] = [];
   chartType: 'line' = 'line';
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
@@ -74,23 +75,43 @@ export class SnowDepthChartComponent implements OnChanges {
       this.snowDepthService.getSnowDepthData(this.startDate, this.endDate, this.groupBy).subscribe((response: any) => {
         this.latestSnowDepthRawData = response.data;
         this.unit = response.unit || 'cm';
-        const avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+        let avgPoints;
+        if (this.groupBy === 'weekly') {
+          avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+          this.chartData = [
+            {
+              data: avgPoints,
+              label: `Avg Snow Depth (${this.unit})`,
+              borderColor: '#0056b3',
+              backgroundColor: 'rgba(0, 86, 179, 0.2)',
+              tension: 0.3,
+              pointRadius: 3,
+              borderWidth: 3,
+              fill: true
+            }
+          ];
+        } else if (this.groupBy === 'month') {
+          // Remove monthly mode: do nothing or fallback to another mode
+          this.chartData = [];
+        } else {
+          avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+          this.chartData = [
+            {
+              data: avgPoints,
+              label: `Avg Snow Depth (${this.unit})`,
+              borderColor: '#0056b3',
+              backgroundColor: 'rgba(0, 86, 179, 0.2)',
+              tension: 0.3,
+              pointRadius: 3,
+              borderWidth: 3,
+              fill: true
+            }
+          ];
+        }
         const values = response.data.map((d: { avg: number }) => d.avg);
         const min = Math.min(...values);
         const max = Math.max(...values);
         const padding = (max - min) * 0.2 || 1;
-        this.chartData = [
-          {
-            data: avgPoints,
-            label: `Avg Snow Depth (${this.unit})`,
-            borderColor: '#0056b3',
-            backgroundColor: 'rgba(0, 86, 179, 0.2)',
-            tension: 0.3,
-            pointRadius: 3,
-            borderWidth: 3,
-            fill: true
-          }
-        ];
         this.chartOptions = {
           responsive: true,
           maintainAspectRatio: false,
@@ -117,7 +138,7 @@ export class SnowDepthChartComponent implements OnChanges {
             y: {
               type: 'linear',
               min: 0,
-              max: max + padding,
+              // max: max + padding, // Let Chart.js auto-calculate max
               title: {
                 display: true,
                 text: `Snow Depth (${this.unit})`
@@ -138,7 +159,130 @@ export class SnowDepthChartComponent implements OnChanges {
             }
           }
         };
+        // Improve x-axis label and ticks for all groupBy
+        const groupByMode = this.groupBy; // capture the current groupBy value
+        (this.chartOptions.scales as any)['x'] = (this.chartOptions.scales as any)['x'] || {};
+        (this.chartOptions.scales as any)['x'].ticks = {
+          autoSkip: groupByMode === 'month' ? false : true,
+          maxTicksLimit: 10,
+          minRotation: 45,
+          maxRotation: 45,
+          callback: function(value: any, index: number, values: any) {
+            if (groupByMode === 'month') {
+              // For month, just return the value (month name)
+              return value;
+            }
+            if (groupByMode === 'weekly') {
+              return 'W' + value;
+            }
+            // For all other cases, display the period string as is
+            return value;
+          }
+        };
+        // Remove explicit x-axis labels for month group (let Chart.js use x values from data)
+        // (No longer set or delete labels here)
+        // Reduce point radius for many points
+        this.chartData[0].pointRadius = (response.data.length > 30) ? 2 : 3;
+        // After updating chartData and chartOptions, force chart update
+        this.chart?.update();
       });
+    }
+  }
+
+  setGroupBy(group: string) {
+    if (this.groupBy !== group) {
+      this.groupBy = group;
+      // Manually trigger data reload
+      if (this.startDate && this.endDate) {
+        this.snowDepthService.getSnowDepthData(this.startDate, this.endDate, this.groupBy).subscribe((response: any) => {
+          this.latestSnowDepthRawData = response.data;
+          this.unit = response.unit || 'cm';
+          let avgPoints;
+          if (this.groupBy === 'weekly') {
+            avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+            this.chartData = [
+              {
+                data: avgPoints,
+                label: `Avg Snow Depth (${this.unit})`,
+                borderColor: '#0056b3',
+                backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                tension: 0.3,
+                pointRadius: 3,
+                borderWidth: 3,
+                fill: true
+              }
+            ];
+          } else if (this.groupBy === 'month') {
+            const monthData = response.data.map((d: { period: string, avg: number }) => ({
+              x: d.period,
+              y: d.avg
+            }));
+            this.chartData = [
+              {
+                data: monthData,
+                label: `Avg Snow Depth (${this.unit})`,
+                borderColor: '#0056b3',
+                backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                tension: 0.3,
+                pointRadius: 3,
+                borderWidth: 3,
+                fill: true
+              }
+            ];
+            (this.chartOptions.scales as any)['x'].ticks = {
+              autoSkip: false,
+              maxTicksLimit: 12,
+              minRotation: 45,
+              maxRotation: 45
+            };
+          } else {
+            avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+            this.chartData = [
+              {
+                data: avgPoints,
+                label: `Avg Snow Depth (${this.unit})`,
+                borderColor: '#0056b3',
+                backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                tension: 0.3,
+                pointRadius: 3,
+                borderWidth: 3,
+                fill: true
+              }
+            ];
+          }
+          // Update chart title with groupBy
+          let groupLabel = 'Hourly';
+          if (this.groupBy === 'weekly') groupLabel = 'Weekly';
+          else if (this.groupBy === 'month') groupLabel = 'Monthly';
+          this.chartOptions.plugins = this.chartOptions.plugins || {};
+          this.chartOptions.plugins.title = this.chartOptions.plugins.title || {};
+          this.chartOptions.plugins.title.text = `Snow Depth (${groupLabel}) Over Time`;
+          // Improve x-axis label for monthly
+          if (this.groupBy === 'month' || this.groupBy === 'weekly') {
+            this.chartOptions.scales = this.chartOptions.scales || {};
+            (this.chartOptions.scales as any)['x'] = (this.chartOptions.scales as any)['x'] || {};
+            const groupByMode = this.groupBy;
+            (this.chartOptions.scales as any)['x'].ticks = {
+              autoSkip: groupByMode === 'month' ? false : true,
+              maxTicksLimit: 10,
+              minRotation: 45,
+              maxRotation: 45,
+              callback: function(value: any, index: number, values: any) {
+                if (groupByMode === 'month') {
+                  // For month, just return the value (month name)
+                  return value;
+                }
+                if (groupByMode === 'weekly') {
+                  return 'W' + value;
+                }
+                return value;
+              }
+            };
+          }
+          // Remove explicit x-axis labels for month group (let Chart.js use x values from data)
+          // (No longer set or delete labels here)
+        });
+      }
     }
   }
 

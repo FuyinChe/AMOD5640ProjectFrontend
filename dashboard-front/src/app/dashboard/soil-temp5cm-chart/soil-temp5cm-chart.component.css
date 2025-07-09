@@ -8,3 +8,28 @@
   width: 100%;
   height: 100%;
 }
+
+.chart-groupby-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+.chart-groupby-btns button {
+  background: #f5f7fa;
+  border: 1.2px solid #007844;
+  color: #007844;
+  font-weight: 600;
+  padding: 0.18rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95em;
+  min-width: 70px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.chart-groupby-btns button.active,
+.chart-groupby-btns button:focus {
+  background: #007844;
+  color: #fff;
+  border-color: #007844;
+}

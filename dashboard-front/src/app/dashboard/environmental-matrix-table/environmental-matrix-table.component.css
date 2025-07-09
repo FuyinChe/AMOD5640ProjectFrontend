@@ -85,6 +85,33 @@
   display: table;
 }
 
+.dashboard__matrix-table__scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .dashboard__matrix-table__table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    min-width: 600px;
+  }
+  .dashboard__matrix-table__header-cell,
+  .dashboard__matrix-table__cell {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.92em;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard__matrix-table__header-cell,
+  .dashboard__matrix-table__cell {
+    padding: 0.25rem 0.3rem;
+    font-size: 0.85em;
+  }
+}
+
 /* Remove all custom button styles for download buttons in the matrix table. Only keep icon size helper. */
 .dashboard__matrix-table__actions.download-buttons {
   display: flex;

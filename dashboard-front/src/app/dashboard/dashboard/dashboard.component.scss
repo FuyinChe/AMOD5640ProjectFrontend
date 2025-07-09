@@ -175,3 +175,71 @@
   margin: 0 auto;
   display: block;
 } 
+
+@media (max-width: 700px) {
+  .dashboard__tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .dashboard__tab {
+    flex: 0 0 auto;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem 0.4rem 1rem;
+    min-width: 110px;
+  }
+}
+
+@media (max-width: 450px) {
+  .dashboard__tabs {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: visible;
+  }
+  .dashboard__tab {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 0.3rem;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.92rem;
+  }
+} 
+
+.dashboard__tabs-dropdown {
+  display: block;
+  width: 250px; // fixed width for consistency
+  max-width: 90vw;
+  margin: 0.5rem auto 1rem auto;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #007844;
+  background: #f5f7fa;
+  color: #007844;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='007844' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  cursor: pointer;
+}
+
+.dashboard__tabs-dropdown option {
+  text-align: center;
+  font-weight: 600;
+  color: #007844;
+  background: #fff;
+  min-width: 250px;
+}
+
+.dashboard__tabs-dropdown:focus {
+  outline: 2px solid #007844;
+  box-shadow: 0 0 0 2px #b2dfdb;
+} 

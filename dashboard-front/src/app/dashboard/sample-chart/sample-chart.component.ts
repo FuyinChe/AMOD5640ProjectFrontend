@@ -50,7 +50,6 @@ export class SampleChartComponent {
           lineWidth: 1
         },
         ticks: {
-          stepSize: 0.1,
           autoSkip: false,
           callback: function(value: string | number) {
             return Number(value).toFixed(1);

@@ -8,24 +8,26 @@
     PNG
   </button>
 </div>
-<table #matrixTable class="dashboard__matrix-table__table">
-  <thead>
-    <tr class="dashboard__matrix-table__header">
-      <th class="dashboard__matrix-table__header-cell">Metric</th>
-      <th *ngFor="let month of months" class="dashboard__matrix-table__header-cell">{{ month }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let metric of metrics" class="dashboard__matrix-table__row">
-      <td class="dashboard__matrix-table__cell">
-        {{ metric.name }} <span *ngIf="metric.unit">({{ metric.unit }})</span>
-      </td>
-      <td *ngFor="let value of metric.values; let i = index"
-          class="dashboard__matrix-table__cell"
-          [ngStyle]="{'background-color': getCellColor(value, getMin(metric), getMax(metric))}"
-          [ngClass]="{'dashboard__matrix-table__cell--null': value === null}">
-        {{ value === null ? '-' : (value | number:'1.2-2') }}
-      </td>
-    </tr>
-  </tbody>
-</table> 
+<div class="dashboard__matrix-table__scroll">
+  <table #matrixTable class="dashboard__matrix-table__table">
+    <thead>
+      <tr class="dashboard__matrix-table__header">
+        <th class="dashboard__matrix-table__header-cell">Metric</th>
+        <th *ngFor="let month of months" class="dashboard__matrix-table__header-cell">{{ month }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let metric of metrics" class="dashboard__matrix-table__row">
+        <td class="dashboard__matrix-table__cell">
+          {{ metric.name }} <span *ngIf="metric.unit">({{ metric.unit }})</span>
+        </td>
+        <td *ngFor="let value of metric.values; let i = index"
+            class="dashboard__matrix-table__cell"
+            [ngStyle]="{'background-color': getCellColor(value, getMin(metric), getMax(metric))}"
+            [ngClass]="{'dashboard__matrix-table__cell--null': value === null}">
+          {{ value === null ? '-' : (value | number:'1.2-2') }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> 
