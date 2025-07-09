@@ -1,108 +1,35 @@
-/* === Rainfall Chart Styling === */
+/* Rainfall Chart Component - BEM Compliant Styles */
 .rainfall-chart {
-  background: linear-gradient(145deg, #f0f4f8, #ffffff);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 1rem;
-  max-width: 100%;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.rainfall-chart:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-.rainfall-chart__canvas {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-.rainfall-chart {
+.rainfall-chart__container {
   width: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
 }
 
-.chart-container {
-  width: 100%;
-  max-width: 100%;
-}
-
-.download-buttons {
+.chart-groupby-btns {
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  margin-top: 0.75rem;
-  padding: 0 0.5rem;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
 }
-
-.chart__download-btn {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #185a9d;
-  color: #185a9d;
+.chart-groupby-btns button {
+  background: #f5f7fa;
+  border: 1.2px solid #007844;
+  color: #007844;
   font-weight: 600;
-  font-size: 0.68rem;
-  padding: 0.28rem 0.48rem;
+  padding: 0.18rem 0.7rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.22em;
-  text-decoration: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.95em;
+  min-width: 70px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
 }
-
-.chart__download-btn--csv {
-  border-color: #28a745;
-  color: #28a745;
-}
-.chart__download-btn--csv:hover,
-.chart__download-btn--csv:focus {
-  background: #28a745;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
-}
-
-.chart__download-btn--png {
-  border-color: #dc3545;
-  color: #dc3545;
-}
-.chart__download-btn--png:hover,
-.chart__download-btn--png:focus {
-  background: #dc3545;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
-}
-
-.chart__download-btn i {
-  font-size: 0.9em;
-}
-/* Unified card style for all charts */
-.chart-card, .snow-depth-chart, .humidity-chart, .rainfall-chart, .sample-chart, .soil-temp5cm-chart {
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  padding: 1rem;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.chart-groupby-btns button.active,
+.chart-groupby-btns button:focus {
+  background: #007844;
+  color: #fff;
+  border-color: #007844;
 }

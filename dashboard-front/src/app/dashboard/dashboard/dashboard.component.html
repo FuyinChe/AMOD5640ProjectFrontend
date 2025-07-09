@@ -15,23 +15,77 @@
     </label>
     <button (click)="applyDateFilter()">Apply</button>
   </div>
+  <div class="dashboard__selected-range">
+    <span *ngIf="dateRange.start && dateRange.end">
+      *Showing data from <strong>{{ dateRange.start }}</strong> to <strong>{{ dateRange.end }}</strong>
+    </span>
+    <span *ngIf="!dateRange.start || !dateRange.end">
+      *Showing data for <strong>2023-01-01</strong> to <strong>2023-12-31</strong> (default)
+    </span>
+  </div>
+  
 
-  <!-- Subcomponents -->
-  <div class="dashboard__charts">
+  <!-- Main Tabs -->
+  <div *ngIf="!isMobile" class="dashboard__tabs">
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'matrix'" (click)="setTab('matrix')">Monthly Summary</button>
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'snow-depth'" (click)="setTab('snow-depth')">Snow Depth</button>
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'soil-temp5cm'" (click)="setTab('soil-temp5cm')">Soil Temp</button>
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'rainfall'" (click)="setTab('rainfall')">Rainfall</button>
+    <button class="dashboard__tab" [class.dashboard__tab--active]="activeTab === 'humidity'" (click)="setTab('humidity')">Humidity</button>
+  </div>
+  <select *ngIf="isMobile" class="dashboard__tabs-dropdown" [(ngModel)]="activeTab" (change)="setTab(activeTab)">
+    <option value="matrix">Monthly Summary</option>
+    <option value="snow-depth">Snow Depth</option>
+    <option value="soil-temp5cm">Soil Temp</option>
+    <option value="rainfall">Rainfall</option>
+    <option value="humidity">Humidity</option>
+  </select>
 
-
-    <h4>Overview</h4>
-    <h4>Detail Metrics</h4>
-      <div class="dashboard__charts-grid">
-      
-      <app-snow-depth-chart [envData]="filteredData"></app-snow-depth-chart>
-      <!-- Add other chart components here -->
-
-      <app-humidity-chart [envData]="filteredData"></app-humidity-chart>
-
-      <app-rainfall-chart [envData]="filteredData"></app-rainfall-chart>
-
-      <app-soil-temp5cm-chart [envData]="filteredData"></app-soil-temp5cm-chart>
-      </div>
+  <!-- Tab Content -->
+  <div *ngIf="activeTab === 'matrix'" class="dashboard__matrix">
+    <h4 class="dashboard__matrix-title">Overview</h4>
+    
+    <app-environmental-matrix-table
+      [metrics]="metrics"
+      [months]="months"
+      class="dashboard__matrix-table">
+    </app-environmental-matrix-table>
+  </div>
+  <div *ngIf="activeTab === 'snow-depth'" class="dashboard__charts">
+    <h4 class="dashboard__charts-title">Snow Depth</h4>
+    <div class="dashboard__charts-content">
+      <app-snow-depth-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-snow-depth-chart>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'soil-temp5cm'" class="dashboard__charts">
+    <h4 class="dashboard__charts-title">Soil Temp 5cm</h4>
+    <div class="dashboard__charts-content">
+      <app-soil-temp5cm-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-soil-temp5cm-chart>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'rainfall'" class="dashboard__charts">
+    <h4 class="dashboard__charts-title">Rainfall</h4>
+    <div class="dashboard__charts-content">
+      <app-rainfall-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end"
+        [limit]="rainfallLimit">
+      </app-rainfall-chart>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'humidity'" class="dashboard__charts">
+    <h4 class="dashboard__charts-title">Humidity</h4>
+    <div class="dashboard__charts-content">
+      <app-humidity-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end">
+      </app-humidity-chart>
+    </div>
   </div>
 </div>

@@ -1,10 +1,14 @@
 <app-chart-card [onDownloadCSV]="downloadCSV" [onDownloadPNG]="downloadPNG">
-  <div class="chart-container">
+  <div class="soil-temp5cm-chart__container">
+    <div class="chart-groupby-btns">
+      <button [class.active]="groupBy === 'hour'" (click)="setGroupBy('hour')">Hourly</button>
+      <button [class.active]="groupBy === 'weekly'" (click)="setGroupBy('weekly')">Weekly</button>
+    </div>
     <canvas baseChart
-            class="soil-temp5cm-chart__canvas"
+            [type]="chartType"
             [datasets]="chartData"
             [options]="chartOptions"
-            [type]="chartType">
+            [legend]="true">
     </canvas>
   </div>
 </app-chart-card>

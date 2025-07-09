@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartDataset, ChartOptions } from 'chart.js';
 import { EnvironmentalRecord } from '../../interfaces/environmental-record';
 import 'chartjs-adapter-luxon';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
+import { HumidityService } from '../../services/humidity.service';
 
 @Component({
   selector: 'app-humidity-chart',
@@ -13,105 +14,236 @@ import { ChartCardComponent } from '../chart-card/chart-card.component';
   styleUrls: ['./humidity-chart.component.css']
 })
 export class HumidityChartComponent implements OnChanges {
-  @Input() envData: EnvironmentalRecord[] = [];
+  @Input() startDate: string = '';
+  @Input() endDate: string = '';
+  @Input() groupBy: string = 'hour';
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  chartData: ChartDataset<'line', { x: Date; y: number }[]>[] = [];
+  chartData: ChartDataset<'line', { x: string; y: number }[]>[] = [];
   chartType: 'line' = 'line';
-
   chartOptions: ChartOptions<'line'> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        text: 'Relative Humidity (%) Over Time'
+        text: 'Humidity Over Time'
       },
       legend: { display: false }
     },
     scales: {
       x: {
-        type: 'time',
-        time: {
-          unit: 'hour',
-          tooltipFormat: 'MMM dd, HH:mm',
-          displayFormats: {
-            hour: 'HH:mm',
-            day: 'MMM dd'
-          }
-        },
+        type: 'category',
         title: {
           display: true,
-          text: 'Time'
+          text: 'Period'
         },
-        min: undefined,
-        max: undefined
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
+        }
       },
       y: {
+        type: 'linear',
         title: {
           display: true,
           text: 'Humidity (%)'
+        },
+        ticks: {
+          // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+          autoSkip: true,
+          maxTicksLimit: 8,
+          callback: function(value: string | number) {
+            return Number(value).toFixed(1);
+          }
+        },
+        grid: {
+          display: true,
+          color: '#e0e0e0',
+          lineWidth: 1
         }
       }
     }
   };
 
-  ngOnChanges(): void {
-    const pad = (n: number) => n.toString().padStart(2, '0');
+  private latestHumidityRawData: { period: string, avg: number }[] = [];
 
-    const humidityPoints = this.envData
-      .filter(d => d.RelativeHumidity_Pct !== null)
-      .map(d => {
-        const dateStr = `${d.Year}-${pad(d.Month)}-${pad(d.Day)}T${d.Time}`;
-        const date = new Date(dateStr);
+  constructor(private humidityService: HumidityService) {}
 
-        if (isNaN(date.getTime())) {
-          console.warn('Invalid date:', dateStr);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.startDate && this.endDate) {
+      this.humidityService.getHumidityData(this.startDate, this.endDate, this.groupBy).subscribe((response: any) => {
+        this.latestHumidityRawData = response.data;
+        let avgPoints;
+        if (this.groupBy === 'weekly') {
+          avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+        } else if (this.groupBy === 'month') {
+          // Remove monthly mode: do nothing or fallback to another mode
+          this.chartData = [];
+        } else {
+          avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
         }
-
-        return {
-          x: date,
-          y: d.RelativeHumidity_Pct as number
-        };
-      })
-      .sort((a, b) => a.x.getTime() - b.x.getTime());
-
-    this.chartData = [
-      {
-        data: humidityPoints,
-        label: 'Relative Humidity (%)',
-        borderColor: '#28a745',
-        backgroundColor: 'rgba(40, 167, 69, 0.1)',
-        tension: 0.3
-      }
-    ];
-
-    if (humidityPoints.length > 0) {
-      const firstDate = humidityPoints[0].x;
-      const year = firstDate.getFullYear();
-      const month = firstDate.getMonth(); // 0-based
-      const day = firstDate.getDate();
-
-      const minTime = new Date(year, month, day, 0, 0, 0).getTime();
-      const maxTime = new Date(year, month, day + 1, 0, 0, 0).getTime();
-
-      this.chartOptions = {
-        ...this.chartOptions,
-        scales: {
-          ...this.chartOptions.scales,
-          ['x']: {
-            ...this.chartOptions.scales!['x']!,
-            min: minTime,
-            max: maxTime
+        const values = response.data.map((d: { avg: number }) => d.avg);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const padding = (max - min) * 0.2 || 1;
+        this.chartData = [
+          {
+            data: avgPoints,
+            label: `Avg Humidity (${response.unit || '%'})`,
+            borderColor: '#00a085',
+            backgroundColor: 'rgba(0, 160, 133, 0.2)',
+            tension: 0.3,
+            pointRadius: (response.data.length > 30) ? 2 : 3,
+            borderWidth: 3,
+            fill: true
           }
-        }
-      };
+        ];
+        this.chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Humidity Over Time'
+            },
+            legend: { display: true }
+          },
+          scales: {
+            x: {
+              type: 'category',
+              title: {
+                display: true,
+                text: 'Period'
+              },
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 10,
+                minRotation: 45,
+                maxRotation: 45,
+                callback: (value: any, index: number, values: any) => {
+                  if (this.groupBy === 'month' && typeof value === 'string' && value.length === 2 && !isNaN(Number(value))) {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    return months[Number(value) - 1] || value;
+                  }
+                  // For weekly and all other cases, display the period string as is
+                  return value;
+                }
+              }
+            },
+            y: {
+              type: 'linear',
+              min: 0,
+              // max: max + padding, // Let Chart.js auto-calculate max
+              title: {
+                display: true,
+                text: `Humidity (${response.unit || '%'})`
+              },
+              ticks: {
+                // stepSize: 0.1, // Removed to let Chart.js auto-calculate
+                autoSkip: true,
+                maxTicksLimit: 8,
+                callback: function(value: string | number) {
+                  return Number(value).toFixed(1);
+                }
+              },
+              grid: {
+                display: true,
+                color: '#e0e0e0',
+                lineWidth: 1
+              }
+            }
+          }
+        };
+        // After updating chartData and chartOptions, force chart update
+        this.chart?.update();
+        // Remove explicit x-axis labels for month group (let Chart.js use x values from data)
+        // (No longer set or delete labels here)
+      });
+    }
+  }
+
+  setGroupBy(group: string) {
+    if (this.groupBy !== group) {
+      this.groupBy = group;
+      if (this.startDate && this.endDate) {
+        this.humidityService.getHumidityData(this.startDate, this.endDate, this.groupBy).subscribe((response: any) => {
+          this.latestHumidityRawData = response.data;
+          let avgPoints;
+          if (this.groupBy === 'weekly') {
+            avgPoints = response.data.map((d: { week: number, avg: number }) => ({ x: `W${String(d.week).padStart(2, '0')}`, y: d.avg }));
+          } else if (this.groupBy === 'month') {
+            const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            // Map API data to a dictionary for quick lookup
+            const dataMap = new Map(response.data.map((d: { period: string, avg: number }) => [d.period, d.avg]));
+            // Build data for all months, using 0 if missing
+            avgPoints = allMonths.map(month => ({
+              x: month,
+              y: Number(dataMap.get(month) ?? 0)
+            }));
+            (this.chartOptions.scales as any)['x'].labels = allMonths;
+          } else {
+            avgPoints = response.data.map((d: { period: string, avg: number }) => ({ x: d.period, y: d.avg }));
+          }
+          const values = response.data.map((d: { avg: number }) => d.avg);
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          this.chartData = [
+            {
+              data: avgPoints,
+              label: `Avg Humidity (${response.unit || '%'})`,
+              borderColor: '#00a085',
+              backgroundColor: 'rgba(0, 160, 133, 0.2)',
+              tension: 0.3,
+              pointRadius: (response.data.length > 30) ? 2 : 3,
+              borderWidth: 3,
+              fill: true
+            }
+          ];
+          // Update chart title
+          let groupLabel = 'Hourly';
+          if (this.groupBy === 'weekly') groupLabel = 'Weekly';
+          else if (this.groupBy === 'month') groupLabel = 'Monthly';
+          this.chartOptions.plugins = this.chartOptions.plugins || {};
+          this.chartOptions.plugins.title = this.chartOptions.plugins.title || {};
+          this.chartOptions.plugins.title.text = `Humidity (${groupLabel}) Over Time`;
+          // X-axis ticks
+          (this.chartOptions.scales as any)['x'] = (this.chartOptions.scales as any)['x'] || {};
+          (this.chartOptions.scales as any)['x'].ticks = {
+            autoSkip: true,
+            maxTicksLimit: 10,
+            minRotation: 45,
+            maxRotation: 45,
+            callback: (value: any, index: number, values: any) => {
+              if (this.groupBy === 'month' && typeof value === 'string' && value.length === 2 && !isNaN(Number(value))) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return months[Number(value) - 1] || value;
+              }
+              if (this.groupBy === 'weekly') {
+                return 'W' + value;
+              }
+              return value;
+            }
+          };
+          // Y-axis: let Chart.js auto-calculate max
+          (this.chartOptions.scales as any)['y'] = (this.chartOptions.scales as any)['y'] || {};
+          (this.chartOptions.scales as any)['y'].min = 0;
+        });
+      }
     }
   }
 
   downloadCSV() {
-    const headers = ['Date', 'Relative Humidity'];
-    const rows = this.envData.map(d => [d.Year + '-' + d.Month + '-' + d.Day + ' ' + d.Time, d.RelativeHumidity_Pct]);
+    if (!this.latestHumidityRawData || this.latestHumidityRawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+    
+    const headers = ['Period', 'Avg Humidity'];
+    const rows = this.latestHumidityRawData.map((d: { period: string, avg: number }) => [d.period, d.avg]);
     let csvContent = headers.join(',') + '\n';
-    csvContent += rows.map(e => e.join(',')).join('\n');
+    csvContent += rows.map((e: (string | number)[]) => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -122,12 +254,14 @@ export class HumidityChartComponent implements OnChanges {
   }
 
   downloadPNG() {
-    const canvas = document.querySelector('.humidity-chart .chart-container canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('app-humidity-chart .humidity-chart__container canvas') as HTMLCanvasElement;
     if (canvas) {
       const link = document.createElement('a');
       link.download = 'humidity-chart.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
+    } else {
+      console.warn('Canvas element not found for PNG download');
     }
   }
 }
