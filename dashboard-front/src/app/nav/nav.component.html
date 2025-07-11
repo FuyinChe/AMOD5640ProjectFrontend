@@ -4,11 +4,25 @@
   <a class="nav__link" routerLink="/about">About</a>
   <span class="nav__separator">|</span>
   <a class="nav__link" routerLink="/environmentalSampleData">Sample Data</a>
+  <span class="nav__separator">|</span>
+  <a class="nav__link" 
+     routerLink="/dashboard" 
+     (click)="handleDashboardClick($event, '/dashboard')"
+     [class.nav__link--requires-login]="!auth.isLoggedIn()"
+     [title]="!auth.isLoggedIn() ? 'Login required' : ''">
+    Dashboard (Chart.js)
+  </a>
+  <span class="nav__separator">|</span>
+  <a class="nav__link" 
+     routerLink="/plotly-dashboard" 
+     (click)="handleDashboardClick($event, '/plotly-dashboard')"
+     [class.nav__link--requires-login]="!auth.isLoggedIn()"
+     [title]="!auth.isLoggedIn() ? 'Login required' : ''">
+    Dashboard (Plotly)
+  </a>
   
   <!-- Show these links only when logged in -->
   <ng-container *ngIf="auth.isLoggedIn()">
-    <span class="nav__separator">|</span>
-    <a class="nav__link" routerLink="/dashboard">Dashboard</a>
     <span class="nav__separator">|</span>
     <a class="nav__link" routerLink="/download">Download</a>
     <span class="nav__separator">|</span>

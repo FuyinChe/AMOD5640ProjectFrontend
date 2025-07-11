@@ -1,0 +1,194 @@
+.plotly-dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Museo Sans', sans-serif;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin: 0;
+  }
+
+  &__filters {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__date-range {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-right: 0.5rem;
+  }
+
+  &__input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+
+  &__apply-btn {
+    margin-left: 1rem;
+    padding: 0.5rem 1.2rem;
+    background: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #217dbb;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 0.5rem;
+  }
+
+  &__tab {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: #7f8c8d;
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #ecf0f1;
+      color: #2c3e50;
+    }
+
+    &--active {
+      background: #3498db;
+      color: white;
+    }
+  }
+
+  &__content {
+    min-height: 500px;
+  }
+
+  &__section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__overview {
+    &-grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    &-item {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__chart-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__chart-container {
+    width: 100%;
+    height: 500px;
+    position: relative;
+  }
+
+  &__chart {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__heatmap {
+    width: 100%;
+    height: 400px;
+  }
+
+  // Responsive Design
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__date-range {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__tabs {
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+
+    &__tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    &__chart-container {
+      height: 400px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__title {
+      font-size: 1.5rem;
+    }
+
+    &__subtitle {
+      font-size: 1rem;
+    }
+
+    &__chart-container {
+      height: 300px;
+    }
+  }
+} 

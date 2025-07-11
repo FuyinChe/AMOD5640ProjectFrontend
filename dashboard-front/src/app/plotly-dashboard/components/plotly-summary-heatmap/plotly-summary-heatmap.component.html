@@ -1,0 +1,25 @@
+<div class="summary-heatmap-table__wrapper">
+  <table class="summary-heatmap-table">
+    <thead>
+      <tr>
+        <th class="summary-heatmap-table__metric-header">Metric</th>
+        <th *ngFor="let month of months" class="summary-heatmap-table__month-header">{{ month }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let metric of metrics">
+        <td class="summary-heatmap-table__metric-name">{{ metric.name }}<span *ngIf="metric.unit"> ({{ metric.unit }})</span></td>
+        <ng-container *ngIf="metric.values && metric.values.length">
+          <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
+            <td *ngFor="let value of metric.values"
+                [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
+                class="summary-heatmap-table__cell">
+              <span *ngIf="value !== null && value !== undefined">{{ value | number:'1.2-2' }}</span>
+              <span *ngIf="value === null || value === undefined">-</span>
+            </td>
+          </ng-container>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div> 

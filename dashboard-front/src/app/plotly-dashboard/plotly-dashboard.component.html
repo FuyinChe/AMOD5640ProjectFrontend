@@ -1,0 +1,132 @@
+<div class="plotly-dashboard">
+  <div class="plotly-dashboard__header">
+    <h2 class="plotly-dashboard__title">Plotly Environmental Dashboard</h2>
+    <p class="plotly-dashboard__subtitle">Advanced interactive visualizations with Plotly.js</p>
+  </div>
+
+  <!-- Date Range Filter -->
+  <div class="plotly-dashboard__filters">
+    <div class="plotly-dashboard__date-range">
+      <label for="startDate" class="plotly-dashboard__label">Start Date:</label>
+      <input 
+        type="date" 
+        id="startDate"
+        [(ngModel)]="dateRange.start" 
+        class="plotly-dashboard__input"
+      >
+      
+      <label for="endDate" class="plotly-dashboard__label">End Date:</label>
+      <input 
+        type="date" 
+        id="endDate"
+        [(ngModel)]="dateRange.end" 
+        class="plotly-dashboard__input"
+      >
+      <button class="plotly-dashboard__apply-btn" (click)="onApplyDateRange()">Apply</button>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="plotly-dashboard__tabs">
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'overview'"
+      (click)="setActiveTab('overview')"
+    >
+      Overview
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'humidity'"
+      (click)="setActiveTab('humidity')"
+    >
+      Humidity
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'rainfall'"
+      (click)="setActiveTab('rainfall')"
+    >
+      Rainfall
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'soil-temp'"
+      (click)="setActiveTab('soil-temp')"
+    >
+      Soil Temperature
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'snow-depth'"
+      (click)="setActiveTab('snow-depth')"
+    >
+      Snow Depth
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="plotly-dashboard__content">
+    <!-- Overview Tab -->
+    <div *ngIf="activeTab === 'overview'" class="plotly-dashboard__overview">
+      <h3 class="plotly-dashboard__section-title">Environmental Data Overview</h3>
+      <div class="plotly-dashboard__overview-grid">
+        <div class="plotly-dashboard__overview-item">
+          <app-plotly-summary-heatmap
+            [metrics]="metrics"
+            [months]="months"
+            class="plotly-dashboard__heatmap">
+          </app-plotly-summary-heatmap>
+        </div>
+      </div>
+    </div>
+
+    <!-- Humidity Tab -->
+    <div *ngIf="activeTab === 'humidity'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Humidity Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-humidity-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-humidity-chart>
+      </div>
+    </div>
+
+    <!-- Rainfall Tab -->
+    <div *ngIf="activeTab === 'rainfall'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Rainfall Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-rainfall-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-rainfall-chart>
+      </div>
+    </div>
+
+    <!-- Soil Temperature Tab -->
+    <div *ngIf="activeTab === 'soil-temp'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Soil Temperature Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-soil-temp-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-soil-temp-chart>
+      </div>
+    </div>
+
+    <!-- Snow Depth Tab -->
+    <div *ngIf="activeTab === 'snow-depth'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Snow Depth Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-snow-depth-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-snow-depth-chart>
+      </div>
+    </div>
+  </div>
+</div> 

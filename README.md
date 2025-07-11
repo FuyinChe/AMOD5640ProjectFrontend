@@ -5,10 +5,13 @@ A modern Angular-based web application for visualizing and analyzing environment
 ## 🌟 Features
 
 ### 📊 Data Visualization
-- **Interactive Charts**: Real-time environmental data visualization using Chart.js
+- **Dual Dashboard System**: 
+  - **Chart.js Dashboard**: Traditional charts with ng2-charts integration
+  - **Plotly Dashboard**: Advanced interactive visualizations with Plotly.js
 - **Multiple Metrics**: Air temperature, humidity, rainfall, soil temperature, wind speed, and solar radiation
 - **Date Range Filtering**: Customizable time periods for data analysis
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Advanced Features**: Heatmaps, interactive tooltips, zoom/pan, and export capabilities
 
 ### 🔐 User Management
 - **Secure Registration**: Email verification system with two-step registration process
@@ -31,7 +34,9 @@ A modern Angular-based web application for visualizing and analyzing environment
 ### Frontend Stack
 - **Framework**: Angular 19.2.12
 - **Styling**: SCSS with BEM methodology
-- **Charts**: Chart.js with ng2-charts
+- **Charts**: 
+  - Chart.js with ng2-charts (Traditional Dashboard)
+  - Plotly.js (Advanced Dashboard)
 - **HTTP Client**: Angular HttpClient for API communication
 - **Routing**: Angular Router for navigation
 
@@ -41,13 +46,21 @@ dashboard-front/
 ├── src/
 │   ├── app/
 │   │   ├── about/                 # About page component
-│   │   ├── dashboard/             # Main dashboard with charts
+│   │   ├── dashboard/             # Chart.js dashboard with ng2-charts
 │   │   │   ├── dashboard/         # Dashboard container
 │   │   │   ├── humidity-chart/    # Humidity visualization
 │   │   │   ├── rainfall-chart/    # Rainfall visualization
 │   │   │   ├── sample-chart/      # Sample data chart
 │   │   │   ├── snow-depth-chart/  # Snow depth visualization
 │   │   │   └── soil-temp5cm-chart/# Soil temperature chart
+│   │   ├── plotly-dashboard/      # Plotly.js dashboard
+│   │   │   ├── components/        # Plotly chart components
+│   │   │   │   ├── plotly-humidity-chart/
+│   │   │   │   ├── plotly-rainfall-chart/
+│   │   │   │   ├── plotly-soil-temp-chart/
+│   │   │   │   ├── plotly-snow-depth-chart/
+│   │   │   │   └── plotly-summary-heatmap/
+│   │   │   └── services/          # Plotly dashboard services
 │   │   ├── download/              # Data download component
 │   │   ├── environmental-data/    # Environmental data display
 │   │   ├── environmental-sample-data/ # Sample data management
@@ -108,10 +121,13 @@ dashboard-front/
 
 ### Data Visualization
 1. Log in to your account
-2. Navigate to the dashboard
+2. Navigate to either dashboard:
+   - **Dashboard (Chart.js)**: Traditional charts with ng2-charts
+   - **Dashboard (Plotly)**: Advanced interactive visualizations
 3. Use date range filters to select time periods
 4. View interactive charts for different environmental metrics
 5. Hover over chart elements for detailed information
+6. Use Plotly dashboard features like zoom, pan, and export
 
 ### Data Export
 1. Go to the Environmental Sample Data page
@@ -488,6 +504,9 @@ For questions, issues, or contributions, please contact the development team or 
 - **Export Formats**: Additional export options (JSON, XML)
 - **User Roles**: Role-based access control
 - **Notifications**: Email alerts for data thresholds
+- **3D Visualizations**: Plotly 3D charts for multi-dimensional analysis
+- **Dashboard Customization**: User-configurable dashboard layouts
+- **Advanced Plotly Features**: Subplots, animations, and statistical charts
 
 ---
 
