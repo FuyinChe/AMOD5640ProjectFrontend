@@ -10,6 +10,7 @@ import { PlotlyShortwaveRadiationChartComponent } from './components/plotly-shor
 import { PlotlyWindSpeedChartComponent } from './components/plotly-wind-speed-chart/plotly-wind-speed-chart.component';
 import { PlotlyAtmosphericPressureChartComponent } from './components/plotly-atmospheric-pressure-chart/plotly-atmospheric-pressure-chart.component';
 import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/environmental-monthly-summary.service';
+import { PlotlyStatisticalBoxplotChartComponent } from './components/plotly-statistical-boxplot-chart/plotly-statistical-boxplot-chart.component';
 
 @Component({
   selector: 'app-plotly-dashboard',
@@ -24,7 +25,8 @@ import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/
     PlotlySummaryHeatmapComponent,
     PlotlyShortwaveRadiationChartComponent,
     PlotlyWindSpeedChartComponent,
-    PlotlyAtmosphericPressureChartComponent
+    PlotlyAtmosphericPressureChartComponent,
+    PlotlyStatisticalBoxplotChartComponent
   ],
   templateUrl: './plotly-dashboard.component.html',
   styleUrls: ['./plotly-dashboard.component.scss']
@@ -49,6 +51,18 @@ export class PlotlyDashboardComponent implements OnInit {
   shortwaveRadiationChartComponent: any = null;
   windSpeedChartComponent: any = null;
   atmosphericPressureChartComponent: any = null;
+  statisticalBoxplotChartComponent: any = null;
+
+  selectedMetrics: string[] = [
+    'humidity',
+    'temperature',
+    'wind_speed',
+    'rainfall',
+    'snow_depth',
+    'shortwave_radiation',
+    'atmospheric_pressure',
+    'soil_temperature'
+  ];
 
   constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
 
@@ -118,6 +132,12 @@ export class PlotlyDashboardComponent implements OnInit {
         if (!this.atmosphericPressureChartComponent) {
           const { PlotlyAtmosphericPressureChartComponent } = await import('./components/plotly-atmospheric-pressure-chart/plotly-atmospheric-pressure-chart.component');
           this.atmosphericPressureChartComponent = PlotlyAtmosphericPressureChartComponent;
+        }
+        break;
+      case 'statistical-analysis':
+        if (!this.statisticalBoxplotChartComponent) {
+          const { PlotlyStatisticalBoxplotChartComponent } = await import('./components/plotly-statistical-boxplot-chart/plotly-statistical-boxplot-chart.component');
+          this.statisticalBoxplotChartComponent = PlotlyStatisticalBoxplotChartComponent;
         }
         break;
     }

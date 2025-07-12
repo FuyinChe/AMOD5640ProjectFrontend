@@ -84,6 +84,13 @@
     >
       Atmospheric Pressure
     </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'statistical-analysis'"
+      (click)="setActiveTab('statistical-analysis')"
+    >
+      Statistical Analysis
+    </button>
   </div>
 
   <!-- Tab Content -->
@@ -184,6 +191,16 @@
           class="plotly-dashboard__chart">
         </app-plotly-atmospheric-pressure-chart>
       </div>
+    </div>
+
+    <!-- Statistical Analysis Tab -->
+    <div *ngIf="activeTab === 'statistical-analysis'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Boxplot Analysis</h3>
+      <app-plotly-statistical-boxplot-chart
+        [startDate]="dateRange.start"
+        [endDate]="dateRange.end"
+        [metrics]="selectedMetrics">
+      </app-plotly-statistical-boxplot-chart>
     </div>
   </div>
 </div> 
