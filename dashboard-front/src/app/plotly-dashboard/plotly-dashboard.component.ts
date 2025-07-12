@@ -6,6 +6,9 @@ import { PlotlyRainfallChartComponent } from './components/plotly-rainfall-chart
 import { PlotlySoilTempChartComponent } from './components/plotly-soil-temp-chart/plotly-soil-temp-chart.component';
 import { PlotlySnowDepthChartComponent } from './components/plotly-snow-depth-chart/plotly-snow-depth-chart.component';
 import { PlotlySummaryHeatmapComponent } from './components/plotly-summary-heatmap/plotly-summary-heatmap.component';
+import { PlotlyShortwaveRadiationChartComponent } from './components/plotly-shortwave-radiation-chart/plotly-shortwave-radiation-chart.component';
+import { PlotlyWindSpeedChartComponent } from './components/plotly-wind-speed-chart/plotly-wind-speed-chart.component';
+import { PlotlyAtmosphericPressureChartComponent } from './components/plotly-atmospheric-pressure-chart/plotly-atmospheric-pressure-chart.component';
 import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/environmental-monthly-summary.service';
 
 @Component({
@@ -18,7 +21,10 @@ import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/
     PlotlyRainfallChartComponent,
     PlotlySoilTempChartComponent,
     PlotlySnowDepthChartComponent,
-    PlotlySummaryHeatmapComponent
+    PlotlySummaryHeatmapComponent,
+    PlotlyShortwaveRadiationChartComponent,
+    PlotlyWindSpeedChartComponent,
+    PlotlyAtmosphericPressureChartComponent
   ],
   templateUrl: './plotly-dashboard.component.html',
   styleUrls: ['./plotly-dashboard.component.scss']
@@ -40,6 +46,9 @@ export class PlotlyDashboardComponent implements OnInit {
   rainfallChartComponent: any = null;
   soilTempChartComponent: any = null;
   snowDepthChartComponent: any = null;
+  shortwaveRadiationChartComponent: any = null;
+  windSpeedChartComponent: any = null;
+  atmosphericPressureChartComponent: any = null;
 
   constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
 
@@ -91,6 +100,24 @@ export class PlotlyDashboardComponent implements OnInit {
         if (!this.snowDepthChartComponent) {
           const { PlotlySnowDepthChartComponent } = await import('./components/plotly-snow-depth-chart/plotly-snow-depth-chart.component');
           this.snowDepthChartComponent = PlotlySnowDepthChartComponent;
+        }
+        break;
+      case 'shortwave-radiation':
+        if (!this.shortwaveRadiationChartComponent) {
+          const { PlotlyShortwaveRadiationChartComponent } = await import('./components/plotly-shortwave-radiation-chart/plotly-shortwave-radiation-chart.component');
+          this.shortwaveRadiationChartComponent = PlotlyShortwaveRadiationChartComponent;
+        }
+        break;
+      case 'wind-speed':
+        if (!this.windSpeedChartComponent) {
+          const { PlotlyWindSpeedChartComponent } = await import('./components/plotly-wind-speed-chart/plotly-wind-speed-chart.component');
+          this.windSpeedChartComponent = PlotlyWindSpeedChartComponent;
+        }
+        break;
+      case 'atmospheric-pressure':
+        if (!this.atmosphericPressureChartComponent) {
+          const { PlotlyAtmosphericPressureChartComponent } = await import('./components/plotly-atmospheric-pressure-chart/plotly-atmospheric-pressure-chart.component');
+          this.atmosphericPressureChartComponent = PlotlyAtmosphericPressureChartComponent;
         }
         break;
     }

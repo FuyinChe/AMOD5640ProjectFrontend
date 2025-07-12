@@ -63,6 +63,27 @@
     >
       Snow Depth
     </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'shortwave-radiation'"
+      (click)="setActiveTab('shortwave-radiation')"
+    >
+      Shortwave Radiation
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'wind-speed'"
+      (click)="setActiveTab('wind-speed')"
+    >
+      Wind Speed
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'atmospheric-pressure'"
+      (click)="setActiveTab('atmospheric-pressure')"
+    >
+      Atmospheric Pressure
+    </button>
   </div>
 
   <!-- Tab Content -->
@@ -126,6 +147,42 @@
           [endDate]="dateRange.end"
           class="plotly-dashboard__chart">
         </app-plotly-snow-depth-chart>
+      </div>
+    </div>
+
+    <!-- Shortwave Radiation Tab -->
+    <div *ngIf="activeTab === 'shortwave-radiation'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Shortwave Radiation Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-shortwave-radiation-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-shortwave-radiation-chart>
+      </div>
+    </div>
+
+    <!-- Wind Speed Tab -->
+    <div *ngIf="activeTab === 'wind-speed'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Wind Speed Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-wind-speed-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-wind-speed-chart>
+      </div>
+    </div>
+
+    <!-- Atmospheric Pressure Tab -->
+    <div *ngIf="activeTab === 'atmospheric-pressure'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Atmospheric Pressure Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-atmospheric-pressure-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-atmospheric-pressure-chart>
       </div>
     </div>
   </div>
