@@ -7,6 +7,7 @@
     <div class="plotly-soil-temp-chart__groupby-btns">
       <button [class.active]="groupBy === 'hour'" (click)="setGroupBy('hour')">Hourly</button>
       <button [class.active]="groupBy === 'weekly'" (click)="setGroupBy('weekly')">Weekly</button>
+      <button [class.active]="groupBy === 'month'" (click)="setGroupBy('month')">Monthly</button>
     </div>
     <div #chartContainer class="plotly-soil-temp-chart__container"></div>
   </div>

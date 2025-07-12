@@ -118,6 +118,13 @@ export class PlotlyShortwaveRadiationChartComponent implements OnChanges {
     if (this.groupBy === 'weekly') {
       xValues = data.map((d: any) => `W${String(d.week).padStart(2, '0')}`);
       yValues = data.map((d: any) => d.avg);
+    } else if (this.groupBy === 'month') {
+      const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      // Map API data to a dictionary for quick lookup
+      const dataMap = new Map(data.map((d: any) => [d.period, d.avg]));
+      // Build data for all months, using 0 if missing
+      xValues = allMonths;
+      yValues = allMonths.map(month => Number(dataMap.get(month) ?? 0));
     } else {
       xValues = data.map((d: any) => d.period || `Week ${d.week}`);
       yValues = data.map((d: any) => d.avg);
@@ -146,7 +153,9 @@ export class PlotlyShortwaveRadiationChartComponent implements OnChanges {
     }];
 
     // Update layout with dynamic title
-    const groupLabel = this.groupBy === 'weekly' ? 'Weekly' : 'Hourly';
+    let groupLabel = 'Hourly';
+    if (this.groupBy === 'weekly') groupLabel = 'Weekly';
+    else if (this.groupBy === 'month') groupLabel = 'Monthly';
     this.chartLayout.title.text = `Shortwave Radiation (${groupLabel}) Analysis (${this.startDate} to ${this.endDate})`;
     this.chartLayout.yaxis.title.text = `Shortwave Radiation (${unit})`;
 
