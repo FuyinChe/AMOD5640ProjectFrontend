@@ -1,31 +1,34 @@
 import { Component, Input, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HumidityService } from '../../../services/humidity.service';
+import { PlotlyChartCardComponent } from '../plotly-chart-card/plotly-chart-card.component';
 
 declare var Plotly: any;
 
 @Component({
   selector: 'app-plotly-humidity-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlotlyChartCardComponent],
   templateUrl: './plotly-humidity-chart.component.html',
   styleUrls: ['./plotly-humidity-chart.component.scss']
 })
 export class PlotlyHumidityChartComponent implements OnChanges {
   @Input() startDate: string = '';
   @Input() endDate: string = '';
+  @Input() groupBy: string = 'hour';
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
-  private chartData: any[] = [];
+  chartData: any[] = [];
   private chartLayout: any = {};
   private chartConfig: any = {};
+  private rawData: any[] = [];
 
   constructor(private humidityService: HumidityService) {
     this.initializeChartConfig();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes['startDate'] || changes['endDate']) && this.startDate && this.endDate) {
+    if ((changes['startDate'] || changes['endDate'] || changes['groupBy']) && this.startDate && this.endDate) {
       this.loadHumidityData();
     }
   }
@@ -92,7 +95,7 @@ export class PlotlyHumidityChartComponent implements OnChanges {
   }
 
   private loadHumidityData(): void {
-    this.humidityService.getHumidityData(this.startDate, this.endDate, 'day').subscribe({
+    this.humidityService.getHumidityData(this.startDate, this.endDate, this.groupBy).subscribe({
       next: (response: any) => {
         this.processHumidityData(response);
       },
@@ -106,10 +109,19 @@ export class PlotlyHumidityChartComponent implements OnChanges {
   private processHumidityData(response: any): void {
     const data = response.data;
     const unit = response.unit || '%';
+    this.rawData = data; // Store raw data for CSV export
 
-    // Process data for Plotly
-    const xValues = data.map((d: any) => d.period || `Week ${d.week}`);
-    const yValues = data.map((d: any) => d.avg);
+    // Process data for Plotly based on grouping
+    let xValues: string[];
+    let yValues: number[];
+    
+    if (this.groupBy === 'weekly') {
+      xValues = data.map((d: any) => `W${String(d.week).padStart(2, '0')}`);
+      yValues = data.map((d: any) => d.avg);
+    } else {
+      xValues = data.map((d: any) => d.period || `Week ${d.week}`);
+      yValues = data.map((d: any) => d.avg);
+    }
 
     this.chartData = [{
       x: xValues,
@@ -134,7 +146,8 @@ export class PlotlyHumidityChartComponent implements OnChanges {
     }];
 
     // Update layout with dynamic title
-    this.chartLayout.title.text = `Humidity Analysis (${this.startDate} to ${this.endDate})`;
+    const groupLabel = this.groupBy === 'weekly' ? 'Weekly' : 'Hourly';
+    this.chartLayout.title.text = `Humidity (${groupLabel}) Analysis (${this.startDate} to ${this.endDate})`;
     this.chartLayout.yaxis.title.text = `Humidity (${unit})`;
 
     this.renderChart();
@@ -190,11 +203,47 @@ export class PlotlyHumidityChartComponent implements OnChanges {
     }
   }
 
-  // Public method to export chart
-  exportChart(format: 'png' | 'svg' | 'pdf' = 'png'): void {
+  // Set grouping method
+  setGroupBy(group: string): void {
+    if (this.groupBy !== group) {
+      this.groupBy = group;
+      if (this.startDate && this.endDate) {
+        this.loadHumidityData();
+      }
+    }
+  }
+
+  // Download CSV data
+  downloadCSV(): void {
+    if (!this.rawData || this.rawData.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+
+    const headers = ['Period', 'Average Humidity (%)'];
+    const rows = [headers];
+    
+    this.rawData.forEach((item: any) => {
+      const period = item.period || `Week ${item.week}`;
+      const value = item.avg;
+      rows.push([period, value]);
+    });
+
+    const csvContent = '\uFEFF' + rows.map(row => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', `humidity_data_${this.startDate}_${this.endDate}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Download PNG image
+  downloadPNG(): void {
     if (this.chartContainer && this.chartContainer.nativeElement) {
       Plotly.downloadImage(this.chartContainer.nativeElement, {
-        format: format,
+        format: 'png',
         filename: `humidity_chart_${this.startDate}_${this.endDate}`,
         height: 500,
         width: 800,

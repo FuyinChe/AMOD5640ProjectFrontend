@@ -1,5 +1,15 @@
 <div class="summary-heatmap-table__wrapper">
-  <table class="summary-heatmap-table">
+  <div class="summary-heatmap-table__download-buttons">
+    <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--csv" (click)="downloadCSV()">
+      <i class="fas fa-file-csv"></i>
+      CSV
+    </button>
+    <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="downloadPNG()">
+      <i class="fas fa-file-image"></i>
+      PNG
+    </button>
+  </div>
+  <table #heatmapTable class="summary-heatmap-table">
     <thead>
       <tr>
         <th class="summary-heatmap-table__metric-header">Metric</th>

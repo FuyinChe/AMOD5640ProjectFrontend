@@ -112,56 +112,53 @@ export class PlotlyDashboardComponent implements OnInit {
         const data: MonthlySummary[] = response.data;
         this.months = data.map(d => d.month_name);
         this.metrics = [
-          {
-            name: 'Air Temp Max',
-            unit: '°C',
-            values: data.map(d => d.air_temperature_max)
-          },
-          {
-            name: 'Air Temp Min',
-            unit: '°C',
-            values: data.map(d => d.air_temperature_min)
-          },
-          {
-            name: 'Mean Air Temp',
-            unit: '°C',
-            values: data.map(d => d.air_temperature_mean)
-          },
-          {
-            name: 'Humidity Max',
-            unit: '%',
-            values: data.map(d => d.relative_humidity_max)
-          },
-          {
-            name: 'Humidity Min',
-            unit: '%',
-            values: data.map(d => d.relative_humidity_min)
-          },
-          {
-            name: 'Mean Humidity',
-            unit: '%',
-            values: data.map(d => d.relative_humidity_mean)
-          },
-          {
-            name: 'Rainfall Total',
-            unit: 'mm',
-            values: data.map(d => d.rainfall_total)
-          },
-          {
-            name: 'Soil Temp 5cm Mean',
-            unit: '°C',
-            values: data.map(d => d.soil_temp_5cm_mean)
-          },
-          {
-            name: 'Wind Speed Mean',
-            unit: 'm/s',
-            values: data.map(d => d.wind_speed_mean)
-          },
-          {
-            name: 'Snow Depth Mean',
-            unit: 'cm',
-            values: data.map(d => d.snow_depth_mean)
-          }
+          // Air Temperature
+          { name: 'Air Temp Max', unit: '°C', values: data.map(d => d.air_temperature_max) },
+          { name: 'Air Temp Min', unit: '°C', values: data.map(d => d.air_temperature_min) },
+          { name: 'Mean Air Temp', unit: '°C', values: data.map(d => d.air_temperature_mean) },
+          { name: 'Air Temp Std', unit: '°C', values: data.map(d => d.air_temperature_std) },
+
+          // Humidity
+          { name: 'Humidity Max', unit: '%', values: data.map(d => d.relative_humidity_max) },
+          { name: 'Humidity Min', unit: '%', values: data.map(d => d.relative_humidity_min) },
+          { name: 'Mean Humidity', unit: '%', values: data.map(d => d.relative_humidity_mean) },
+          { name: 'Humidity Std', unit: '%', values: data.map(d => d.relative_humidity_std) },
+
+          // Shortwave Radiation
+          { name: 'Shortwave Radiation Max', unit: '', values: data.map(d => d.shortwave_radiation_max) },
+          { name: 'Shortwave Radiation Min', unit: '', values: data.map(d => d.shortwave_radiation_min) },
+          { name: 'Shortwave Radiation Mean', unit: '', values: data.map(d => d.shortwave_radiation_mean) },
+          { name: 'Shortwave Radiation Std', unit: '', values: data.map(d => d.shortwave_radiation_std) },
+
+          // Rainfall
+          { name: 'Rainfall Total', unit: 'mm', values: data.map(d => d.rainfall_total) },
+          { name: 'Rainfall Max', unit: 'mm', values: data.map(d => d.rainfall_max) },
+          { name: 'Rainfall Mean', unit: 'mm', values: data.map(d => d.rainfall_mean) },
+          { name: 'Rainfall Std', unit: 'mm', values: data.map(d => d.rainfall_std) },
+
+          // Soil Temp 5cm
+          { name: 'Soil Temp 5cm Max', unit: '°C', values: data.map(d => d.soil_temp_5cm_max) },
+          { name: 'Soil Temp 5cm Min', unit: '°C', values: data.map(d => d.soil_temp_5cm_min) },
+          { name: 'Soil Temp 5cm Mean', unit: '°C', values: data.map(d => d.soil_temp_5cm_mean) },
+          { name: 'Soil Temp 5cm Std', unit: '°C', values: data.map(d => d.soil_temp_5cm_std) },
+
+          // Wind Speed
+          { name: 'Wind Speed Max', unit: 'm/s', values: data.map(d => d.wind_speed_max) },
+          { name: 'Wind Speed Min', unit: 'm/s', values: data.map(d => d.wind_speed_min) },
+          { name: 'Wind Speed Mean', unit: 'm/s', values: data.map(d => d.wind_speed_mean) },
+          { name: 'Wind Speed Std', unit: 'm/s', values: data.map(d => d.wind_speed_std) },
+
+          // Snow Depth
+          { name: 'Snow Depth Max', unit: 'cm', values: data.map(d => d.snow_depth_max) },
+          { name: 'Snow Depth Min', unit: 'cm', values: data.map(d => d.snow_depth_min) },
+          { name: 'Snow Depth Mean', unit: 'cm', values: data.map(d => d.snow_depth_mean) },
+          { name: 'Snow Depth Std', unit: 'cm', values: data.map(d => d.snow_depth_std) },
+
+          // Atmospheric Pressure
+          { name: 'Atmospheric Pressure Max', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_max) },
+          { name: 'Atmospheric Pressure Min', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_min) },
+          { name: 'Atmospheric Pressure Mean', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_mean) },
+          { name: 'Atmospheric Pressure Std', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_std) },
         ];
       },
       error: (err) => {

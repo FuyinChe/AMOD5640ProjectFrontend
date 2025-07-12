@@ -1,3 +1,13 @@
-<div class="plotly-rainfall-chart">
-  <div #chartContainer class="plotly-rainfall-chart__container"></div>
-</div> 
+<app-plotly-chart-card 
+  [chartTitle]="'Rainfall Analysis'"
+  [chartData]="chartData"
+  (downloadCSV)="downloadCSV()"
+  (downloadPNG)="downloadPNG()">
+  <div class="plotly-rainfall-chart">
+    <div class="plotly-rainfall-chart__groupby-btns">
+      <button [class.active]="groupBy === 'hour'" (click)="setGroupBy('hour')">Hourly</button>
+      <button [class.active]="groupBy === 'weekly'" (click)="setGroupBy('weekly')">Weekly</button>
+    </div>
+    <div #chartContainer class="plotly-rainfall-chart__container"></div>
+  </div>
+</app-plotly-chart-card> 

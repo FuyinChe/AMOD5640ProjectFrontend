@@ -3,6 +3,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {CommonModule} from '@angular/common';
+import {NavComponent} from '../nav/nav.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import {CommonModule} from '@angular/common';
   imports: [
     RouterLinkActive,
     RouterLink,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
@@ -61,5 +62,14 @@ export class HeaderComponent {
     } else {
       return `${username.substring(0, 12)}...@${domain}`;
     }
+  }
+
+  handleDashboardClick(event: Event, route: string): void {
+    if (!this.auth.isLoggedIn()) {
+      event.preventDefault();
+      localStorage.setItem('redirectAfterLogin', route);
+      this.router.navigate(['/login']);
+    }
+    // If logged in, let the normal navigation happen
   }
 }

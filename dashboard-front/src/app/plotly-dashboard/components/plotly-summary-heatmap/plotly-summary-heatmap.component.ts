@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 export class PlotlySummaryHeatmapComponent {
   @Input() metrics: Array<{name: string, unit: string, values: (number | null)[]}> = [];
   @Input() months: string[] = [];
+  @ViewChild('heatmapTable', { static: false }) heatmapTableRef!: ElementRef;
 
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {
@@ -62,5 +63,48 @@ export class PlotlySummaryHeatmapComponent {
       min: Math.min(...filtered),
       max: Math.max(...filtered)
     };
+  }
+
+  // Download CSV data
+  downloadCSV(): void {
+    if (!this.metrics || this.metrics.length === 0) {
+      console.warn('No data available for CSV download');
+      return;
+    }
+
+    const rows = [];
+    const header = ['Metric', ...this.months];
+    rows.push(header);
+    
+    for (const metric of this.metrics) {
+      const row = [
+        metric.unit ? `${metric.name} (${metric.unit})` : metric.name,
+        ...metric.values.map(v => v === null ? '' : v)
+      ];
+      rows.push(row);
+    }
+    
+    const csvContent = '\uFEFF' + rows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', 'plotly_summary_heatmap.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Download PNG image
+  async downloadPNG(): Promise<void> {
+    const html2canvas = (await import('html2canvas')).default;
+    const tableElem = this.heatmapTableRef?.nativeElement as HTMLElement;
+    if (!tableElem) return;
+    
+    html2canvas(tableElem).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'plotly_summary_heatmap.png';
+      link.click();
+    });
   }
 } 
