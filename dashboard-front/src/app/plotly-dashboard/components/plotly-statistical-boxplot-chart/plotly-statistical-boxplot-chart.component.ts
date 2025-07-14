@@ -201,7 +201,7 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
       },
       boxmode: 'group',
       showlegend: false,
-      margin: { t: 70, b: 80, l: 60, r: 40 }, // Increased top margin to 70
+      margin: { t: 70, b: 140, l: 60, r: 40 }, // Increased bottom margin for x label visibility
       height: 600,
       width: 1100, // Increased width for better spacing
       plot_bgcolor: '#fff',
