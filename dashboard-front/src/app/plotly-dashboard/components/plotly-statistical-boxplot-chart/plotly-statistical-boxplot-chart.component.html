@@ -1,0 +1,12 @@
+<div class="statistical-boxplot-chart">
+  <div *ngIf="isLoading" class="statistical-boxplot-chart__loading">
+    <div class="statistical-boxplot-chart__spinner"></div>
+    <p>Loading boxplot data...</p>
+  </div>
+  <div *ngIf="error" class="statistical-boxplot-chart__error">
+    <p>{{ error }}</p>
+  </div>
+  <div *ngIf="!isLoading && !error" class="statistical-boxplot-chart__plot-container">
+    <div id="statisticalBoxplotChart" class="statistical-boxplot-chart__plot"></div>
+  </div>
+</div> 

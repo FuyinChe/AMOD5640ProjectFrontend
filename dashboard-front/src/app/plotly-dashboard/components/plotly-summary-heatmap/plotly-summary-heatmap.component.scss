@@ -1,0 +1,287 @@
+.plotly-summary-heatmap {
+  width: 100%;
+  height: 100%;
+
+  &__container {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+  }
+}
+
+.summary-heatmap-table__wrapper {
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+.summary-heatmap-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-family: 'Museo Sans', Arial, sans-serif;
+  font-size: 1rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+}
+
+.summary-heatmap-table__metric-header,
+.summary-heatmap-table__month-header {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 2;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e0e0e0;
+  color: #2c3e50;
+}
+
+.summary-heatmap-table__month-header {
+  text-align: center;
+}
+
+.summary-heatmap-table__metric-name {
+  font-weight: 600;
+  background: #f8f9fa;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 180px;
+  border-right: 2px solid #e0e0e0;
+  padding: 0.75rem 1rem;
+  color: #2c3e50;
+}
+
+.summary-heatmap-table__cell {
+  text-align: center;
+  min-width: 70px;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: #2c3e50;
+  transition: background 0.2s;
+}
+
+.summary-heatmap-table__cell:last-child {
+  border-right: none;
+}
+
+.summary-heatmap-table tr:last-child .summary-heatmap-table__cell {
+  border-bottom: none;
+}
+
+.summary-heatmap-table__cell span {
+  display: inline-block;
+  min-width: 40px;
+}
+
+.summary-heatmap-table__download-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.summary-heatmap-table__download-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #185a9d;
+  color: #185a9d;
+  font-weight: 600;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.48rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22em;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &--csv {
+    border-color: #28a745;
+    color: #28a745;
+
+    &:hover {
+      background: #28a745;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    }
+  }
+
+  &--png {
+    border-color: #007bff;
+    color: #007bff;
+
+    &:hover {
+      background: #007bff;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.summary-heatmap-table__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  p {
+    margin-top: 15px;
+    font-size: 16px;
+  }
+}
+.summary-heatmap-table__spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.summary-heatmap-table__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  color: #dc3545;
+  font-size: 16px;
+  text-align: center;
+  padding: 20px;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  .plotly-summary-heatmap__container {
+    min-height: 400px;
+  }
+  .summary-heatmap-table__wrapper {
+    padding-left: 1rem;
+    padding-right: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .summary-heatmap-table {
+    font-size: 1rem;
+    min-width: unset;
+  }
+  .summary-heatmap-table__month-header {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    height: auto;
+    min-width: unset;
+    max-width: unset;
+    white-space: nowrap;
+  }
+  .summary-heatmap-table__metric-header {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .summary-heatmap-table__metric-name {
+    min-width: 180px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .summary-heatmap-table__cell {
+    min-width: 70px;
+    padding: 0.7rem 0.5rem;
+    font-size: 1rem;
+  }
+  .summary-heatmap-table__cell span {
+    min-width: 40px;
+  }
+  
+} 
+
+// Tablet breakpoint (max-width: 768px)
+@media (max-width: 768px) {
+  .plotly-summary-heatmap__container {
+    min-height: 320px;
+  }
+  .summary-heatmap-table__wrapper {
+    padding-left: 0.7rem;
+    padding-right: 0;
+  }
+  .summary-heatmap-table {
+    font-size: 0.92rem;
+  }
+  .summary-heatmap-table__month-header {
+    font-size: 0.92rem;
+    padding: 0.5rem 0.7rem;
+  }
+  .summary-heatmap-table__metric-header {
+    font-size: 0.92rem;
+    padding: 0.5rem 0.7rem;
+  }
+  .summary-heatmap-table__metric-name {
+    min-width: 120px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.92rem;
+  }
+  .summary-heatmap-table__cell {
+    min-width: 50px;
+    padding: 0.5rem 0.3rem;
+    font-size: 0.92rem;
+  }
+  .summary-heatmap-table__cell span {
+    min-width: 28px;
+  }
+}
+
+// Small phone breakpoint (max-width: 480px)
+@media (max-width: 480px) {
+  .plotly-summary-heatmap__container {
+    min-height: 180px;
+  }
+  .summary-heatmap-table__wrapper {
+    padding-left: 0.2rem;
+    padding-right: 0;
+  }
+  .summary-heatmap-table {
+    font-size: 0.7rem;
+  }
+  .summary-heatmap-table__month-header {
+    font-size: 0.7rem;
+    padding: 0.18rem 0.3rem;
+  }
+  .summary-heatmap-table__metric-header {
+    font-size: 0.7rem;
+    padding: 0.18rem 0.3rem;
+  }
+  .summary-heatmap-table__metric-name {
+    min-width: 60px;
+    padding: 0.18rem 0.3rem;
+    font-size: 0.7rem;
+  }
+  .summary-heatmap-table__cell {
+    min-width: 24px;
+    padding: 0.18rem 0.12rem;
+    font-size: 0.7rem;
+  }
+  .summary-heatmap-table__cell span {
+    min-width: 12px;
+  }
+} 

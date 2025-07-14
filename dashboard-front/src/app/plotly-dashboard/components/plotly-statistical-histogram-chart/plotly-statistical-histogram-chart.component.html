@@ -1,0 +1,14 @@
+<div class="statistical-histogram-chart">
+  <div *ngIf="isLoading" class="statistical-histogram-chart__loading">
+    <div class="statistical-histogram-chart__spinner"></div>
+    <p>Loading histogram data...</p>
+  </div>
+  <div *ngIf="error" class="statistical-histogram-chart__error">
+    <p>{{ error }}</p>
+  </div>
+  <div *ngIf="!isLoading && !error" class="statistical-histogram-chart__plot-container">
+    <div class="statistical-histogram-chart__plots-flex">
+      <div *ngFor="let hist of histograms" [id]="'histogram-' + hist.metric" class="statistical-histogram-chart__plot"></div>
+    </div>
+  </div>
+</div> 

@@ -5,35 +5,51 @@ A modern Angular-based web application for visualizing and analyzing environment
 ## 🌟 Features
 
 ### 📊 Data Visualization
-- **Interactive Charts**: Real-time environmental data visualization using Chart.js
-- **Multiple Metrics**: Air temperature, humidity, rainfall, soil temperature, wind speed, and solar radiation
+- **Dual Dashboard System**: 
+  - **Chart.js Dashboard**: Traditional charts with ng2-charts integration(has been hidden from nav links)
+  - **Plotly Dashboard**: Advanced interactive visualizations with Plotly.js
+- **Multiple Environmental Metrics**: 
+  - Air temperature and atmospheric pressure
+  - Humidity and rainfall
+  - Soil temperature (5cm depth)
+  - Wind speed and direction
+  - Snow depth
+  - Shortwave radiation
+- **Advanced Analytics**: Statistical boxplots, histograms, and summary heatmaps
 - **Date Range Filtering**: Customizable time periods for data analysis
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Interactive Features**: Zoom, pan, hover tooltips, and export capabilities
 
 ### 🔐 User Management
 - **Secure Registration**: Email verification system with two-step registration process
 - **User Authentication**: Login system with email validation
 - **Password Security**: Confirmation password validation and security warnings
+- **Session Management**: Secure token-based authentication
 
-### 📥 Data Export
+### 📥 Data Export & Management
 - **CSV Export**: Download environmental data in CSV format
 - **Excel Export**: Export data to Excel spreadsheets
 - **Sample Data**: Access to sample environmental datasets for testing
+- **Environmental Matrix Table**: Comprehensive data display with filtering
 
 ### 🎨 Modern UI/UX
-- **BEM Methodology**: Clean, maintainable CSS architecture
+- **BEM Methodology**: Clean, maintainable CSS architecture following Block Element Modifier principles
 - **SCSS Styling**: Advanced styling with variables, nesting, and mixins
 - **Trent University Branding**: Consistent with institutional design guidelines
 - **Responsive Layout**: Adaptive design for all screen sizes
+- **Accessibility**: WCAG compliant design patterns
 
 ## 🏗️ Architecture
 
 ### Frontend Stack
 - **Framework**: Angular 19.2.12
 - **Styling**: SCSS with BEM methodology
-- **Charts**: Chart.js with ng2-charts
-- **HTTP Client**: Angular HttpClient for API communication
+- **Charts**: 
+  - Chart.js with ng2-charts (Traditional Dashboard)
+  - Plotly.js (Advanced Dashboard with statistical analysis)
+- **HTTP Client**: Angular HttpClient with interceptors for authentication
 - **Routing**: Angular Router for navigation
+- **TypeScript**: Strict typing for better code quality
 
 ### Project Structure
 ```
@@ -41,25 +57,41 @@ dashboard-front/
 ├── src/
 │   ├── app/
 │   │   ├── about/                 # About page component
-│   │   ├── dashboard/             # Main dashboard with charts
+│   │   ├── dashboard/             # Chart.js dashboard with ng2-charts
 │   │   │   ├── dashboard/         # Dashboard container
+│   │   │   ├── chart-card/        # Reusable chart card component
+│   │   │   ├── environmental-matrix-table/ # Data table component
 │   │   │   ├── humidity-chart/    # Humidity visualization
 │   │   │   ├── rainfall-chart/    # Rainfall visualization
 │   │   │   ├── sample-chart/      # Sample data chart
 │   │   │   ├── snow-depth-chart/  # Snow depth visualization
 │   │   │   └── soil-temp5cm-chart/# Soil temperature chart
+│   │   ├── plotly-dashboard/      # Plotly.js dashboard
+│   │   │   ├── components/        # Plotly chart components
+│   │   │   │   ├── plotly-atmospheric-pressure-chart/
+│   │   │   │   ├── plotly-chart-card/
+│   │   │   │   ├── plotly-humidity-chart/
+│   │   │   │   ├── plotly-radar-chart/
+│   │   │   │   ├── plotly-rainfall-chart/
+│   │   │   │   ├── plotly-shortwave-radiation-chart/
+│   │   │   │   ├── plotly-snow-depth-chart/
+│   │   │   │   ├── plotly-soil-temp-chart/
+│   │   │   │   ├── plotly-statistical-boxplot-chart/
+│   │   │   │   ├── plotly-statistical-histogram-chart/
+│   │   │   │   ├── plotly-summary-heatmap/
+│   │   │   │   └── plotly-wind-speed-chart/
+│   │   │   └── services/          # Plotly dashboard services
 │   │   ├── download/              # Data download component
 │   │   ├── environmental-data/    # Environmental data display
 │   │   ├── environmental-sample-data/ # Sample data management
 │   │   ├── footer/                # Footer component
 │   │   ├── header/                # Header component
 │   │   ├── interfaces/            # TypeScript interfaces
-│   │   ├── nav/                   # Navigation component
-│   │   ├── services/              # API services
+│   │   ├── services/              # API services for all data types
 │   │   ├── user-login/            # User authentication
 │   │   ├── user-registration/     # User registration
 │   │   └── welcome/               # Landing page
-│   ├── assets/                    # Static assets
+│   ├── assets/                    # Static assets (images, fonts)
 │   └── environments/              # Environment configuration
 ```
 
@@ -86,7 +118,7 @@ dashboard-front/
 
 3. **Configure environment**
    - Copy `src/environments/environment.ts` to `src/environments/environment.prod.ts`
-   - Update API endpoints in `src/api.config.ts`
+   - Update API endpoints in environment files as needed
 
 4. **Start development server**
    ```bash
@@ -108,10 +140,24 @@ dashboard-front/
 
 ### Data Visualization
 1. Log in to your account
-2. Navigate to the dashboard
+2. Navigate to either dashboard:
+   - **Dashboard (Chart.js)**: Traditional charts with ng2-charts
+   - **Dashboard (Plotly)**: Advanced interactive visualizations with statistical analysis
 3. Use date range filters to select time periods
-4. View interactive charts for different environmental metrics
-5. Hover over chart elements for detailed information
+4. View interactive charts for different environmental metrics:
+   - Atmospheric pressure trends
+   - Humidity patterns
+   - Rainfall accumulation
+   - Soil temperature variations
+   - Wind speed and direction
+   - Snow depth measurements
+   - Shortwave radiation data
+5. Use Plotly dashboard features:
+   - Zoom and pan functionality
+   - Hover tooltips with detailed information
+   - Export charts as images
+   - Statistical analysis with boxplots and histograms
+   - Summary heatmaps for data overview
 
 ### Data Export
 1. Go to the Environmental Sample Data page
@@ -126,6 +172,7 @@ dashboard-front/
 - **SCSS**: BEM methodology for CSS organization
 - **Components**: Standalone Angular components
 - **Services**: Injectable services for API communication
+- **Interfaces**: TypeScript interfaces for data models
 
 ### Key Commands
 
@@ -149,11 +196,21 @@ ng generate component component-name
 ng generate service service-name
 ```
 
-### API Configuration
-Update the API base URL in `src/api.config.ts`:
-```typescript
-export const API_BASE_URL = 'http://your-api-endpoint.com/api';
-```
+### API Services
+The application includes dedicated services for each environmental metric:
+- `atmospheric-pressure.service.ts`
+- `humidity.service.ts`
+- `rainfall.service.ts`
+- `soil-temperature.service.ts`
+- `wind-speed.service.ts`
+- `snow-depth.service.ts`
+- `shortwave-radiation.service.ts`
+- `statistical-boxplot.service.ts`
+- `statistical-histogram.service.ts`
+- `environmental-monthly-summary.service.ts`
+
+### API Documentation
+For detailed information about the backend API endpoints, request/response formats, authentication, and usage examples, see the [API Documentation](API_DOCUMENTATION.md) file.
 
 ## 🧪 Testing
 
@@ -264,13 +321,6 @@ Vercel is the recommended deployment platform for this Angular application. It p
    vercel env add API_BASE_URL preview
    vercel env add NODE_ENV preview
    vercel env add NG_APP_ENVIRONMENT preview
-   ```
-
-5. **Update `src/api.config.ts` to use environment variables**
-   ```typescript
-   export const API_BASE_URL = process.env['API_BASE_URL'] || 'http://localhost:8000/api';
-   export const NODE_ENV = process.env['NODE_ENV'] || 'development';
-   export const NG_APP_ENVIRONMENT = process.env['NG_APP_ENVIRONMENT'] || 'development';
    ```
 
 #### Vercel Configuration
@@ -442,6 +492,7 @@ Vercel is the recommended deployment platform for this Angular application. It p
 - **HTTPS**: Secure communication protocols
 - **Input Sanitization**: XSS protection
 - **CORS Configuration**: Cross-origin resource sharing
+- **Authentication Interceptor**: Token-based API authentication
 
 ## 🤝 Contributing
 
@@ -456,6 +507,7 @@ Vercel is the recommended deployment platform for this Angular application. It p
 - Use BEM methodology for CSS
 - Write unit tests for new features
 - Update documentation for API changes
+- Maintain TypeScript strict typing
 
 ## 📄 License
 
@@ -466,7 +518,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Development Team
 - **Frontend Development**: Angular, TypeScript, SCSS
 - **UI/UX Design**: Responsive design, accessibility
-- **Data Visualization**: Chart.js integration
+- **Data Visualization**: Chart.js and Plotly.js integration
 - **Testing**: Unit and integration testing
 
 ### Project Support
@@ -474,21 +526,29 @@ For questions, issues, or contributions, please contact the development team or 
 
 ## 🔗 Related Links
 
+- [API Documentation](API_DOCUMENTATION.md) - Complete API reference and usage guide
 - [Angular Documentation](https://angular.dev/)
 - [Chart.js Documentation](https://www.chartjs.org/docs/)
+- [Plotly.js Documentation](https://plotly.com/javascript/)
 - [BEM Methodology](https://en.bem.info/methodology/)
 - [SCSS Documentation](https://sass-lang.com/documentation)
 
 ## 📈 Future Enhancements
 
 - **Real-time Data**: WebSocket integration for live updates
-- **Advanced Analytics**: Statistical analysis tools
+- **Advanced Analytics**: Statistical analysis tools and machine learning integration
 - **Mobile App**: React Native or Flutter companion app
 - **Data Comparison**: Multi-site data comparison features
-- **Export Formats**: Additional export options (JSON, XML)
-- **User Roles**: Role-based access control
-- **Notifications**: Email alerts for data thresholds
+- **Export Formats**: Additional export options (JSON, XML, PDF reports)
+- **User Roles**: Role-based access control and permissions
+- **Notifications**: Email alerts for data thresholds and anomalies
+- **3D Visualizations**: Plotly 3D charts for multi-dimensional analysis
+- **Dashboard Customization**: User-configurable dashboard layouts and widgets
+- **Advanced Plotly Features**: Subplots, animations, and statistical charts
+- **Data Validation**: Real-time data quality checks and validation
+- **API Rate Limiting**: Intelligent caching and request optimization
+- **Offline Support**: Progressive Web App features for offline data access
 
 ---
 
-**Built with ❤️ for environmental research and agricultural monitoring**
+**Built with ❤️ for environmental research and agricultural monitoring at Trent University**

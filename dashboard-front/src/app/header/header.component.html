@@ -54,9 +54,19 @@
         </li>
 
         <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
-          <a class="header__bottom-nav-link" routerLink="/dashboard">DASHBOARD</a>
+          <a class="header__bottom-nav-link"
+             routerLink="/dashboard"
+             (click)="handleDashboardClick($event, '/dashboard')" hidden="true">
+            DASHBOARD(CHART.JS)
+          </a>
         </li>
-
+<li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
+  <a class="header__bottom-nav-link"
+     routerLink="/plotly-dashboard"
+     (click)="handleDashboardClick($event, '/plotly-dashboard')">
+    DASHBOARD
+  </a>
+</li>
         <li class="header__bottom-nav-item" routerLinkActive="header__bottom-nav-item--active">
           <a class="header__bottom-nav-link" routerLink="/download">DOWNLOAD</a>
         </li>
@@ -135,5 +145,6 @@
 <!--        <li><button (click)="logout()" class="header__logout-btn">Logout</button></li>-->
       </ul>
     </nav>
+    <!-- <app-nav></app-nav> -->
   </div>
 </header>

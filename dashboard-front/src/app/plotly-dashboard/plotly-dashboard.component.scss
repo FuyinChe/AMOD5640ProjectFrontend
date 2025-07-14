@@ -1,0 +1,588 @@
+.plotly-dashboard {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Museo Sans', sans-serif;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin: 0;
+  }
+
+  &__filters {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__date-range {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-right: 0.5rem;
+  }
+
+  &__input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+
+  &__apply-btn {
+    margin-left: 1rem;
+    padding: 0.5rem 1.2rem;
+    background: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #217dbb;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 0.5rem;
+  }
+
+  &__tab {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: #7f8c8d;
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #ecf0f1;
+      color: #2c3e50;
+    }
+
+    &--active {
+      background: #3498db;
+      color: white;
+    }
+  }
+
+  &__content {
+    min-height: 500px;
+  }
+
+  &__section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  &__overview {
+    &-grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    &-item {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &__chart-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &__chart-container {
+    width: 100%;
+    height: 500px;
+    position: relative;
+  }
+
+  &__chart {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__heatmap {
+    width: 100%;
+    height: 400px;
+  }
+
+  // Responsive Design
+  @media (max-width: 1024px) {
+    max-width: 100vw;
+    padding: 0.5rem;
+    &__overview-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    &__header {
+      margin-bottom: 1rem;
+    }
+    &__title {
+      font-size: 1.5rem;
+    }
+    &__subtitle {
+      font-size: 1rem;
+    }
+    &__filters {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    &__date-range {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+    &__input,
+    &__apply-btn {
+      width: 100%;
+      margin-left: 0;
+      box-sizing: border-box;
+    }
+    &__tabs {
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      justify-content: flex-start;
+      padding-bottom: 0.25rem;
+    }
+    &__tab {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.95rem;
+      min-width: 120px;
+      text-align: center;
+    }
+    &__overview-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    &__chart-container {
+      height: 300px;
+    }
+    &__section-title {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0;
+    margin: 0;
+    &__header {
+      margin-bottom: 0.3rem;
+      padding: 0 0.3rem;
+    }
+    &__title {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    &__subtitle {
+      font-size: 0.85rem;
+    }
+    &__filters {
+      padding: 0.3rem 0.3rem 0.7rem 0.3rem;
+      margin-bottom: 0.7rem;
+      border-radius: 6px;
+      box-shadow: none;
+    }
+    &__date-range {
+      gap: 0.3rem;
+    }
+    &__input,
+    &__apply-btn {
+      font-size: 0.95rem;
+      padding: 0.45rem 0.7rem;
+    }
+    &__apply-btn {
+      margin-top: 0.3rem;
+    }
+    &__tabs {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      gap: 0.1rem;
+      padding: 0 0.2rem 0.2rem 0.2rem;
+      margin-bottom: 0.7rem;
+      border-bottom: 1px solid #ecf0f1;
+      scrollbar-width: thin;
+    }
+    &__tab {
+      min-width: 110px;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.7rem;
+      white-space: nowrap;
+    }
+    &__content {
+      min-height: 200px;
+      padding: 0 0.2rem;
+    }
+    &__section-title {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    &__overview-item {
+      padding: 0.5rem;
+    }
+    &__chart-section {
+      padding: 0.7rem;
+      border-radius: 6px;
+      margin-bottom: 0.7rem;
+    }
+    &__chart-container {
+      height: 180px;
+      min-width: 320px;
+      overflow-x: auto;
+    }
+    &__chart,
+    &__heatmap {
+      min-width: 320px;
+      width: 100%;
+      height: 100%;
+    }
+    table {
+      font-size: 0.85rem;
+      min-width: 400px;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td {
+      padding: 0.3rem 0.4rem;
+    }
+  }
+} 
+
+// Statistical Analysis Chart Type Toggle (Boxplot/Histogram)
+.statistical-analysis__chart-type-toggle--right {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.statistical-analysis__chart-type-btn {
+  background: #f5f7fa;
+  border: 1.2px solid #007844;
+  color: #007844;
+  font-weight: 600;
+  padding: 0.18rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95em;
+  min-width: 90px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.statistical-analysis__chart-type-btn--active,
+.statistical-analysis__chart-type-btn:focus {
+  background: #007844;
+  color: #fff;
+  border-color: #007844;
+}
+
+.statistical-analysis__chart-type-btn:hover:not(.statistical-analysis__chart-type-btn--active) {
+  background: #e8f5e8;
+  border-color: #005f34;
+} 
+
+.statistical-analysis__chart-type-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+  gap: 1rem;
+}
+
+.statistical-analysis__download-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  padding: 0 0.5rem;
+} 
+
+// Copy of heatmap PNG download button styles for use in statistical analysis
+.summary-heatmap-table__download-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #185a9d;
+  color: #185a9d;
+  font-weight: 600;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.48rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22em;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.summary-heatmap-table__download-btn--png {
+  border-color: #007bff;
+  color: #007bff;
+}
+.summary-heatmap-table__download-btn--png:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+} 
+
+.plotly-dashboard__tabs--dropdown {
+  display: none;
+}
+.plotly-dashboard__tab-dropdown {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #3498db;
+  background: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.07);
+}
+
+@media (max-width: 600px) {
+  .plotly-dashboard__tabs {
+    display: none !important;
+  }
+  .plotly-dashboard__tabs--dropdown {
+    display: block;
+    margin-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .plotly-dashboard__tab-dropdown {
+    font-size: 1rem;
+    padding: 0.6rem 0.7rem;
+    margin-bottom: 0.7rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  select.plotly-dashboard__tab-dropdown {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .plotly-dashboard__chart-container {
+    height: 440px;
+    min-width: 320px;
+    overflow-x: auto;
+  }
+  .plotly-dashboard__chart,
+  .plotly-dashboard__heatmap {
+    min-width: 320px;
+    width: 100%;
+    height: 100%;
+  }
+  .plotly-chart-card__download-btns {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+    margin-top: 1.2rem;
+  }
+  .plotly-chart-card__download-btns button,
+  .plotly-chart-card__download-btns a {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 1.1rem;
+    padding: 0.7rem 0;
+  }
+} 
+
+// Tablet breakpoint (max-width: 768px)
+@media (max-width: 768px) {
+  .plotly-dashboard__header {
+    margin-bottom: 0.7rem;
+    padding: 0 0.7rem;
+  }
+  .plotly-dashboard__title {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+  .plotly-dashboard__subtitle {
+    font-size: 0.92rem;
+  }
+  .plotly-dashboard__filters {
+    padding: 0.7rem;
+    margin-bottom: 0.7rem;
+    border-radius: 7px;
+  }
+  .plotly-dashboard__date-range {
+    gap: 0.4rem;
+  }
+  .plotly-dashboard__input,
+  .plotly-dashboard__apply-btn {
+    font-size: 0.98rem;
+    padding: 0.45rem 0.8rem;
+  }
+  .plotly-dashboard__tabs {
+    gap: 0.18rem;
+    padding: 0 0.2rem 0.2rem 0.2rem;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__tab {
+    min-width: 110px;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.7rem;
+  }
+  .plotly-dashboard__content {
+    min-height: 180px;
+    padding: 0 0.2rem;
+  }
+  .plotly-dashboard__section-title {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__overview-item {
+    padding: 0.7rem;
+  }
+  .plotly-dashboard__chart-section {
+    padding: 0.7rem;
+    border-radius: 7px;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__chart-container {
+    height: 220px;
+    min-width: 220px;
+    overflow-x: auto;
+  }
+  .plotly-dashboard__chart,
+  .plotly-dashboard__heatmap {
+    min-width: 220px;
+    width: 100%;
+    height: 100%;
+  }
+  table {
+    font-size: 0.92rem;
+    min-width: 320px;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 0.22rem 0.3rem;
+  }
+}
+
+// Small phone breakpoint (max-width: 480px)
+@media (max-width: 480px) {
+  .plotly-dashboard__header {
+    margin-bottom: 0.15rem;
+    padding: 0 0.15rem;
+  }
+  .plotly-dashboard__title {
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem;
+  }
+  .plotly-dashboard__subtitle {
+    font-size: 0.7rem;
+  }
+  .plotly-dashboard__filters {
+    padding: 0.15rem 0.15rem 0.4rem 0.15rem;
+    margin-bottom: 0.4rem;
+    border-radius: 5px;
+  }
+  .plotly-dashboard__date-range {
+    gap: 0.15rem;
+  }
+  .plotly-dashboard__input,
+  .plotly-dashboard__apply-btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.5rem;
+  }
+  .plotly-dashboard__tabs {
+    gap: 0.05rem;
+    padding: 0 0.1rem 0.1rem 0.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .plotly-dashboard__tab {
+    min-width: 90px;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.4rem;
+  }
+  .plotly-dashboard__content {
+    min-height: 100px;
+    padding: 0 0.1rem;
+  }
+  .plotly-dashboard__section-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+  .plotly-dashboard__overview-item {
+    padding: 0.3rem;
+  }
+  .plotly-dashboard__chart-section {
+    padding: 0.3rem;
+    border-radius: 5px;
+    margin-bottom: 0.3rem;
+  }
+  .plotly-dashboard__chart-container {
+    height: 120px;
+    min-width: 120px;
+    overflow-x: auto;
+  }
+  .plotly-dashboard__chart,
+  .plotly-dashboard__heatmap {
+    min-width: 120px;
+    width: 100%;
+    height: 100%;
+  }
+  table {
+    font-size: 0.7rem;
+    min-width: 200px;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 0.12rem 0.18rem;
+  }
+} 

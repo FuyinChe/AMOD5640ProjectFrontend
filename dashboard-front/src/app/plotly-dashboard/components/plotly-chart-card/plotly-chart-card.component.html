@@ -1,0 +1,15 @@
+<div class="plotly-chart-card">
+  <div class="plotly-chart-card__content">
+    <ng-content></ng-content>
+  </div>
+  <div class="plotly-chart-card__download-buttons" *ngIf="showDownloadButtons">
+    <button class="plotly-chart-card__download-btn plotly-chart-card__download-btn--csv" (click)="handleCSVDownload()">
+      <i class="fas fa-file-csv"></i>
+      CSV
+    </button>
+    <button class="plotly-chart-card__download-btn plotly-chart-card__download-btn--png" (click)="handlePNGDownload()">
+      <i class="fas fa-file-image"></i>
+      PNG
+    </button>
+  </div>
+</div> 

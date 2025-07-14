@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {FooterComponent} from './footer/footer.component';
-import {NavComponent} from './nav/nav.component';
 import {HeaderComponent} from './header/header.component';
 // @ts-ignore
 import { NgChartsModule } from 'ng2-charts';

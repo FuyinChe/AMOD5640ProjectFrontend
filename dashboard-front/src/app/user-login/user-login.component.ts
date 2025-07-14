@@ -68,7 +68,7 @@ export class UserLoginComponent {
         console.log('Login successful:', response);
         
         // Set redirect message based on intended destination
-        const intendedDestination = localStorage.getItem('intendedDestination');
+        const intendedDestination = localStorage.getItem('intendedDestination') || localStorage.getItem('redirectAfterLogin');
         if (intendedDestination) {
           this.redirectMessage = `Login successful! Redirecting to ${this.getDestinationName(intendedDestination)}...`;
         } else {
@@ -79,6 +79,7 @@ export class UserLoginComponent {
         setTimeout(() => {
           if (intendedDestination) {
             localStorage.removeItem('intendedDestination'); // Clear the stored destination
+            localStorage.removeItem('redirectAfterLogin'); // Clear the stored destination
             this.router.navigate([intendedDestination]);
           } else {
             this.router.navigate(['/dashboard']);
@@ -110,7 +111,9 @@ export class UserLoginComponent {
       case '/download':
         return 'Download Data page';
       case '/dashboard':
-        return 'Dashboard';
+        return 'Dashboard (Chart.js)';
+      case '/plotly-dashboard':
+        return 'Dashboard (Plotly)';
       case '/about':
         return 'About page';
       case '/environmentalData':
