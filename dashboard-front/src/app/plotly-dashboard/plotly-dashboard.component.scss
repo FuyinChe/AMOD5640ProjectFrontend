@@ -396,20 +396,20 @@
   .plotly-dashboard__tabs--dropdown {
     display: block;
     margin-bottom: 0.7rem;
-    padding-left: 0.7rem;
-    padding-right: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   .plotly-dashboard__tab-dropdown {
     font-size: 1rem;
     padding: 0.6rem 0.7rem;
     margin-bottom: 0.7rem;
-    width: calc(100vw - 1.4rem);
-    max-width: calc(100vw - 1.4rem);
+    width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
   }
   select.plotly-dashboard__tab-dropdown {
-    width: calc(100vw - 1.4rem);
-    max-width: calc(100vw - 1.4rem);
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
   }
   .plotly-dashboard__chart-container {

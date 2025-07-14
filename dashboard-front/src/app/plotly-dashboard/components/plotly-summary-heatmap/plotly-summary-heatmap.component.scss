@@ -170,4 +170,48 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  .plotly-summary-heatmap__container {
+    min-height: 400px;
+  }
+  .summary-heatmap-table__wrapper {
+    padding-left: 1rem;
+    padding-right: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .summary-heatmap-table {
+    font-size: 1rem;
+    min-width: unset;
+  }
+  .summary-heatmap-table__month-header {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    height: auto;
+    min-width: unset;
+    max-width: unset;
+    white-space: nowrap;
+  }
+  .summary-heatmap-table__metric-header {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .summary-heatmap-table__metric-name {
+    min-width: 180px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .summary-heatmap-table__cell {
+    min-width: 70px;
+    padding: 0.7rem 0.5rem;
+    font-size: 1rem;
+  }
+  .summary-heatmap-table__cell span {
+    min-width: 40px;
+  }
+  
 } 
