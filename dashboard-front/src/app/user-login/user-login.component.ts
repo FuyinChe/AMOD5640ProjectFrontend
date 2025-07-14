@@ -72,17 +72,17 @@ export class UserLoginComponent {
         if (intendedDestination) {
           this.redirectMessage = `Login successful! Redirecting to ${this.getDestinationName(intendedDestination)}...`;
         } else {
-          this.redirectMessage = 'Login successful! Redirecting to dashboard...';
+          this.redirectMessage = 'Login successful! Redirecting to welcome page...';
         }
         
-        // Show success message briefly, then redirect to intended destination or dashboard
+        // Show success message briefly, then redirect to intended destination or welcome page
         setTimeout(() => {
           if (intendedDestination) {
             localStorage.removeItem('intendedDestination'); // Clear the stored destination
             localStorage.removeItem('redirectAfterLogin'); // Clear the stored destination
             this.router.navigate([intendedDestination]);
           } else {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/welcome']);
           }
         }, 1000);
       },
@@ -116,6 +116,8 @@ export class UserLoginComponent {
         return 'Dashboard (Plotly)';
       case '/about':
         return 'About page';
+      case '/welcome':
+        return 'Welcome page';
       case '/environmentalData':
         return 'Environmental Data page';
       case '/environmentalSampleData':
