@@ -34,11 +34,12 @@ export class PlotlyAtmosphericPressureChartComponent implements OnChanges {
   }
 
   private initializeChartConfig(): void {
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth <= 600;
     this.chartLayout = {
       title: {
         text: 'Atmospheric Pressure Over Time',
         font: {
-          size: 20,
+          size: isSmallScreen ? 13 : 18,
           color: '#2c3e50'
         }
       },
@@ -76,7 +77,14 @@ export class PlotlyAtmosphericPressureChartComponent implements OnChanges {
         b: 60
       },
       hovermode: 'closest',
-      showlegend: true
+      showlegend: true,
+      legend: {
+        orientation: 'h',
+        yanchor: 'bottom',
+        y: -0.3,
+        x: 0.5,
+        xanchor: 'center'
+      }
     };
 
     this.chartConfig = {
@@ -156,8 +164,11 @@ export class PlotlyAtmosphericPressureChartComponent implements OnChanges {
     let groupLabel = 'Hourly';
     if (this.groupBy === 'weekly') groupLabel = 'Weekly';
     else if (this.groupBy === 'month') groupLabel = 'Monthly';
-    this.chartLayout.title.text = `Atmospheric Pressure (${groupLabel}) Analysis (${this.startDate} to ${this.endDate})`;
+    this.chartLayout.title.text = `Atmospheric Pressure (${groupLabel}) Analysis`;
     this.chartLayout.yaxis.title.text = `Atmospheric Pressure (${unit})`;
+
+    // Responsive title font size
+    this.chartLayout.title.font.size = (typeof window !== 'undefined' && window.innerWidth <= 600) ? 13 : 18;
 
     this.renderChart();
   }

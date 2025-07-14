@@ -97,4 +97,34 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
+}
+
+@media (max-width: 600px) {
+  .plotly-chart-card {
+    height: auto;
+    max-height: none;
+  }
+  .plotly-chart-card__content {
+    aspect-ratio: unset !important;
+    max-height: none;
+    min-height: 0;
+    height: auto;
+  }
+  .plotly-chart-card__download-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.7rem;
+    width: 100%;
+    margin-top: 2.2rem;
+    padding: 0;
+  }
+  .plotly-chart-card__download-btn {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    padding: 0.45rem 0;
+    justify-content: center;
+  }
 } 

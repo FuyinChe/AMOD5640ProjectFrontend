@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HumidityService } from '../../../services/humidity.service';
 import { PlotlyChartCardComponent } from '../plotly-chart-card/plotly-chart-card.component';
@@ -12,7 +12,7 @@ declare var Plotly: any;
   templateUrl: './plotly-humidity-chart.component.html',
   styleUrls: ['./plotly-humidity-chart.component.scss']
 })
-export class PlotlyHumidityChartComponent implements OnChanges {
+export class PlotlyHumidityChartComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() startDate: string = '';
   @Input() endDate: string = '';
   @Input() groupBy: string = 'hour';
@@ -33,12 +33,22 @@ export class PlotlyHumidityChartComponent implements OnChanges {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.resizeChart();
+    window.addEventListener('resize', this.resizeChart.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeChart.bind(this));
+  }
+
   private initializeChartConfig(): void {
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth <= 600;
     this.chartLayout = {
       title: {
         text: 'Humidity Over Time',
         font: {
-          size: 20,
+          size: isSmallScreen ? 13 : 18,
           color: '#2c3e50'
         }
       },
@@ -76,7 +86,14 @@ export class PlotlyHumidityChartComponent implements OnChanges {
         b: 60
       },
       hovermode: 'closest',
-      showlegend: true
+      showlegend: true,
+      legend: {
+        orientation: 'h',
+        yanchor: 'bottom',
+        y: -0.3,
+        x: 0.5,
+        xanchor: 'center'
+      }
     };
 
     this.chartConfig = {
@@ -156,8 +173,11 @@ export class PlotlyHumidityChartComponent implements OnChanges {
     let groupLabel = 'Hourly';
     if (this.groupBy === 'weekly') groupLabel = 'Weekly';
     else if (this.groupBy === 'month') groupLabel = 'Monthly';
-    this.chartLayout.title.text = `Humidity (${groupLabel}) Analysis (${this.startDate} to ${this.endDate})`;
+    this.chartLayout.title.text = `Humidity (${groupLabel}) Analysis`;
     this.chartLayout.yaxis.title.text = `Humidity (${unit})`;
+
+    // Responsive title font size
+    this.chartLayout.title.font.size = (typeof window !== 'undefined' && window.innerWidth <= 600) ? 13 : 18;
 
     this.renderChart();
   }
@@ -196,12 +216,21 @@ export class PlotlyHumidityChartComponent implements OnChanges {
 
   private renderChart(): void {
     if (this.chartContainer && this.chartContainer.nativeElement) {
+      // Remove fixed width/height from layout for responsiveness
+      this.chartLayout.width = undefined;
+      this.chartLayout.height = undefined;
       Plotly.newPlot(
         this.chartContainer.nativeElement,
         this.chartData,
         this.chartLayout,
         this.chartConfig
-      );
+      ).then(() => this.resizeChart());
+    }
+  }
+
+  private resizeChart(): void {
+    if (this.chartContainer && this.chartContainer.nativeElement && typeof Plotly !== 'undefined') {
+      Plotly.Plots.resize(this.chartContainer.nativeElement);
     }
   }
 

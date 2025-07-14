@@ -40,6 +40,20 @@ export class PlotlyDashboardComponent implements OnInit {
     end: '2023-12-31'
   };
 
+  // Add for responsive tab dropdown
+  isSmallScreen: boolean = false;
+  tabOptions = [
+    { label: 'Overview', value: 'overview' },
+    { label: 'Statistical Analysis', value: 'statistical-analysis' },
+    { label: 'Humidity', value: 'humidity' },
+    { label: 'Rainfall', value: 'rainfall' },
+    { label: 'Soil Temperature', value: 'soil-temp' },
+    { label: 'Snow Depth', value: 'snow-depth' },
+    { label: 'Shortwave Radiation', value: 'shortwave-radiation' },
+    { label: 'Wind Speed', value: 'wind-speed' },
+    { label: 'Atmospheric Pressure', value: 'atmospheric-pressure' },
+  ];
+
   // Monthly summary data
   months: string[] = [];
   metrics: Array<{name: string, unit: string, values: (number | null)[]}> = [];
@@ -77,6 +91,16 @@ export class PlotlyDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.fetchMonthlySummary(this.dateRange.start, this.dateRange.end);
     this.loadComponentForTab('overview');
+    this.checkScreenSize();
+    window.addEventListener('resize', this.checkScreenSize.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize(): void {
+    this.isSmallScreen = window.innerWidth <= 600;
   }
 
   onDateRangeChange(): void {

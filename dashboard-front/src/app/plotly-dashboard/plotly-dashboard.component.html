@@ -27,7 +27,7 @@
   </div>
 
   <!-- Navigation Tabs -->
-  <div class="plotly-dashboard__tabs">
+  <div *ngIf="!isSmallScreen" class="plotly-dashboard__tabs">
     <button 
       class="plotly-dashboard__tab" 
       [class.plotly-dashboard__tab--active]="activeTab === 'overview'"
@@ -36,12 +36,12 @@
       Overview
     </button>
     <button 
-    class="plotly-dashboard__tab" 
-    [class.plotly-dashboard__tab--active]="activeTab === 'statistical-analysis'"
-    (click)="setActiveTab('statistical-analysis')"
-  >
-    Statistical Analysis
-  </button>
+      class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'statistical-analysis'"
+      (click)="setActiveTab('statistical-analysis')"
+    >
+      Statistical Analysis
+    </button>
     <button 
       class="plotly-dashboard__tab" 
       [class.plotly-dashboard__tab--active]="activeTab === 'humidity'"
@@ -91,7 +91,11 @@
     >
       Atmospheric Pressure
     </button>
-
+  </div>
+  <div *ngIf="isSmallScreen" class="plotly-dashboard__tabs--dropdown">
+    <select class="plotly-dashboard__tab-dropdown" [ngModel]="activeTab" (ngModelChange)="setActiveTab($event)">
+      <option *ngFor="let tab of tabOptions" [value]="tab.value">{{ tab.label }}</option>
+    </select>
   </div>
 
   <!-- Tab Content -->
