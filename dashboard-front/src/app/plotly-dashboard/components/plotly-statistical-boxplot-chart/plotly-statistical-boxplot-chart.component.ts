@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, AfterViewChecked, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatisticalBoxplotService, BoxplotApiResponse } from '../../../services/statistical-boxplot.service';
 declare var Plotly: any;
@@ -15,6 +15,7 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
   @Input() endDate: string = '';
   @Input() metrics: string[] = [];
   @ViewChild('statisticalBoxplotChart', { static: false }) chartContainer!: ElementRef;
+  @Output() downloadCSV = new EventEmitter<void>();
 
   chartData: any[] = [];
   chartLayout: any = {};
@@ -44,7 +45,11 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
     this.error = null;
     this.boxplotService.getBoxplotData(this.startDate, this.endDate, this.metrics).subscribe({
       next: (response: BoxplotApiResponse) => {
-        this.chartData = this.processBoxplotData(response.data);
+        // Always show all available metrics, ignore this.metrics
+        const metricsToShow = Object.keys(response.data);
+        console.log('Boxplot API data keys:', Object.keys(response.data));
+        console.log('Boxplot metricsToShow:', metricsToShow);
+        this.chartData = this.processBoxplotData(response.data, metricsToShow);
         this.isLoading = false;
         this.shouldRender = true;
       },
@@ -58,11 +63,41 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
   renderChart() {
     const chartDiv = document.getElementById('statisticalBoxplotChart');
     if (chartDiv && this.chartData.length) {
-      Plotly.newPlot(chartDiv, this.chartData, this.chartLayout, {responsive: true});
+      // Warn for degenerate statistics
+      this.chartData.forEach(trace => {
+        if (
+          trace.q1[0] === trace.median[0] &&
+          trace.median[0] === trace.q3[0] &&
+          trace.q1[0] === trace.q3[0]
+        ) {
+          console.warn(`[Boxplot] Degenerate statistics for metric '${trace.name}': All quartiles are equal (${trace.q1[0]})`);
+        }
+        // Set larger box width
+        trace.width = 0.5;
+        // Log detailed trace info
+        console.log(`[Boxplot Trace] name: ${trace.name}, x: ${trace.x}, min: ${trace.lowerfence[0]}, q1: ${trace.q1[0]}, median: ${trace.median[0]}, q3: ${trace.q3[0]}, max: ${trace.upperfence[0]}`);
+      });
+      // Log the full chartData array
+      console.log('Final chartData:', this.chartData);
+      // Use smaller fixed width for compact display
+      const compactLayout = {
+        ...this.chartLayout,
+        width: undefined, // Responsive width
+        autosize: true
+      };
+      // Force Plotly to purge the chart div before drawing
+      if (typeof Plotly !== 'undefined' && typeof Plotly.purge === 'function') {
+        Plotly.purge(chartDiv);
+      }
+      Plotly.newPlot(chartDiv, this.chartData, compactLayout, {
+        responsive: true,
+        displayModeBar: true,
+        modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d']
+      });
     }
   }
 
-  processBoxplotData(data: any): any[] {
+  processBoxplotData(data: any, metricsToShow?: string[]): any[] {
     const colorMap: { [key: string]: string } = {
       humidity: '#00aaff',
       temperature: '#ff5733',
@@ -73,22 +108,38 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
       atmospheric_pressure: '#636e72',
       soil_temperature: '#e17055'
     };
-    return this.metrics.map(metric => {
+    const allMetrics = [
+      'humidity',
+      'temperature',
+      'wind_speed',
+      'rainfall',
+      'snow_depth',
+      'shortwave_radiation',
+      'atmospheric_pressure',
+      'soil_temperature'
+    ];
+    return allMetrics.map(metric => {
       const arr = data[metric];
       const color = colorMap[metric] || '#ff4136';
-      if (!arr || !arr[0] || !arr[0].statistics) {
-        // No data for this metric, show an empty box
+      if (!arr || !arr[0] || !arr[0].statistics || arr[0].statistics.q1 == null || arr[0].statistics.median == null || arr[0].statistics.q3 == null) {
+        // Show a placeholder/empty box for missing or invalid data
         return {
           type: 'box',
           name: this.getMetricLabel(metric),
           x: [this.getMetricLabel(metric)],
           y: [],
-          boxpoints: 'outliers',
-          marker: { color, outliercolor: '#22223b', size: 8 },
-          line: { color, width: 2 },
-          width: 0.3,
-          fillcolor: color,
-          orientation: 'v'
+          q1: [0],
+          median: [0],
+          q3: [0],
+          lowerfence: [0],
+          upperfence: [0],
+          marker: { color: '#cccccc' },
+          line: { color: '#cccccc', width: 2, dash: 'dot' },
+          width: 0.15,
+          fillcolor: '#f8f8f8',
+          orientation: 'v',
+          boxpoints: false,
+          hovertemplate: `<b>${this.getMetricLabel(metric)}</b><br>No data available<extra></extra>`
         };
       }
       const stats = arr[0].statistics;
@@ -101,11 +152,10 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
         q3: [stats.q3],
         lowerfence: [stats.min],
         upperfence: [stats.max],
-        y: stats.outliers || [],
         boxpoints: 'outliers',
         marker: { color, outliercolor: '#22223b', size: 8 },
         line: { color, width: 2 },
-        width: 0.3,
+        width: 0.15,
         fillcolor: color,
         orientation: 'v',
         hovertemplate:
@@ -146,14 +196,29 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
         zeroline: false
       },
       xaxis: {
-        tickfont: { size: 16, color: '#22223b' }
+        tickfont: { size: 11, color: '#22223b' },
+        tickangle: -30 // Rotate labels to prevent overlap
       },
       boxmode: 'group',
       showlegend: false,
-      margin: { t: 40, b: 60, l: 60, r: 40 },
-      height: 500,
+      margin: { t: 70, b: 80, l: 60, r: 40 }, // Increased top margin to 70
+      height: 600,
+      width: 1100, // Increased width for better spacing
       plot_bgcolor: '#fff',
       paper_bgcolor: '#fff'
     };
+  }
+
+  downloadPNG(): void {
+    const chartDiv = document.getElementById('statisticalBoxplotChart');
+    if (chartDiv) {
+      Plotly.downloadImage(chartDiv, {
+        format: 'png',
+        filename: `boxplot_chart_${this.startDate}_${this.endDate}`,
+        height: 600,
+        width: 1100,
+        scale: 2
+      });
+    }
   }
 } 

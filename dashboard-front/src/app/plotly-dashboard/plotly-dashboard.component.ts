@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlotlyHumidityChartComponent } from './components/plotly-humidity-chart/plotly-humidity-chart.component';
@@ -11,6 +11,7 @@ import { PlotlyWindSpeedChartComponent } from './components/plotly-wind-speed-ch
 import { PlotlyAtmosphericPressureChartComponent } from './components/plotly-atmospheric-pressure-chart/plotly-atmospheric-pressure-chart.component';
 import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/environmental-monthly-summary.service';
 import { PlotlyStatisticalBoxplotChartComponent } from './components/plotly-statistical-boxplot-chart/plotly-statistical-boxplot-chart.component';
+import { PlotlyStatisticalHistogramChartComponent } from './components/plotly-statistical-histogram-chart/plotly-statistical-histogram-chart.component';
 
 @Component({
   selector: 'app-plotly-dashboard',
@@ -26,7 +27,8 @@ import { PlotlyStatisticalBoxplotChartComponent } from './components/plotly-stat
     PlotlyShortwaveRadiationChartComponent,
     PlotlyWindSpeedChartComponent,
     PlotlyAtmosphericPressureChartComponent,
-    PlotlyStatisticalBoxplotChartComponent
+    PlotlyStatisticalBoxplotChartComponent,
+    PlotlyStatisticalHistogramChartComponent
   ],
   templateUrl: './plotly-dashboard.component.html',
   styleUrls: ['./plotly-dashboard.component.scss']
@@ -52,6 +54,10 @@ export class PlotlyDashboardComponent implements OnInit {
   windSpeedChartComponent: any = null;
   atmosphericPressureChartComponent: any = null;
   statisticalBoxplotChartComponent: any = null;
+  statisticalHistogramChartComponent: any = null;
+
+  @ViewChild(PlotlyStatisticalBoxplotChartComponent) boxplotChart?: PlotlyStatisticalBoxplotChartComponent;
+  @ViewChild(PlotlyStatisticalHistogramChartComponent) histogramChart?: PlotlyStatisticalHistogramChartComponent;
 
   selectedMetrics: string[] = [
     'humidity',
@@ -63,6 +69,8 @@ export class PlotlyDashboardComponent implements OnInit {
     'atmospheric_pressure',
     'soil_temperature'
   ];
+
+  statisticalChartType: 'boxplot' | 'histogram' = 'boxplot';
 
   constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
 
@@ -154,6 +162,11 @@ export class PlotlyDashboardComponent implements OnInit {
   }
 
   private fetchMonthlySummary(start: string, end: string): void {
+    // Set loading state on the heatmap component if available
+    if (this.summaryHeatmapComponent && this.summaryHeatmapComponent.isLoading !== undefined) {
+      this.summaryHeatmapComponent.isLoading = true;
+      this.summaryHeatmapComponent.error = null;
+    }
     this.monthlySummaryService.getMonthlySummary(start, end).subscribe({
       next: (response) => {
         const data: MonthlySummary[] = response.data;
@@ -207,10 +220,38 @@ export class PlotlyDashboardComponent implements OnInit {
           { name: 'Atmospheric Pressure Mean', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_mean) },
           { name: 'Atmospheric Pressure Std', unit: 'hPa', values: data.map(d => d.atmospheric_pressure_std) },
         ];
+        // Set loading to false after data is loaded
+        if (this.summaryHeatmapComponent && this.summaryHeatmapComponent.isLoading !== undefined) {
+          this.summaryHeatmapComponent.isLoading = false;
+        }
       },
       error: (err) => {
         console.error('Error loading monthly summary:', err);
+        // Set error state on the heatmap component
+        if (this.summaryHeatmapComponent && this.summaryHeatmapComponent.error !== undefined) {
+          this.summaryHeatmapComponent.error = 'Failed to load overview data';
+          this.summaryHeatmapComponent.isLoading = false;
+        }
       }
     });
+  }
+
+  // Download methods for statistical analysis charts
+  onDownloadBoxplotCSV(): void {
+    // This will be handled by the child component via event emitter
+    console.log('Download boxplot CSV requested');
+  }
+
+  onDownloadBoxplotPNG(): void {
+    this.boxplotChart?.downloadPNG();
+  }
+
+  onDownloadHistogramCSV(): void {
+    // This will be handled by the child component via event emitter
+    console.log('Download histogram CSV requested');
+  }
+
+  onDownloadHistogramPNG(): void {
+    this.histogramChart?.downloadPNG();
   }
 } 

@@ -192,3 +192,81 @@
     }
   }
 } 
+
+// Statistical Analysis Chart Type Toggle (Boxplot/Histogram)
+.statistical-analysis__chart-type-toggle--right {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.statistical-analysis__chart-type-btn {
+  background: #f5f7fa;
+  border: 1.2px solid #007844;
+  color: #007844;
+  font-weight: 600;
+  padding: 0.18rem 0.7rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95em;
+  min-width: 90px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.statistical-analysis__chart-type-btn--active,
+.statistical-analysis__chart-type-btn:focus {
+  background: #007844;
+  color: #fff;
+  border-color: #007844;
+}
+
+.statistical-analysis__chart-type-btn:hover:not(.statistical-analysis__chart-type-btn--active) {
+  background: #e8f5e8;
+  border-color: #005f34;
+} 
+
+.statistical-analysis__chart-type-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+  gap: 1rem;
+}
+
+.statistical-analysis__download-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  padding: 0 0.5rem;
+} 
+
+// Copy of heatmap PNG download button styles for use in statistical analysis
+.summary-heatmap-table__download-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #185a9d;
+  color: #185a9d;
+  font-weight: 600;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.48rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22em;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.summary-heatmap-table__download-btn--png {
+  border-color: #007bff;
+  color: #007bff;
+}
+.summary-heatmap-table__download-btn--png:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+} 

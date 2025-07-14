@@ -195,12 +195,44 @@
 
     <!-- Statistical Analysis Tab -->
     <div *ngIf="activeTab === 'statistical-analysis'" class="plotly-dashboard__chart-section">
-      <h3 class="plotly-dashboard__section-title">Boxplot Analysis</h3>
-      <app-plotly-statistical-boxplot-chart
-        [startDate]="dateRange.start"
-        [endDate]="dateRange.end"
-        [metrics]="selectedMetrics">
-      </app-plotly-statistical-boxplot-chart>
+      <h3 class="plotly-dashboard__section-title">Statistical Analysis</h3>
+      <div class="statistical-analysis__chart-type-toggle-row">
+        <div class="statistical-analysis__chart-type-toggle--right">
+          <button
+            class="statistical-analysis__chart-type-btn"
+            [class.statistical-analysis__chart-type-btn--active]="statisticalChartType === 'boxplot'"
+            (click)="statisticalChartType = 'boxplot'">
+            Boxplot
+          </button>
+          <button
+            class="statistical-analysis__chart-type-btn"
+            [class.statistical-analysis__chart-type-btn--active]="statisticalChartType === 'histogram'"
+            (click)="statisticalChartType = 'histogram'">
+            Histogram
+          </button>
+        </div>
+        <div class="statistical-analysis__download-buttons">
+          <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="statisticalChartType === 'boxplot' ? onDownloadBoxplotPNG() : onDownloadHistogramPNG()">
+            <i class="fas fa-file-image"></i>
+            PNG
+          </button>
+        </div>
+      </div>
+      <div *ngIf="statisticalChartType === 'boxplot'">
+        <app-plotly-statistical-boxplot-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          (downloadPNG)="onDownloadBoxplotPNG()">
+        </app-plotly-statistical-boxplot-chart>
+      </div>
+      <div *ngIf="statisticalChartType === 'histogram'">
+        <app-plotly-statistical-histogram-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          [metrics]="selectedMetrics"
+          (downloadPNG)="onDownloadHistogramPNG()">
+        </app-plotly-statistical-histogram-chart>
+      </div>
     </div>
   </div>
 </div> 

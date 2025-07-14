@@ -12,6 +12,8 @@ export class PlotlySummaryHeatmapComponent {
   @Input() metrics: Array<{name: string, unit: string, values: (number | null)[]}> = [];
   @Input() months: string[] = [];
   @ViewChild('heatmapTable', { static: false }) heatmapTableRef!: ElementRef;
+  isLoading = false;
+  error: string | null = null;
 
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {

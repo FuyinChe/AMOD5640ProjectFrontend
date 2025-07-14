@@ -1,35 +1,44 @@
 <div class="summary-heatmap-table__wrapper">
-  <div class="summary-heatmap-table__download-buttons">
-    <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--csv" (click)="downloadCSV()">
-      <i class="fas fa-file-csv"></i>
-      CSV
-    </button>
-    <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="downloadPNG()">
-      <i class="fas fa-file-image"></i>
-      PNG
-    </button>
+  <div *ngIf="isLoading" class="summary-heatmap-table__loading">
+    <div class="summary-heatmap-table__spinner"></div>
+    <p>Loading overview data...</p>
   </div>
-  <table #heatmapTable class="summary-heatmap-table">
-    <thead>
-      <tr>
-        <th class="summary-heatmap-table__metric-header">Metric</th>
-        <th *ngFor="let month of months" class="summary-heatmap-table__month-header">{{ month }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let metric of metrics">
-        <td class="summary-heatmap-table__metric-name">{{ metric.name }}<span *ngIf="metric.unit"> ({{ metric.unit }})</span></td>
-        <ng-container *ngIf="metric.values && metric.values.length">
-          <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
-            <td *ngFor="let value of metric.values"
-                [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
-                class="summary-heatmap-table__cell">
-              <span *ngIf="value !== null && value !== undefined">{{ value | number:'1.2-2' }}</span>
-              <span *ngIf="value === null || value === undefined">-</span>
-            </td>
+  <div *ngIf="error" class="summary-heatmap-table__error">
+    <p>{{ error }}</p>
+  </div>
+  <ng-container *ngIf="!isLoading && !error">
+    <div class="summary-heatmap-table__download-buttons">
+      <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--csv" (click)="downloadCSV()">
+        <i class="fas fa-file-csv"></i>
+        CSV
+      </button>
+      <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="downloadPNG()">
+        <i class="fas fa-file-image"></i>
+        PNG
+      </button>
+    </div>
+    <table #heatmapTable class="summary-heatmap-table">
+      <thead>
+        <tr>
+          <th class="summary-heatmap-table__metric-header">Metric</th>
+          <th *ngFor="let month of months" class="summary-heatmap-table__month-header">{{ month }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let metric of metrics">
+          <td class="summary-heatmap-table__metric-name">{{ metric.name }}<span *ngIf="metric.unit"> ({{ metric.unit }})</span></td>
+          <ng-container *ngIf="metric.values && metric.values.length">
+            <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
+              <td *ngFor="let value of metric.values"
+                  [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
+                  class="summary-heatmap-table__cell">
+                <span *ngIf="value !== null && value !== undefined">{{ value | number:'1.2-2' }}</span>
+                <span *ngIf="value === null || value === undefined">-</span>
+              </td>
+            </ng-container>
           </ng-container>
-        </ng-container>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
 </div> 
