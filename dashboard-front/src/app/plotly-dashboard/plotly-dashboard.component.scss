@@ -438,3 +438,151 @@
     padding: 0.7rem 0;
   }
 } 
+
+// Tablet breakpoint (max-width: 768px)
+@media (max-width: 768px) {
+  .plotly-dashboard__header {
+    margin-bottom: 0.7rem;
+    padding: 0 0.7rem;
+  }
+  .plotly-dashboard__title {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+  .plotly-dashboard__subtitle {
+    font-size: 0.92rem;
+  }
+  .plotly-dashboard__filters {
+    padding: 0.7rem;
+    margin-bottom: 0.7rem;
+    border-radius: 7px;
+  }
+  .plotly-dashboard__date-range {
+    gap: 0.4rem;
+  }
+  .plotly-dashboard__input,
+  .plotly-dashboard__apply-btn {
+    font-size: 0.98rem;
+    padding: 0.45rem 0.8rem;
+  }
+  .plotly-dashboard__tabs {
+    gap: 0.18rem;
+    padding: 0 0.2rem 0.2rem 0.2rem;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__tab {
+    min-width: 110px;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.7rem;
+  }
+  .plotly-dashboard__content {
+    min-height: 180px;
+    padding: 0 0.2rem;
+  }
+  .plotly-dashboard__section-title {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__overview-item {
+    padding: 0.7rem;
+  }
+  .plotly-dashboard__chart-section {
+    padding: 0.7rem;
+    border-radius: 7px;
+    margin-bottom: 0.7rem;
+  }
+  .plotly-dashboard__chart-container {
+    height: 220px;
+    min-width: 220px;
+    overflow-x: auto;
+  }
+  .plotly-dashboard__chart,
+  .plotly-dashboard__heatmap {
+    min-width: 220px;
+    width: 100%;
+    height: 100%;
+  }
+  table {
+    font-size: 0.92rem;
+    min-width: 320px;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 0.22rem 0.3rem;
+  }
+}
+
+// Small phone breakpoint (max-width: 480px)
+@media (max-width: 480px) {
+  .plotly-dashboard__header {
+    margin-bottom: 0.15rem;
+    padding: 0 0.15rem;
+  }
+  .plotly-dashboard__title {
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem;
+  }
+  .plotly-dashboard__subtitle {
+    font-size: 0.7rem;
+  }
+  .plotly-dashboard__filters {
+    padding: 0.15rem 0.15rem 0.4rem 0.15rem;
+    margin-bottom: 0.4rem;
+    border-radius: 5px;
+  }
+  .plotly-dashboard__date-range {
+    gap: 0.15rem;
+  }
+  .plotly-dashboard__input,
+  .plotly-dashboard__apply-btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.5rem;
+  }
+  .plotly-dashboard__tabs {
+    gap: 0.05rem;
+    padding: 0 0.1rem 0.1rem 0.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .plotly-dashboard__tab {
+    min-width: 90px;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.4rem;
+  }
+  .plotly-dashboard__content {
+    min-height: 100px;
+    padding: 0 0.1rem;
+  }
+  .plotly-dashboard__section-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.2rem;
+  }
+  .plotly-dashboard__overview-item {
+    padding: 0.3rem;
+  }
+  .plotly-dashboard__chart-section {
+    padding: 0.3rem;
+    border-radius: 5px;
+    margin-bottom: 0.3rem;
+  }
+  .plotly-dashboard__chart-container {
+    height: 120px;
+    min-width: 120px;
+    overflow-x: auto;
+  }
+  .plotly-dashboard__chart,
+  .plotly-dashboard__heatmap {
+    min-width: 120px;
+    width: 100%;
+    height: 100%;
+  }
+  table {
+    font-size: 0.7rem;
+    min-width: 200px;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 0.12rem 0.18rem;
+  }
+} 
