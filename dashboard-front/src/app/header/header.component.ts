@@ -28,14 +28,7 @@ export class HeaderComponent {
 
   // Called when user clicks the "Logout" button
   logout() {
-    this.auth.logout();                // Clear token and username from localStorage
-    this.router.navigate(['/']).then(success => {
-      if (success) {
-        console.log('Navigation successful');
-      } else {
-        console.warn('Navigation failed');
-      }
-    });      // Navigate to home (or login page if you prefer)
+    this.auth.logout();                // Clear token and username from localStorage, redirects to welcome page
     this.dropdownOpen = false;
   }
 

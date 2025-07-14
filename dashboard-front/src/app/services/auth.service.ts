@@ -132,7 +132,7 @@ export class AuthService {
     localStorage.removeItem(this.usernameKey);
     localStorage.removeItem(this.emailKey);
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/welcome']);
   }
 
   /**
