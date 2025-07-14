@@ -1,6 +1,6 @@
 <div class="plotly-dashboard">
   <div class="plotly-dashboard__header">
-    <h2 class="plotly-dashboard__title">Plotly Environmental Dashboard</h2>
+    <h2 class="plotly-dashboard__title">Environmental Dashboard</h2>
     <p class="plotly-dashboard__subtitle">Advanced interactive visualizations with Plotly.js</p>
   </div>
 
@@ -35,6 +35,13 @@
     >
       Overview
     </button>
+    <button 
+    class="plotly-dashboard__tab" 
+    [class.plotly-dashboard__tab--active]="activeTab === 'statistical-analysis'"
+    (click)="setActiveTab('statistical-analysis')"
+  >
+    Statistical Analysis
+  </button>
     <button 
       class="plotly-dashboard__tab" 
       [class.plotly-dashboard__tab--active]="activeTab === 'humidity'"
@@ -84,13 +91,7 @@
     >
       Atmospheric Pressure
     </button>
-    <button 
-      class="plotly-dashboard__tab" 
-      [class.plotly-dashboard__tab--active]="activeTab === 'statistical-analysis'"
-      (click)="setActiveTab('statistical-analysis')"
-    >
-      Statistical Analysis
-    </button>
+
   </div>
 
   <!-- Tab Content -->

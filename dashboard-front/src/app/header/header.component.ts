@@ -3,7 +3,6 @@ import {NgOptimizedImage} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {CommonModule} from '@angular/common';
-import {NavComponent} from '../nav/nav.component';
 
 
 @Component({
