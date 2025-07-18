@@ -43,7 +43,7 @@ export class WelcomeComponent {
       image: './images/chart.jpg',
       title: 'Real-time Charts',
       description: 'Visualize temperature, humidity, rainfall and more with dynamic dashboards.',
-      link: '/dashboard'
+      link: '/plotly-dashboard'
     },
     {
       image: './images/download-s.jpg',
@@ -55,7 +55,7 @@ export class WelcomeComponent {
       image: './images/research-s.jpg',
       title: 'Research Ready',
       description: 'Perfect for agriculture, climate science, and environmental education.',
-      link: '/dashboard'
+      link: '/plotly-dashboard'
     }
   ];
 
