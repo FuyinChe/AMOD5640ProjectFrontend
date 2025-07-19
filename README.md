@@ -156,7 +156,7 @@ dashboard-front/
    - Zoom and pan functionality
    - Hover tooltips with detailed information
    - Export charts as images
-   - Statistical analysis with boxplots and histograms
+   - Statistical analysis with boxplots, histograms, and correlation matrices
    - Summary heatmaps for data overview
 
 ### Data Export
@@ -536,7 +536,7 @@ For questions, issues, or contributions, please contact the development team or 
 ## 📈 Future Enhancements
 
 - **Real-time Data**: WebSocket integration for live updates
-- **Advanced Analytics**: Statistical analysis tools and machine learning integration
+- **Advanced Analytics**: Statistical analysis tools including correlation analysis and machine learning integration
 - **Mobile App**: React Native or Flutter companion app
 - **Data Comparison**: Multi-site data comparison features
 - **Export Formats**: Additional export options (JSON, XML, PDF reports)

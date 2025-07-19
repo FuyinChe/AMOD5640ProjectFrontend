@@ -1,10 +1,11 @@
 import { Component,OnInit } from '@angular/core';
 import {EnvironmentalSampleDataService} from '../services/environmental-sample-data.service';
 import {NgForOf, NgIf, CommonModule, DecimalPipe} from '@angular/common';
-import {RouterOutlet} from '@angular/router';
+import {RouterOutlet, Router} from '@angular/router';
 import {EnvironmentalRecord} from '../interfaces/environmental-record';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -20,12 +21,29 @@ import { saveAs } from 'file-saver';
 })
 export class EnvironmentalSampleDataComponent implements OnInit {
   environmentalSampleData:EnvironmentalRecord [] = [];
-  constructor(private environmentalSampleDataService:EnvironmentalSampleDataService){}
+  constructor(
+    private environmentalSampleDataService:EnvironmentalSampleDataService,
+    private authService: AuthService,
+    private router: Router
+  ){}
 
   ngOnInit() {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('intendedDestination', '/environmentalSampleData');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.environmentalSampleDataService.getEnvironmentalData().subscribe({
       next: data => this.environmentalSampleData = data,
-      error: err => console.error(err)
+      error: (err) => {
+        console.error(err);
+        if (err.status === 401) {
+          localStorage.setItem('intendedDestination', '/environmentalSampleData');
+          this.router.navigate(['/login']);
+        }
+      }
     });
   }
 

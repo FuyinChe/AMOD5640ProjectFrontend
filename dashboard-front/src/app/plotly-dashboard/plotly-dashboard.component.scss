@@ -326,7 +326,29 @@
 .statistical-analysis__chart-type-btn:hover:not(.statistical-analysis__chart-type-btn--active) {
   background: #e8f5e8;
   border-color: #005f34;
-} 
+}
+
+// Responsive font sizing for statistical analysis tabs
+@media (max-width: 768px) {
+  .statistical-analysis__chart-type-btn {
+    font-size: 0.85em;
+    padding: 0.15rem 0.6rem;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 600px) {
+  .statistical-analysis__chart-type-btn {
+    font-size: 0.75em;
+    padding: 0.12rem 0.5rem;
+    min-width: 70px;
+  }
+  
+  .statistical-analysis__chart-type-toggle--right {
+    gap: 0.2rem;
+    margin-bottom: 1rem;
+  }
+}
 
 .statistical-analysis__chart-type-toggle-row {
   display: flex;

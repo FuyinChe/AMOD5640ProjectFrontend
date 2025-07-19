@@ -1,0 +1,273 @@
+.plotly-correlation-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+
+  &__view-toggle {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__view-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+
+    &--active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  }
+
+  &__download-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+
+    &--csv {
+      color: #28a745;
+      border-color: #28a745;
+
+      &:hover {
+        background-color: #d4edda;
+      }
+    }
+
+    &--png {
+      color: #17a2b8;
+      border-color: #17a2b8;
+
+      &:hover {
+        background-color: #d1ecf1;
+      }
+    }
+  }
+
+  &__container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: #dc3545;
+  }
+
+  &__retry-btn {
+    padding: 0.5rem 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+
+  &__chart-wrapper {
+    flex: 1;
+    min-height: 400px;
+  }
+
+  &__chart {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+  }
+
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6;
+  }
+
+  &__stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &__stat-label {
+    font-size: 0.75rem;
+    color: #495057;
+    text-align: center;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    font-family: 'Arial', sans-serif;
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    &__controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__view-toggle {
+      justify-content: center;
+    }
+
+    &__download-buttons {
+      justify-content: center;
+    }
+
+    &__stats {
+      justify-content: center;
+    }
+
+    &__stat-item {
+      min-width: 100px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &__view-btn {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    &__download-btn {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.6rem;
+    }
+
+    &__stat-label {
+      font-size: 0.7rem;
+    }
+
+    &__stat-value {
+      font-size: 1rem;
+    }
+
+    &__chart {
+      min-height: 350px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__view-toggle {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    &__view-btn {
+      width: 100%;
+    }
+
+    &__download-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    &__download-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    &__stats {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__stat-item {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      min-width: auto;
+    }
+  }
+} 

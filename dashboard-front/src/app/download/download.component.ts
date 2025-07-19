@@ -46,9 +46,18 @@ export class DownloadComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.dataService.getEnvironmentalData().subscribe(data => {
-      this.data = data;
-      this.filteredData = data;
+    this.dataService.getEnvironmentalData().subscribe({
+      next: (data) => {
+        this.data = data;
+        this.filteredData = data;
+      },
+      error: (err) => {
+        console.error('Error loading environmental data:', err);
+        if (err.status === 401) {
+          localStorage.setItem('intendedDestination', '/download');
+          this.router.navigate(['/login']);
+        }
+      }
     });
   }
 

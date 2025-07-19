@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PlotlyHumidityChartComponent } from './components/plotly-humidity-chart/plotly-humidity-chart.component';
 import { PlotlyRainfallChartComponent } from './components/plotly-rainfall-chart/plotly-rainfall-chart.component';
 import { PlotlySoilTempChartComponent } from './components/plotly-soil-temp-chart/plotly-soil-temp-chart.component';
@@ -12,6 +13,8 @@ import { PlotlyAtmosphericPressureChartComponent } from './components/plotly-atm
 import { EnvironmentalMonthlySummaryService, MonthlySummary } from '../services/environmental-monthly-summary.service';
 import { PlotlyStatisticalBoxplotChartComponent } from './components/plotly-statistical-boxplot-chart/plotly-statistical-boxplot-chart.component';
 import { PlotlyStatisticalHistogramChartComponent } from './components/plotly-statistical-histogram-chart/plotly-statistical-histogram-chart.component';
+import { PlotlyStatisticalCorrelationChartComponent } from './components/plotly-statistical-correlation-chart/plotly-statistical-correlation-chart.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-plotly-dashboard',
@@ -28,7 +31,8 @@ import { PlotlyStatisticalHistogramChartComponent } from './components/plotly-st
     PlotlyWindSpeedChartComponent,
     PlotlyAtmosphericPressureChartComponent,
     PlotlyStatisticalBoxplotChartComponent,
-    PlotlyStatisticalHistogramChartComponent
+    PlotlyStatisticalHistogramChartComponent,
+    PlotlyStatisticalCorrelationChartComponent
   ],
   templateUrl: './plotly-dashboard.component.html',
   styleUrls: ['./plotly-dashboard.component.scss']
@@ -69,9 +73,11 @@ export class PlotlyDashboardComponent implements OnInit {
   atmosphericPressureChartComponent: any = null;
   statisticalBoxplotChartComponent: any = null;
   statisticalHistogramChartComponent: any = null;
+  correlationChartComponent: any = null;
 
   @ViewChild(PlotlyStatisticalBoxplotChartComponent) boxplotChart?: PlotlyStatisticalBoxplotChartComponent;
   @ViewChild(PlotlyStatisticalHistogramChartComponent) histogramChart?: PlotlyStatisticalHistogramChartComponent;
+  @ViewChild(PlotlyStatisticalCorrelationChartComponent) correlationChart?: PlotlyStatisticalCorrelationChartComponent;
 
   selectedMetrics: string[] = [
     'humidity',
@@ -84,11 +90,22 @@ export class PlotlyDashboardComponent implements OnInit {
     'soil_temperature'
   ];
 
-  statisticalChartType: 'boxplot' | 'histogram' = 'boxplot';
+  statisticalChartType: 'boxplot' | 'histogram' | 'correlation-matrix' | 'pairwise-correlations' = 'boxplot';
 
-  constructor(private monthlySummaryService: EnvironmentalMonthlySummaryService) {}
+  constructor(
+    private monthlySummaryService: EnvironmentalMonthlySummaryService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    // Check authentication
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('intendedDestination', '/plotly-dashboard');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.fetchMonthlySummary(this.dateRange.start, this.dateRange.end);
     this.loadComponentForTab('overview');
     this.checkScreenSize();
@@ -112,6 +129,13 @@ export class PlotlyDashboardComponent implements OnInit {
   }
 
   setActiveTab(tab: string): void {
+    // Check authentication for statistical analysis tab
+    if (tab === 'statistical-analysis' && !this.authService.isLoggedIn()) {
+      localStorage.setItem('intendedDestination', '/plotly-dashboard');
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     this.activeTab = tab;
     this.loadComponentForTab(tab);
   }
@@ -170,6 +194,10 @@ export class PlotlyDashboardComponent implements OnInit {
         if (!this.statisticalBoxplotChartComponent) {
           const { PlotlyStatisticalBoxplotChartComponent } = await import('./components/plotly-statistical-boxplot-chart/plotly-statistical-boxplot-chart.component');
           this.statisticalBoxplotChartComponent = PlotlyStatisticalBoxplotChartComponent;
+        }
+        if (!this.correlationChartComponent) {
+          const { PlotlyStatisticalCorrelationChartComponent } = await import('./components/plotly-statistical-correlation-chart/plotly-statistical-correlation-chart.component');
+          this.correlationChartComponent = PlotlyStatisticalCorrelationChartComponent;
         }
         break;
     }
@@ -277,5 +305,9 @@ export class PlotlyDashboardComponent implements OnInit {
 
   onDownloadHistogramPNG(): void {
     this.histogramChart?.downloadPNG();
+  }
+
+  onDownloadCorrelationPNG(): void {
+    this.correlationChart?.downloadPNG();
   }
 } 

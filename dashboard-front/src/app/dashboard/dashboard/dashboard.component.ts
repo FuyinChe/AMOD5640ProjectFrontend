@@ -257,6 +257,10 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading monthly summary:', err);
+        if (err.status === 401) {
+          localStorage.setItem('intendedDestination', '/dashboard');
+          this.router.navigate(['/login']);
+        }
       }
     });
   }

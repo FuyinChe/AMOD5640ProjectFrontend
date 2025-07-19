@@ -301,6 +301,76 @@ All chart endpoints support the following query parameters:
 }
 ```
 
+#### 3. Correlation Analysis
+**GET** `/charts/statistical/correlation/`
+
+**Query Parameters:**
+- `start_date`: YYYY-MM-DD
+- `end_date`: YYYY-MM-DD
+- `metrics`: Array of metric names (e.g., humidity, temperature, wind_speed)
+- `correlation_method`: pearson | spearman (default: pearson)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "correlation_matrix": [
+      [1.0, -0.0103, -0.0148, 0.0113, -0.0075, -0.0090, 0.0224],
+      [-0.0103, 1.0, 0.0076, -0.0027, 0.0105, -0.0061, 0.0075],
+      [-0.0148, 0.0076, 1.0, 0.0171, -0.4698, -0.1009, 0.0003],
+      [0.0113, -0.0027, 0.0171, 1.0, -0.0088, -0.0026, -0.0080],
+      [-0.0075, 0.0105, -0.4698, -0.0088, 1.0, 0.0390, 0.0016],
+      [-0.0090, -0.0061, -0.1009, -0.0026, 0.0390, 1.0, -0.0064],
+      [0.0224, 0.0075, 0.0003, -0.0080, 0.0016, -0.0064, 1.0]
+    ],
+    "p_value_matrix": [
+      [0.0, 0.4594, 0.2891, 0.4169, 0.5908, 0.5205, 0.1089],
+      [0.4594, 0.0, 0.5845, 0.8445, 0.4513, 0.6614, 0.5904],
+      [0.2891, 0.5845, 0.0, 0.2201, 2.12e-279, 4.70e-13, 0.9819],
+      [0.4169, 0.8445, 0.2201, 0.0, 0.5287, 0.8515, 0.5656],
+      [0.5908, 0.4513, 2.12e-279, 0.5287, 0.0, 0.0053, 0.9075],
+      [0.5205, 0.6614, 4.70e-13, 0.8515, 0.0053, 0.0, 0.6457],
+      [0.1089, 0.5904, 0.9819, 0.5656, 0.9075, 0.6457, 0.0]
+    ],
+    "metric_names": [
+      "humidity",
+      "temperature",
+      "wind_speed",
+      "rainfall",
+      "snow_depth",
+      "atmospheric_pressure",
+      "soil_temperature"
+    ],
+    "pairwise_correlations": [
+      {
+        "metric1": "wind_speed",
+        "metric2": "snow_depth",
+        "correlation": -0.4698,
+        "p_value": 0.0,
+        "sample_size": 5118
+      }
+    ],
+    "statistics": {
+      "total_records": 5118,
+      "valid_pairs": 21,
+      "strong_correlations": 0,
+      "moderate_correlations": 1,
+      "weak_correlations": 20
+    }
+  },
+  "metadata": {
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "metrics": ["humidity", "temperature", "wind_speed", "rainfall", "snow_depth", "shortwave_radiation", "atmospheric_pressure", "soil_temperature"],
+    "correlation_method": "pearson",
+    "include_p_values": true,
+    "sample_size": 10000,
+    "depth": "5cm"
+  }
+}
+```
+
 ### Summary Data Endpoints
 
 #### 1. Monthly Summary

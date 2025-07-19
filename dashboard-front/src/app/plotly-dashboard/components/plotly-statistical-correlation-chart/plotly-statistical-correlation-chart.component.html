@@ -1,0 +1,43 @@
+<div class="plotly-correlation-chart">
+
+  <div class="plotly-correlation-chart__container">
+    <div *ngIf="isLoading" class="plotly-correlation-chart__loading">
+      <div class="plotly-correlation-chart__spinner"></div>
+      <p>Loading correlation data...</p>
+    </div>
+
+    <div *ngIf="error" class="plotly-correlation-chart__error">
+      <p>{{ error }}</p>
+      <button class="plotly-correlation-chart__retry-btn" (click)="loadCorrelationData()">
+        Retry
+      </button>
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="plotly-correlation-chart__chart-wrapper">
+      <div id="correlation-chart" class="plotly-correlation-chart__chart"></div>
+    </div>
+
+    <div *ngIf="correlationData?.data?.statistics && !isLoading && !error" class="plotly-correlation-chart__stats">
+      <div class="plotly-correlation-chart__stat-item">
+        <span class="plotly-correlation-chart__stat-label">Total Records:</span>
+        <span class="plotly-correlation-chart__stat-value">{{ correlationData?.data?.statistics?.total_records }}</span>
+      </div>
+      <div class="plotly-correlation-chart__stat-item">
+        <span class="plotly-correlation-chart__stat-label">Valid Pairs:</span>
+        <span class="plotly-correlation-chart__stat-value">{{ correlationData?.data?.statistics?.valid_pairs }}</span>
+      </div>
+      <div class="plotly-correlation-chart__stat-item">
+        <span class="plotly-correlation-chart__stat-label">Strong Correlations:</span>
+        <span class="plotly-correlation-chart__stat-value">{{ correlationData?.data?.statistics?.strong_correlations }}</span>
+      </div>
+      <div class="plotly-correlation-chart__stat-item">
+        <span class="plotly-correlation-chart__stat-label">Moderate Correlations:</span>
+        <span class="plotly-correlation-chart__stat-value">{{ correlationData?.data?.statistics?.moderate_correlations }}</span>
+      </div>
+      <div class="plotly-correlation-chart__stat-item">
+        <span class="plotly-correlation-chart__stat-label">Weak Correlations:</span>
+        <span class="plotly-correlation-chart__stat-value">{{ correlationData?.data?.statistics?.weak_correlations }}</span>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -215,9 +215,21 @@
             (click)="statisticalChartType = 'histogram'">
             Histogram
           </button>
+          <button
+            class="statistical-analysis__chart-type-btn"
+            [class.statistical-analysis__chart-type-btn--active]="statisticalChartType === 'correlation-matrix'"
+            (click)="statisticalChartType = 'correlation-matrix'">
+            Correlation Matrix
+          </button>
+          <button
+            class="statistical-analysis__chart-type-btn"
+            [class.statistical-analysis__chart-type-btn--active]="statisticalChartType === 'pairwise-correlations'"
+            (click)="statisticalChartType = 'pairwise-correlations'">
+            Pairwise Correlations
+          </button>
         </div>
         <div class="statistical-analysis__download-buttons">
-          <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="statisticalChartType === 'boxplot' ? onDownloadBoxplotPNG() : onDownloadHistogramPNG()">
+          <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="statisticalChartType === 'boxplot' ? onDownloadBoxplotPNG() : statisticalChartType === 'histogram' ? onDownloadHistogramPNG() : (statisticalChartType === 'correlation-matrix' || statisticalChartType === 'pairwise-correlations') ? onDownloadCorrelationPNG() : null">
             <i class="fas fa-file-image"></i>
             PNG
           </button>
@@ -237,6 +249,24 @@
           [metrics]="selectedMetrics"
           (downloadPNG)="onDownloadHistogramPNG()">
         </app-plotly-statistical-histogram-chart>
+      </div>
+      <div *ngIf="statisticalChartType === 'correlation-matrix'">
+        <app-plotly-statistical-correlation-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          [metrics]="selectedMetrics"
+          [activeView]="'matrix'"
+          class="plotly-dashboard__chart">
+        </app-plotly-statistical-correlation-chart>
+      </div>
+      <div *ngIf="statisticalChartType === 'pairwise-correlations'">
+        <app-plotly-statistical-correlation-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          [metrics]="selectedMetrics"
+          [activeView]="'pairs'"
+          class="plotly-dashboard__chart">
+        </app-plotly-statistical-correlation-chart>
       </div>
     </div>
   </div>
