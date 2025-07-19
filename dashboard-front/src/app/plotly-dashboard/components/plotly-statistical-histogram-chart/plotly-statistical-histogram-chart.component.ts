@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { StatisticalHistogramService, HistogramApiResponse } from '../../../services/statistical-histogram.service';
+import { AuthService } from '../../../services/auth.service';
 declare var Plotly: any;
 
 @Component({
@@ -21,7 +23,11 @@ export class PlotlyStatisticalHistogramChartComponent implements OnChanges, Afte
   error: string | null = null;
   private shouldRender = false;
 
-  constructor(private histogramService: StatisticalHistogramService) {}
+  constructor(
+    private histogramService: StatisticalHistogramService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes['startDate'] || changes['endDate'] || changes['metrics']) && this.startDate && this.endDate && this.metrics.length) {
@@ -42,6 +48,13 @@ export class PlotlyStatisticalHistogramChartComponent implements OnChanges, Afte
   }
 
   fetchHistogramData() {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('intendedDestination', '/plotly-dashboard');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.isLoading = true;
     this.error = null;
     this.histogramService.getHistogramData(this.startDate, this.endDate, this.metrics).subscribe({
@@ -76,9 +89,17 @@ export class PlotlyStatisticalHistogramChartComponent implements OnChanges, Afte
         this.isLoading = false;
         this.shouldRender = true;
       },
-      error: () => {
-        this.error = 'Failed to load histogram data';
+      error: (err) => {
         this.isLoading = false;
+        
+        // Handle authentication errors
+        if (err.status === 401) {
+          this.error = 'Authentication required. Please log in to view statistical data.';
+          localStorage.setItem('intendedDestination', '/plotly-dashboard');
+          this.router.navigate(['/login']);
+        } else {
+          this.error = 'Failed to load histogram data';
+        }
       }
     });
   }

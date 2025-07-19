@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
+import { AuthService } from './auth.service';
 
 export interface ShortwaveRadiationRecord {
   period: string;
@@ -22,13 +23,21 @@ export interface ShortwaveRadiationResponse {
 export class ShortwaveRadiationService {
   private baseUrl = environment.API_BASE_URL;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   getShortwaveRadiationData(
     startDate: string,
     endDate: string,
     groupBy: string = 'hour'
   ): Observable<ShortwaveRadiationResponse> {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      throw new Error('Authentication required to access shortwave radiation data');
+    }
+    
     let params = new HttpParams()
       .set('start_date', startDate)
       .set('end_date', endDate)

@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges, AfterViewChecked, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { StatisticalBoxplotService, BoxplotApiResponse } from '../../../services/statistical-boxplot.service';
+import { AuthService } from '../../../services/auth.service';
 declare var Plotly: any;
 
 @Component({
@@ -23,7 +25,11 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
   error: string | null = null;
   private shouldRender = false;
 
-  constructor(private boxplotService: StatisticalBoxplotService) {
+  constructor(
+    private boxplotService: StatisticalBoxplotService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.initializeChartLayout();
   }
 
@@ -41,6 +47,13 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
   }
 
   fetchBoxplotData() {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('intendedDestination', '/plotly-dashboard');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.isLoading = true;
     this.error = null;
     this.boxplotService.getBoxplotData(this.startDate, this.endDate, this.metrics).subscribe({
@@ -54,8 +67,16 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
         this.shouldRender = true;
       },
       error: (err) => {
-        this.error = 'Failed to load data';
         this.isLoading = false;
+        
+        // Handle authentication errors
+        if (err.status === 401) {
+          this.error = 'Authentication required. Please log in to view statistical data.';
+          localStorage.setItem('intendedDestination', '/plotly-dashboard');
+          this.router.navigate(['/login']);
+        } else {
+          this.error = 'Failed to load data';
+        }
       }
     });
   }

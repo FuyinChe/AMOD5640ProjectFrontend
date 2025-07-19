@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environments';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface MonthlySummary {
   year: number;
@@ -48,9 +49,17 @@ export interface MonthlySummary {
 export class EnvironmentalMonthlySummaryService {
   private apiUrl = `${environment.API_BASE_URL}/monthly-summary/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
   getMonthlySummary(start_date: string, end_date: string): Observable<any> {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      throw new Error('Authentication required to access monthly summary data');
+    }
+    
     const params = new HttpParams()
       .set('start_date', start_date)
       .set('end_date', end_date);

@@ -3,6 +3,7 @@ import {environment} from '../../environments/environments';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {EnvironmentalRecord} from '../interfaces/environmental-record';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,16 @@ export class EnvironmentalDataService {
 
   private apiUrl = `${environment.API_BASE_URL}/environmental-data`
 
-  constructor(private http:HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
   getEnvironmentalData(): Observable<EnvironmentalRecord[]> {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      throw new Error('Authentication required to access environmental data');
+    }
     return this.http.get<EnvironmentalRecord[]>(this.apiUrl);
   }
 
