@@ -19,10 +19,7 @@ export class EnvironmentalSampleDataService {
   ) { }
 
   getEnvironmentalData(): Observable<EnvironmentalRecord[]> {
-    // Check authentication before making request
-    if (!this.authService.isLoggedIn()) {
-      throw new Error('Authentication required to access environmental sample data');
-    }
+    // Removed authentication check to allow guest access
     return this.http.get<EnvironmentalRecord[]>(this.apiUrl);
   }
 }

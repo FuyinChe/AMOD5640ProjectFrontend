@@ -28,21 +28,12 @@ export class EnvironmentalSampleDataComponent implements OnInit {
   ){}
 
   ngOnInit() {
-    // Check authentication before making request
-    if (!this.authService.isLoggedIn()) {
-      localStorage.setItem('intendedDestination', '/environmentalSampleData');
-      this.router.navigate(['/login']);
-      return;
-    }
-
+    // Removed authentication check to allow guest access
     this.environmentalSampleDataService.getEnvironmentalData().subscribe({
       next: data => this.environmentalSampleData = data,
       error: (err) => {
         console.error(err);
-        if (err.status === 401) {
-          localStorage.setItem('intendedDestination', '/environmentalSampleData');
-          this.router.navigate(['/login']);
-        }
+        // Optionally handle errors, but do not redirect guests
       }
     });
   }
