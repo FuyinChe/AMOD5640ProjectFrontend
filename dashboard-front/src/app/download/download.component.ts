@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { DownloadService } from '../services/download.service';
 
 @Component({
   selector: 'app-download',
@@ -24,104 +25,86 @@ export class DownloadComponent implements OnInit {
     'SoilTemperature_10cm_degC', 'SoilTemperature_25cm_degC', 'Record_TCS_30min', 'LoggerTemp_degC',
     'BarometricPressure_TCS_kPa'
   ];
-  data: EnvironmentalRecord[] = [];
-  filteredData: EnvironmentalRecord[] = [];
   variables: string[] = this.STATIC_VARIABLES;
   selectedVariables: string[] = [];
   startDate: string = '2023-01-01';
   endDate: string = '2023-12-31';
   dropdownOpen = false;
   downloadDropdownOpen = false;
+  filterApplied = false;
+  appliedVariables: string[] = [];
+  appliedStartDate: string = '';
+  appliedEndDate: string = '';
+
+  private formatDate(date: string): string {
+    if (!date) return '';
+    // Remove any single quotes
+    date = date.replace(/'/g, '');
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0];
+  }
 
   constructor(
     public auth: AuthService,
     private router: Router,
-    private dataService: EnvironmentalDataService
+    private downloadService: DownloadService
   ) {}
 
   ngOnInit(): void {
     if (!this.auth.isLoggedIn()) {
-      // Store the intended destination before redirecting to login
       localStorage.setItem('intendedDestination', '/download');
       this.router.navigate(['/login']);
       return;
     }
-    this.dataService.getEnvironmentalData().subscribe({
-      next: (data) => {
-        this.data = data;
-        this.filteredData = data;
-      },
-      error: (err) => {
-        console.error('Error loading environmental data:', err);
-        if (err.status === 401) {
-          localStorage.setItem('intendedDestination', '/download');
-          this.router.navigate(['/login']);
-        }
-      }
-    });
+    // No data fetching on init
   }
 
-  filterData() {
-    this.filteredData = this.data.filter(record => {
-      const recordDate = new Date(record.Timestamp);
-      const afterStart = this.startDate ? recordDate >= new Date(this.startDate) : true;
-      const beforeEnd = this.endDate ? recordDate <= new Date(this.endDate) : true;
-      return afterStart && beforeEnd;
-    });
+  // UI logic for variable selection and dropdowns remains unchanged
+
+  onApply() {
+    this.filterApplied = true;
+    this.appliedVariables = [...this.selectedVariables];
+    this.appliedStartDate = this.startDate;
+    this.appliedEndDate = this.endDate;
   }
 
   downloadCSV() {
-    if (!this.selectedVariables.length) return;
-    const header = ['Timestamp', ...this.selectedVariables];
-    const rows = [
-      header,
-      ...this.filteredData.map(record => [record.Timestamp, ...this.selectedVariables.map(v => record[v as keyof EnvironmentalRecord])])
-    ];
-    const csvContent = rows.map(e => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    
-    // Generate filename with actual date range from filtered data
-    let filename = 'trentfarmdata';
-    if (this.filteredData.length > 0) {
-      const dates = this.filteredData.map(record => new Date(record.Timestamp));
-      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
-      const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
-      
-      const startDateFormatted = minDate.toISOString().split('T')[0].replace(/-/g, '');
-      const endDateFormatted = maxDate.toISOString().split('T')[0].replace(/-/g, '');
-      
-      filename += `_${startDateFormatted}_${endDateFormatted}`;
-    }
-    filename += '.csv';
-    
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    if (!this.appliedVariables.length) return;
+    const startDate = this.formatDate(this.appliedStartDate) || '2023-01-01';
+    const endDate = this.formatDate(this.appliedEndDate) || '2023-12-31';
+    this.downloadService.downloadEnvironmentalData(startDate, endDate, this.appliedVariables)
+      .subscribe(jsonData => {
+        if (!jsonData || !jsonData.length) return;
+        const header = Object.keys(jsonData[0]);
+        const rows = [header, ...jsonData.map(row => header.map(h => row[h]))];
+        const csvContent = rows.map(e => e.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        let filename = 'trentfarmdata';
+        filename += `_${startDate.replace(/-/g, '')}_${endDate.replace(/-/g, '')}.csv`;
+        saveAs(blob, filename);
+      });
   }
 
   downloadExcel() {
-    if (!this.selectedVariables.length) return;
-    const header = ['Timestamp', ...this.selectedVariables];
-    const rows = this.filteredData.map(record => [record.Timestamp, ...this.selectedVariables.map(v => record[v as keyof EnvironmentalRecord])]);
-    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Data');
-    let filename = 'trentfarmdata';
-    if (this.filteredData.length > 0) {
-      const dates = this.filteredData.map(record => new Date(record.Timestamp));
-      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
-      const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
-      const startDateFormatted = minDate.toISOString().split('T')[0].replace(/-/g, '');
-      const endDateFormatted = maxDate.toISOString().split('T')[0].replace(/-/g, '');
-      filename += `_${startDateFormatted}_${endDateFormatted}`;
-    }
-    filename += '.xlsx';
-    const excelData = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelData], { type: 'application/octet-stream' });
-    saveAs(blob, filename);
+    if (!this.appliedVariables.length) return;
+    const startDate = this.formatDate(this.appliedStartDate) || '2023-01-01';
+    const endDate = this.formatDate(this.appliedEndDate) || '2023-12-31';
+    this.downloadService.downloadEnvironmentalData(startDate, endDate, this.appliedVariables)
+      .subscribe(jsonData => {
+        if (!jsonData || !jsonData.length) return;
+        const header = Object.keys(jsonData[0]);
+        const rows = jsonData.map(row => header.map(h => row[h]));
+        const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Data');
+        let filename = 'trentfarmdata';
+        filename += `_${startDate.replace(/-/g, '')}_${endDate.replace(/-/g, '')}.xlsx`;
+        const excelData = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelData], { type: 'application/octet-stream' });
+        saveAs(blob, filename);
+      });
   }
 
   toggleDropdown(event: Event) {
@@ -140,6 +123,7 @@ export class DownloadComponent implements OnInit {
     } else {
       this.selectedVariables = [...this.variables];
     }
+    this.filterApplied = false;
   }
 
   toggleVariable(variable: string, event?: Event) {
@@ -149,10 +133,12 @@ export class DownloadComponent implements OnInit {
     } else {
       this.selectedVariables = [...this.selectedVariables, variable];
     }
+    this.filterApplied = false;
   }
 
   removeVariable(variable: string) {
     this.selectedVariables = this.selectedVariables.filter(v => v !== variable);
+    this.filterApplied = false;
   }
 
   toggleDownloadDropdown(event: Event) {
@@ -162,6 +148,16 @@ export class DownloadComponent implements OnInit {
 
   closeDownloadDropdown() {
     this.downloadDropdownOpen = false;
+  }
+
+  setStartDate(date: string) {
+    this.startDate = date;
+    this.filterApplied = false;
+  }
+
+  setEndDate(date: string) {
+    this.endDate = date;
+    this.filterApplied = false;
   }
 
   @HostListener('document:click', ['$event'])

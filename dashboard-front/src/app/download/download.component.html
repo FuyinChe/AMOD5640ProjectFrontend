@@ -43,12 +43,12 @@
     </div>
     <!-- Apply/Filter Button Row -->
     <div class="filters-row align-left filter-btn-row">
-      <button type="button" (click)="filterData()">Apply</button>
+      <button type="button" (click)="onApply()">Apply</button>
     </div>
     <div class="download-actions">
-      <span *ngIf="filteredData.length > 0" class="filtered-records">Filtered records: {{ filteredData.length }}</span>
+      <!-- Removed filtered records span -->
       <div class="dropdown download-dropdown" [class.open]="downloadDropdownOpen">
-        <button type="button" class="dropdown-toggle" [disabled]="!selectedVariables.length || filteredData.length === 0" (click)="toggleDownloadDropdown($event)">
+        <button type="button" class="dropdown-toggle" [disabled]="!filterApplied || !selectedVariables.length" (click)="toggleDownloadDropdown($event)">
           Download <span class="arrow" [class.open]="downloadDropdownOpen"></span>
         </button>
         <div class="dropdown-menu" *ngIf="downloadDropdownOpen">
