@@ -27,14 +27,6 @@
     </div>
     
     <div class="summary-heatmap-table__container" [style.overflow-x]="containerOverflow">
-      <div class="summary-heatmap-table__scroll-hint" *ngIf="shouldUseFixedWidth">
-        <div class="summary-heatmap-table__scroll-arrow summary-heatmap-table__scroll-arrow--left" 
-             (click)="scrollLeft()" 
-             title="Scroll left">‹</div>
-        <div class="summary-heatmap-table__scroll-arrow summary-heatmap-table__scroll-arrow--right" 
-             (click)="scrollRight()" 
-             title="Scroll right">›</div>
-      </div>
       <div class="summary-heatmap-table__inner-wrapper">
         <table #heatmapTable class="summary-heatmap-table" role="table" aria-label="Environmental Data Overview" [style.width]="tableWidth">
           <thead>
