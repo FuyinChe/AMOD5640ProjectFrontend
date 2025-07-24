@@ -10,59 +10,308 @@
 }
 
 .summary-heatmap-table__wrapper {
-  overflow-x: auto;
-  padding: 1rem 0;
+  width: 100%;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.summary-heatmap-table__container {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: auto; // Ensure horizontal overflow is handled properly
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fafbfc;
+  position: relative;
+  
+  // Enhanced scrollbar styling
+  scrollbar-width: auto;
+  scrollbar-color: #3b82f6 #e2e8f0;
+  
+  &::-webkit-scrollbar {
+    height: 16px;
+    width: 16px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+    margin: 2px;
+    border: 1px solid #e2e8f0;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+    border-radius: 8px;
+    border: 2px solid #f1f5f9;
+    min-height: 40px;
+    
+    &:hover {
+      background: linear-gradient(45deg, #1d4ed8, #1e40af);
+    }
+    
+    &:active {
+      background: linear-gradient(45deg, #1e40af, #1e3a8a);
+    }
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: #f1f5f9;
+  }
+}
+
+.summary-heatmap-table__scroll-hint {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 15;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  
+  .summary-heatmap-table__container:hover & {
+    opacity: 0.9;
+  }
+  
+  // Show scroll arrows only when scrolling is enabled
+  .summary-heatmap-table__container[style*="overflow-x: visible"] & {
+    display: none;
+  }
+}
+
+.summary-heatmap-table__scroll-arrow {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.2s ease;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  z-index: 20;
+  
+  &:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: scale(1.15);
+    box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  &--left {
+    margin-right: auto;
+  }
+  
+  &--right {
+    margin-left: auto;
+  }
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.summary-heatmap-table__inner-wrapper {
+  width: 100%;
+  min-width: 100%;
+  display: flex; // Changed to flex for centering
+  justify-content: flex-start; // Changed to flex-start to ensure metric column is visible
+  position: relative;
 }
 
 .summary-heatmap-table {
-  border-collapse: separate;
+  border-collapse: collapse; // Changed from separate to collapse to eliminate gaps
   border-spacing: 0;
   width: 100%;
+  min-width: auto; // Changed from fixed width to auto
   font-family: 'Museo Sans', Arial, sans-serif;
-  font-size: 1rem;
+  font-size: 0.875rem;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+  border-radius: 10px;
+  overflow: visible; // Changed from hidden to visible to ensure metric column shows
+  table-layout: auto; // Changed from fixed to auto for better text wrapping
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  // Ensure minimum width for better display
+  min-width: 400px; // Minimum width to prevent table from becoming too narrow
+  // Ensure all cells are vertically centered
+  vertical-align: middle;
 }
 
-.summary-heatmap-table__metric-header,
-.summary-heatmap-table__month-header {
+.summary-heatmap-table__metric-header {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #1e293b;
+  padding: 18px 20px 0px 20px; // Removed bottom padding to eliminate gap
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center; // Changed to center align for metric names
+  border: 1px solid #e2e8f0;
+  min-width: 320px; // Further increased to ensure full metric name display
+  max-width: 400px; // Increased max width
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 10; // Increased z-index to ensure visibility
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip; // Changed to clip to prevent text cutoff
+  word-wrap: break-word;
+  word-break: keep-all; // Changed to keep-all to prevent word breaking
+  line-height: 1.4;
+  vertical-align: middle;
+  // Ensure metric column is always visible
+  background-clip: padding-box;
+  isolation: isolate;
+  // Match height with year + month headers
+  height: 70px; // Set fixed height to match combined year + month headers
+}
+
+.summary-heatmap-table__year-header {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #1e293b;
+  padding: 9px 16px 0px 16px; // Reduced padding to match metric cell height
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  min-width: 75px; // Reduced to ensure all 12 months fit for single year
+  max-width: 75px; // Reduced width
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
   position: sticky;
   top: 0;
-  background: #f8f9fa;
-  z-index: 2;
-  font-weight: 700;
-  text-align: left;
-  padding: 0.75rem 1rem;
-  border-bottom: 2px solid #e0e0e0;
-  color: #2c3e50;
+  z-index: 8; // High z-index to stay on top when scrolling
+  border-bottom: none; // Removed border to eliminate gap
+  // Ensure proper stacking and visibility
+  background-clip: padding-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  // Set fixed height to match metric header
+  height: 35px; // Half of metric header height
+  vertical-align: middle; // Ensure vertical centering
+  
+  &:hover {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .summary-heatmap-table__month-header {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  color: #475569;
+  padding: 0px 16px 9px 16px; // Reduced padding to match metric cell height
+  font-weight: 500;
+  font-size: 0.85rem;
   text-align: center;
+  border: 1px solid #e2e8f0;
+  min-width: 75px; // Reduced to ensure all 12 months fit for single year
+  max-width: 75px; // Reduced width
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+  position: sticky;
+  top: 35px; // Adjusted position to eliminate gap and match heights
+  z-index: 7; // High z-index to stay on top when scrolling
+  border-top: none;
+  // Ensure proper stacking with year headers
+  background-clip: padding-box;
+  // Set fixed height to match metric header
+  height: 35px; // Half of metric header height
+  vertical-align: middle; // Ensure vertical centering
+  
+  &:hover {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+  }
 }
 
 .summary-heatmap-table__metric-name {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #1e293b;
+  padding: 18px 20px 0px 20px; // Increased padding to match value cells height
   font-weight: 600;
-  background: #f8f9fa;
+  font-size: 0.9rem; // Slightly smaller font for better fit
+  text-align: center; // Changed to center align for metric names
+  border: 1px solid #e2e8f0;
+  min-width: 320px; // Further increased to ensure full metric name display
+  max-width: 400px; // Increased max width
   position: sticky;
   left: 0;
-  z-index: 1;
-  min-width: 180px;
-  border-right: 2px solid #e0e0e0;
-  padding: 0.75rem 1rem;
-  color: #2c3e50;
+  z-index: 9; // Increased z-index to ensure visibility
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip; // Changed to clip to prevent text cutoff
+  word-wrap: break-word;
+  word-break: keep-all; // Changed to keep-all to prevent word breaking
+  line-height: 1.4; // Increased line height for better readability
+  hyphens: none; // Disabled hyphenation to prevent unwanted breaks
+  vertical-align: middle; // Ensure vertical centering
+  // Ensure metric column is always visible
+  background-clip: padding-box;
+  isolation: isolate;
+  
+  span {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  }
 }
 
 .summary-heatmap-table__cell {
+  padding: 18px 16px 0px 16px; // Increased top/bottom padding for more height
   text-align: center;
-  min-width: 70px;
-  padding: 0.7rem 0.5rem;
-  border-bottom: 1px solid #e0e0e0;
-  border-right: 1px solid #e0e0e0;
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  color: #2c3e50;
-  transition: background 0.2s;
+  font-weight: 300;
+  border: 1px solid #e2e8f0;
+  min-width: 75px; // Reduced to ensure all 12 months fit for single year
+  max-width: 75px; // Reduced width
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  transition: all 0.2s ease;
+  color: #1e293b;
+  vertical-align: middle; // Ensure vertical centering
+  
+  &:hover {
+    transform: scale(1.05);
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  span {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-weight: 300;
+  }
 }
 
 .summary-heatmap-table__cell:last-child {
@@ -75,15 +324,17 @@
 
 .summary-heatmap-table__cell span {
   display: inline-block;
-  min-width: 40px;
+  min-width: 35px;
+  text-align: center;
 }
 
 .summary-heatmap-table__download-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin-bottom: 1rem;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
 }
 
 .summary-heatmap-table__download-btn {
@@ -91,14 +342,14 @@
   border: 1px solid #185a9d;
   color: #185a9d;
   font-weight: 600;
-  font-size: 0.68rem;
-  padding: 0.28rem 0.48rem;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-radius: 4px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
-  gap: 0.22em;
+  gap: 0.5rem;
   text-decoration: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
@@ -144,11 +395,13 @@
   justify-content: center;
   height: 200px;
   color: #666;
+  
   p {
     margin-top: 15px;
     font-size: 16px;
   }
 }
+
 .summary-heatmap-table__spinner {
   width: 40px;
   height: 40px;
@@ -157,6 +410,7 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
 .summary-heatmap-table__error {
   display: flex;
   align-items: center;
@@ -166,122 +420,132 @@
   font-size: 16px;
   text-align: center;
   padding: 20px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin: 1rem;
 }
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-@media (max-width: 600px) {
-  .plotly-summary-heatmap__container {
-    min-height: 400px;
-  }
+// Responsive design improvements
+@media (max-width: 1200px) {
   .summary-heatmap-table__wrapper {
-    padding-left: 1rem;
-    padding-right: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .summary-heatmap-table {
-    font-size: 1rem;
-    min-width: unset;
-  }
-  .summary-heatmap-table__month-header {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-    height: auto;
-    min-width: unset;
-    max-width: unset;
-    white-space: nowrap;
-  }
-  .summary-heatmap-table__metric-header {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-  }
-  .summary-heatmap-table__metric-name {
-    min-width: 180px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    white-space: normal;
-    word-break: break-word;
-  }
-  .summary-heatmap-table__cell {
-    min-width: 70px;
-    padding: 0.7rem 0.5rem;
-    font-size: 1rem;
-  }
-  .summary-heatmap-table__cell span {
-    min-width: 40px;
+    padding: 0.75rem 0;
   }
   
-} 
-
-// Tablet breakpoint (max-width: 768px)
-@media (max-width: 768px) {
-  .plotly-summary-heatmap__container {
-    min-height: 320px;
-  }
-  .summary-heatmap-table__wrapper {
-    padding-left: 0.7rem;
-    padding-right: 0;
-  }
   .summary-heatmap-table {
-    font-size: 0.92rem;
+    font-size: 0.8rem;
+    min-width: 1400px; // Adjusted for medium screens with optimized widths
   }
-  .summary-heatmap-table__month-header {
-    font-size: 0.92rem;
-    padding: 0.5rem 0.7rem;
-  }
+  
+  .summary-heatmap-table__metric-name,
   .summary-heatmap-table__metric-header {
-    font-size: 0.92rem;
-    padding: 0.5rem 0.7rem;
+    min-width: 250px; // Adjusted for medium screens with increased width
+    max-width: 300px;
+    font-size: 0.85rem;
+    word-break: normal; // Changed to normal for better word breaking
+    line-height: 1.3;
   }
-  .summary-heatmap-table__metric-name {
-    min-width: 120px;
-    padding: 0.5rem 0.7rem;
-    font-size: 0.92rem;
+  
+  .summary-heatmap-table__month-header,
+  .summary-heatmap-table__year-header {
+    min-width: 80px; // Adjusted for medium screens
+    max-width: 100px;
+    font-size: 0.8rem;
   }
+  
   .summary-heatmap-table__cell {
-    min-width: 50px;
-    padding: 0.5rem 0.3rem;
-    font-size: 0.92rem;
-  }
-  .summary-heatmap-table__cell span {
-    min-width: 28px;
+    min-width: 70px;
+    max-width: 90px;
+    font-size: 0.75rem;
   }
 }
 
-// Small phone breakpoint (max-width: 480px)
-@media (max-width: 480px) {
-  .plotly-summary-heatmap__container {
-    min-height: 180px;
-  }
+@media (max-width: 768px) {
   .summary-heatmap-table__wrapper {
-    padding-left: 0.2rem;
-    padding-right: 0;
+    padding: 0.5rem 0;
   }
+  
   .summary-heatmap-table {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    min-width: 1200px; // Adjusted for mobile with optimized widths
   }
-  .summary-heatmap-table__month-header {
-    font-size: 0.7rem;
-    padding: 0.18rem 0.3rem;
-  }
+  
+  .summary-heatmap-table__metric-name,
   .summary-heatmap-table__metric-header {
-    font-size: 0.7rem;
-    padding: 0.18rem 0.3rem;
+    min-width: 200px; // Adjusted for mobile with increased width
+    max-width: 250px;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    word-break: normal; // Changed to normal for better word breaking
+    line-height: 1.2;
   }
-  .summary-heatmap-table__metric-name {
-    min-width: 60px;
-    padding: 0.18rem 0.3rem;
-    font-size: 0.7rem;
+  
+  .summary-heatmap-table__month-header,
+  .summary-heatmap-table__year-header {
+    min-width: 70px; // Adjusted for mobile
+    max-width: 90px;
+    font-size: 0.75rem;
+    padding: 6px 10px;
   }
+  
   .summary-heatmap-table__cell {
-    min-width: 24px;
-    padding: 0.18rem 0.12rem;
+    min-width: 60px;
+    max-width: 80px;
     font-size: 0.7rem;
+    padding: 8px 12px;
   }
+}
+
+@media (max-width: 480px) {
+  .summary-heatmap-table__wrapper {
+    padding: 0.25rem 0;
+  }
+  
+  .summary-heatmap-table {
+    font-size: 0.65rem;
+    min-width: 500px; // Ensure scrolling on mobile with optimized widths
+  }
+  
+  .summary-heatmap-table__metric-name {
+    min-width: 140px;
+    max-width: 170px;
+    font-size: 0.6rem;
+    padding: 0.4rem 0.4rem;
+    word-break: normal; // Changed to normal for better word breaking
+    line-height: 1.1;
+  }
+  
+  .summary-heatmap-table__month-header {
+    font-size: 0.6rem;
+    padding: 0.4rem 0.2rem;
+    min-width: 45px;
+    max-width: 55px;
+  }
+  
+  .summary-heatmap-table__cell {
+    min-width: 40px;
+    max-width: 50px;
+    padding: 0.3rem 0.15rem;
+    font-size: 0.55rem;
+  }
+  
   .summary-heatmap-table__cell span {
-    min-width: 12px;
+    min-width: 25px;
+  }
+  
+  .summary-heatmap-table__download-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .summary-heatmap-table__download-btn {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
   }
 } 

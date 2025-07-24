@@ -15,21 +15,97 @@ export class PlotlySummaryHeatmapComponent {
   isLoading = false;
   error: string | null = null;
 
+  // Calculate if table should use fixed width or auto width
+  get shouldUseFixedWidth(): boolean {
+    // Use fixed width (with scrollbar) if more than 12 months (multiple years scenario)
+    // This ensures all 12 months are visible for single year, scrolling for multiple years
+    return this.months.length > 12;
+  }
+
+  // Calculate dynamic table width based on number of months
+  get tableWidth(): string {
+    if (this.shouldUseFixedWidth) {
+      // Calculate width for multiple years with scrolling
+      const monthWidth = 75; // Reduced width per month column to ensure all 12 months fit
+      const metricWidth = 320; // Increased width of metric column to ensure full metric name display
+      const totalWidth = metricWidth + (this.months.length * monthWidth);
+      return `${totalWidth}px`;
+    } else {
+      // Calculate width based on number of months for single year
+      const monthWidth = 75; // Reduced width per month column to ensure all 12 months fit
+      const metricWidth = 320; // Increased width of metric column to ensure full metric name display
+      const totalWidth = metricWidth + (this.months.length * monthWidth);
+      return `${totalWidth}px`;
+    }
+  }
+
+  // Get container overflow style
+  get containerOverflow(): string {
+    return this.shouldUseFixedWidth ? 'auto' : 'visible';
+  }
+
+  // Scroll table horizontally
+  scrollTable(direction: 'left' | 'right'): void {
+    // Find the scrollable container (parent of the table)
+    const tableElement = this.heatmapTableRef?.nativeElement;
+    if (tableElement) {
+      const scrollableContainer = tableElement.closest('.summary-heatmap-table__container');
+      if (scrollableContainer) {
+        const scrollAmount = 300; // Scroll by 300px
+        const currentScroll = scrollableContainer.scrollLeft;
+        const newScroll = direction === 'left' 
+          ? Math.max(0, currentScroll - scrollAmount)
+          : currentScroll + scrollAmount;
+        
+        scrollableContainer.scrollTo({
+          left: newScroll,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }
+
+  // Scroll left
+  scrollLeft(): void {
+    this.scrollTable('left');
+  }
+
+  // Scroll right
+  scrollRight(): void {
+    this.scrollTable('right');
+  }
+
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {
-    if (value === null || isNaN(value)) return '#f8f9fa';
-    // Diverging color scale: blue (low) - white (mid) - orange (high)
-    const mid = (min + max) / 2;
-    if (max === min) return '#fff';
-    let t: number;
-    if (value <= mid) {
-      // Blue to white
-      t = (value - min) / (mid - min || 1);
-      return this.interpolateColor('#2c9cff', '#fff', t);
+    if (value === null || isNaN(value)) return '#f8fafc';
+    
+    // Handle edge case where all values are the same
+    if (max === min) return '#e2e8f0';
+    
+    // Normalize value to 0-1 range
+    const normalizedValue = (value - min) / (max - min);
+    
+    // Use a more modern and vibrant color scale
+    if (normalizedValue <= 0.3) {
+      // Deep blue to light blue (low values)
+      const t = normalizedValue / 0.3;
+      return this.interpolateColor('#1e40af', '#3b82f6', t);
+    } else if (normalizedValue <= 0.7) {
+      // Light blue to white to light orange (mid values)
+      const t = (normalizedValue - 0.3) / 0.4;
+      if (t <= 0.5) {
+        // Blue to white
+        const t2 = t * 2;
+        return this.interpolateColor('#3b82f6', '#ffffff', t2);
+      } else {
+        // White to orange
+        const t2 = (t - 0.5) * 2;
+        return this.interpolateColor('#ffffff', '#f97316', t2);
+      }
     } else {
-      // White to orange
-      t = (value - mid) / (max - mid || 1);
-      return this.interpolateColor('#fff', '#ff7f2c', t);
+      // Light orange to deep orange (high values)
+      const t = (normalizedValue - 0.7) / 0.3;
+      return this.interpolateColor('#f97316', '#ea580c', t);
     }
   }
 
@@ -65,6 +141,30 @@ export class PlotlySummaryHeatmapComponent {
       min: Math.min(...filtered),
       max: Math.max(...filtered)
     };
+  }
+
+  // Generate accessible aria-label for table cells
+  getCellAriaLabel(value: number|null, metricName: string, month: string): string {
+    if (value === null || value === undefined) {
+      return `No data available for ${metricName} in ${month}`;
+    }
+    return `${metricName} value ${value.toFixed(2)} for ${month}`;
+  }
+
+  // Extract month name from label (e.g., "Jan 2023" -> "Jan")
+  getMonthFromLabel(label: string): string {
+    if (label.includes(' ')) {
+      return label.split(' ')[0];
+    }
+    return label;
+  }
+
+  // Extract year from label (e.g., "Jan 2023" -> "2023")
+  getYearFromLabel(label: string): string {
+    if (label.includes(' ')) {
+      return label.split(' ')[1];
+    }
+    return '';
   }
 
   // Download CSV data
