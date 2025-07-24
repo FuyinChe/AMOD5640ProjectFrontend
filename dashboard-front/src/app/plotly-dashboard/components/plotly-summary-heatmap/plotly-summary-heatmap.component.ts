@@ -202,11 +202,41 @@ export class PlotlySummaryHeatmapComponent {
     const tableElem = this.heatmapTableRef?.nativeElement as HTMLElement;
     if (!tableElem) return;
     
-    html2canvas(tableElem).then(canvas => {
+    // Store original styles to restore later
+    const originalStyles = new Map<HTMLElement, string>();
+    
+    // Temporarily remove sticky positioning and shadows for clean PNG
+    const stickyElements = tableElem.querySelectorAll('.summary-heatmap-table__metric-header, .summary-heatmap-table__year-header, .summary-heatmap-table__month-header, .summary-heatmap-table__metric-name');
+    
+    stickyElements.forEach((element: Element) => {
+      const el = element as HTMLElement;
+      originalStyles.set(el, el.style.cssText);
+      el.style.position = 'static';
+      el.style.top = '';
+      el.style.left = '';
+      el.style.zIndex = '';
+      el.style.boxShadow = 'none';
+    });
+    
+    try {
+      const canvas = await html2canvas(tableElem, {
+        useCORS: true,
+        allowTaint: true
+      });
+      
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = 'plotly_summary_heatmap.png';
       link.click();
-    });
+    } finally {
+      // Restore original styles
+      stickyElements.forEach((element: Element) => {
+        const el = element as HTMLElement;
+        const originalStyle = originalStyles.get(el);
+        if (originalStyle !== undefined) {
+          el.style.cssText = originalStyle;
+        }
+      });
+    }
   }
 } 
