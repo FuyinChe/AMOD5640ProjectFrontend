@@ -97,33 +97,26 @@
   vertical-align: middle;
 }
 
-.summary-heatmap-table__metric-header {
+.summary-heatmap-table__metric-header,
+.summary-heatmap-table__metric-group {
+  border: 1px solid #e2e8f0;
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   color: #1e293b;
-  padding: 18px 20px 0px 20px; // Removed bottom padding to eliminate gap
   font-weight: 700;
-  font-size: 1.1rem;
-  text-align: center; // Changed to center align for metric names
-  border: 1px solid #e2e8f0;
-  min-width: 320px; // Further increased to ensure full metric name display
-  max-width: 400px; // Increased max width
-  position: sticky;
-  left: 0;
-  top: 0;
-  z-index: 10; // Increased z-index to ensure visibility
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip; // Changed to clip to prevent text cutoff
-  word-wrap: break-word;
-  word-break: keep-all; // Changed to keep-all to prevent word breaking
-  line-height: 1.4;
+  font-size: 1rem;
+  text-align: center;
   vertical-align: middle;
-  // Ensure metric column is always visible
-  background-clip: padding-box;
-  isolation: isolate;
-  // Match height with year + month headers
-  height: 70px; // Set fixed height to match combined year + month headers
+}
+
+.summary-heatmap-table__submetric-header,
+.summary-heatmap-table__metric-name {
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .summary-heatmap-table__year-header {
@@ -185,41 +178,61 @@
   }
 }
 
-.summary-heatmap-table__metric-name {
-  background: linear-gradient(135deg, #ffffff, #f8fafc);
-  color: #1e293b;
-  padding: 18px 20px 0px 20px; // Increased padding to match value cells height
-  font-weight: 600;
-  font-size: 0.9rem; // Slightly smaller font for better fit
-  text-align: center; // Changed to center align for metric names
-  border: 1px solid #e2e8f0;
-  min-width: 320px; // Further increased to ensure full metric name display
-  max-width: 400px; // Increased max width
+.summary-heatmap-table__metric-header {
   position: sticky;
   left: 0;
-  z-index: 9; // Increased z-index to ensure visibility
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip; // Changed to clip to prevent text cutoff
-  word-wrap: break-word;
-  word-break: keep-all; // Changed to keep-all to prevent word breaking
-  line-height: 1.4; // Increased line height for better readability
-  hyphens: none; // Disabled hyphenation to prevent unwanted breaks
-  vertical-align: middle; // Ensure vertical centering
-  // Ensure metric column is always visible
-  background-clip: padding-box;
-  isolation: isolate;
-  
-  span {
-    color: #64748b;
-    font-weight: 500;
-    font-size: 0.85rem;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  }
+  top: 0;
+  z-index: 30;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+.summary-heatmap-table__metric-group {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-right: 1px solid #e2e8f0;
+  margin: 0;
+  padding: 0;
+  min-width: 120px;
+  max-width: 320px; /* match metricWidth from TypeScript component */
+}
+
+.summary-heatmap-table__metric-group--spacer {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border: 1px solid #e2e8f0;
+  min-width: 120px;
+  max-width: 120px;
+  width: 120px;
+  height: 100%;
+  padding: 0;
+}
+
+.summary-heatmap-table__submetric-header {
+  position: sticky;
+  left: unset;
+  top: 0;
+  z-index: 19;
+  min-width: 140px;
+  max-width: 180px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.summary-heatmap-table__metric-name {
+  position: sticky;
+  left: unset;
+  z-index: 9;
+  min-width: 140px;
+  max-width: 180px;
+  text-align: center;
+  font-weight: 500;
+  vertical-align: middle;
+  border-left: 1px solid #e2e8f0;
+  margin: 0;
+  padding: 0;
 }
 
 .summary-heatmap-table__cell {
