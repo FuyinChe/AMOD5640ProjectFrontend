@@ -222,7 +222,14 @@ export class PlotlyDashboardComponent implements OnInit {
     this.monthlySummaryService.getMonthlySummary(start, end).subscribe({
       next: (response) => {
         const data: MonthlySummary[] = response.data;
-        this.months = data.map(d => d.month_name);
+        
+        // Generate month labels that always include year information
+        this.months = data.map(d => {
+          // Always include year: "Jan 2023", "Feb 2023", etc.
+          const monthAbbr = d.month_name.substring(0, 3);
+          return `${monthAbbr} ${d.year}`;
+        });
+        
         this.metrics = [
           // Air Temperature
           { name: 'Air Temp Max', unit: '°C', values: data.map(d => d.air_temperature_max) },

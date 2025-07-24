@@ -3,42 +3,90 @@
     <div class="summary-heatmap-table__spinner"></div>
     <p>Loading overview data...</p>
   </div>
+  
   <div *ngIf="error" class="summary-heatmap-table__error">
     <p>{{ error }}</p>
   </div>
+  
   <ng-container *ngIf="!isLoading && !error">
     <div class="summary-heatmap-table__download-buttons">
-      <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--csv" (click)="downloadCSV()">
+      <button 
+        class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--csv" 
+        (click)="downloadCSV()"
+        title="Download data as CSV file">
         <i class="fas fa-file-csv"></i>
         CSV
       </button>
-      <button class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" (click)="downloadPNG()">
+      <button 
+        class="summary-heatmap-table__download-btn summary-heatmap-table__download-btn--png" 
+        (click)="downloadPNG()"
+        title="Download table as PNG image">
         <i class="fas fa-file-image"></i>
         PNG
       </button>
     </div>
-    <table #heatmapTable class="summary-heatmap-table">
-      <thead>
-        <tr>
-          <th class="summary-heatmap-table__metric-header">Metric</th>
-          <th *ngFor="let month of months" class="summary-heatmap-table__month-header">{{ month }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let metric of metrics">
-          <td class="summary-heatmap-table__metric-name">{{ metric.name }}<span *ngIf="metric.unit"> ({{ metric.unit }})</span></td>
-          <ng-container *ngIf="metric.values && metric.values.length">
-            <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
-              <td *ngFor="let value of metric.values"
-                  [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
-                  class="summary-heatmap-table__cell">
-                <span *ngIf="value !== null && value !== undefined">{{ value | number:'1.2-2' }}</span>
-                <span *ngIf="value === null || value === undefined">-</span>
-              </td>
-            </ng-container>
-          </ng-container>
-        </tr>
-      </tbody>
-    </table>
+    
+    <div class="summary-heatmap-table__container" [style.overflow-x]="containerOverflow">
+      <div class="summary-heatmap-table__scroll-hint" *ngIf="shouldUseFixedWidth">
+        <div class="summary-heatmap-table__scroll-arrow summary-heatmap-table__scroll-arrow--left" 
+             (click)="scrollLeft()" 
+             title="Scroll left">‹</div>
+        <div class="summary-heatmap-table__scroll-arrow summary-heatmap-table__scroll-arrow--right" 
+             (click)="scrollRight()" 
+             title="Scroll right">›</div>
+      </div>
+      <div class="summary-heatmap-table__inner-wrapper">
+        <table #heatmapTable class="summary-heatmap-table" role="table" aria-label="Environmental Data Overview" [style.width]="tableWidth">
+          <thead>
+            <tr>
+              <th class="summary-heatmap-table__metric-header" scope="col" rowspan="2">Metric</th>
+              <th 
+                *ngFor="let month of months; let i = index" 
+                class="summary-heatmap-table__year-header" 
+                scope="col"
+                [attr.aria-label]="'Year for ' + month">
+                {{ getYearFromLabel(month) }}
+              </th>
+            </tr>
+            <tr>
+              <th 
+                *ngFor="let month of months; let i = index" 
+                class="summary-heatmap-table__month-header" 
+                scope="col"
+                [attr.aria-label]="'Data for ' + month">
+                {{ getMonthFromLabel(month) }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let metric of metrics; let rowIndex = index">
+              <th 
+                class="summary-heatmap-table__metric-name" 
+                scope="row"
+                [attr.aria-label]="metric.name + (metric.unit ? ' in ' + metric.unit : '')">
+                {{ metric.name }}<span *ngIf="metric.unit"> ({{ metric.unit }})</span>
+              </th>
+              <ng-container *ngIf="metric.values && metric.values.length">
+                <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
+                  <td 
+                    *ngFor="let value of metric.values; let colIndex = index"
+                    [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
+                    class="summary-heatmap-table__cell"
+                    [attr.aria-label]="getCellAriaLabel(value, metric.name, months[colIndex])"
+                    role="cell">
+                    <span *ngIf="value !== null && value !== undefined">
+                      {{ value | number:'1.2-2' }}
+                    </span>
+                    <span *ngIf="value === null || value === undefined" aria-label="No data available">
+                      -
+                    </span>
+                  </td>
+                </ng-container>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </ng-container>
 </div> 
