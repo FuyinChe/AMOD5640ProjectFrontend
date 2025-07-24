@@ -44,36 +44,7 @@ export class PlotlySummaryHeatmapComponent {
     return this.shouldUseFixedWidth ? 'auto' : 'visible';
   }
 
-  // Scroll table horizontally
-  scrollTable(direction: 'left' | 'right'): void {
-    // Find the scrollable container (parent of the table)
-    const tableElement = this.heatmapTableRef?.nativeElement;
-    if (tableElement) {
-      const scrollableContainer = tableElement.closest('.summary-heatmap-table__container');
-      if (scrollableContainer) {
-        const scrollAmount = 300; // Scroll by 300px
-        const currentScroll = scrollableContainer.scrollLeft;
-        const newScroll = direction === 'left' 
-          ? Math.max(0, currentScroll - scrollAmount)
-          : currentScroll + scrollAmount;
-        
-        scrollableContainer.scrollTo({
-          left: newScroll,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }
 
-  // Scroll left
-  scrollLeft(): void {
-    this.scrollTable('left');
-  }
-
-  // Scroll right
-  scrollRight(): void {
-    this.scrollTable('right');
-  }
 
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {
