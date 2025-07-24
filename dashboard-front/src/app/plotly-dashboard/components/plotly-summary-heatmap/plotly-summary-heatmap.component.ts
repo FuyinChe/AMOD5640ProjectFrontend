@@ -44,7 +44,55 @@ export class PlotlySummaryHeatmapComponent {
     return this.shouldUseFixedWidth ? 'auto' : 'visible';
   }
 
+  // Group months by year for merged year header cells
+  get yearGroups(): Array<{ year: string, startIndex: number, count: number }> {
+    const groups: Array<{ year: string, startIndex: number, count: number }> = [];
+    let lastYear = '';
+    let startIndex = 0;
+    for (let i = 0; i < this.months.length; i++) {
+      const year = this.getYearFromLabel(this.months[i]);
+      if (year !== lastYear) {
+        if (i > 0) {
+          groups.push({ year: lastYear, startIndex, count: i - startIndex });
+        }
+        lastYear = year;
+        startIndex = i;
+      }
+    }
+    if (lastYear && startIndex < this.months.length) {
+      groups.push({ year: lastYear, startIndex, count: this.months.length - startIndex });
+    }
+    return groups;
+  }
 
+  // Group metrics for row grouping in the table
+  get groupedMetrics(): Array<{ group: string, metrics: {name: string, unit: string, values: (number|null)[]}[] }> {
+    const groupDefs = [
+      { group: 'Air Temperature', keywords: ['Air Temp Max', 'Air Temp Min', 'Mean Air Temp', 'Air Temp Std'] },
+      { group: 'Humidity', keywords: ['Humidity Max', 'Humidity Min', 'Mean Humidity', 'Humidity Std'] },
+      { group: 'Shortwave Radiation', keywords: ['Shortwave Radiation Max', 'Shortwave Radiation Min', 'Shortwave Radiation Mean', 'Shortwave Radiation Std'] },
+      { group: 'Rainfall', keywords: ['Rainfall Total', 'Rainfall Max', 'Rainfall Mean', 'Rainfall Std'] },
+      { group: 'Soil Temp 5cm', keywords: ['Soil Temp 5cm Max', 'Soil Temp 5cm Min', 'Soil Temp 5cm Mean', 'Soil Temp 5cm Std'] },
+      { group: 'Wind Speed', keywords: ['Wind Speed Max', 'Wind Speed Min', 'Wind Speed Mean', 'Wind Speed Std'] },
+      { group: 'Snow Depth', keywords: ['Snow Depth Max', 'Snow Depth Min', 'Snow Depth Mean', 'Snow Depth Std'] },
+      { group: 'Atmospheric Pressure', keywords: ['Atmospheric Pressure Max', 'Atmospheric Pressure Min', 'Atmospheric Pressure Mean', 'Atmospheric Pressure Std'] },
+    ];
+    const grouped: Array<{ group: string, metrics: {name: string, unit: string, values: (number|null)[]}[] }> = [];
+    const used = new Set();
+    for (const def of groupDefs) {
+      const groupMetrics = this.metrics.filter(m => def.keywords.some(k => m.name.includes(k)));
+      groupMetrics.forEach(m => used.add(m));
+      if (groupMetrics.length) {
+        grouped.push({ group: def.group, metrics: groupMetrics });
+      }
+    }
+    // Add any remaining metrics as their own group
+    const remaining = this.metrics.filter(m => !used.has(m));
+    for (const m of remaining) {
+      grouped.push({ group: m.name, metrics: [m] });
+    }
+    return grouped;
+  }
 
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {
@@ -136,6 +184,15 @@ export class PlotlySummaryHeatmapComponent {
       return label.split(' ')[1];
     }
     return '';
+  }
+
+  // Extracts the suffix (e.g., Max, Min, Mean, Std) from a metric name
+  getMetricSuffix(metricName: string): string {
+    const match = metricName.match(/(Max|Min|Mean|Std)(?![a-zA-Z])/i);
+    if (match) {
+      return match[0][0].toUpperCase() + match[0].slice(1).toLowerCase();
+    }
+    return metricName;
   }
 
   // Download CSV data
