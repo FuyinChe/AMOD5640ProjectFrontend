@@ -33,11 +33,12 @@
             <tr>
               <th class="summary-heatmap-table__metric-header" scope="col" rowspan="2">Metric</th>
               <th 
-                *ngFor="let month of months; let i = index" 
+                *ngFor="let group of yearGroups"
                 class="summary-heatmap-table__year-header" 
                 scope="col"
-                [attr.aria-label]="'Year for ' + month">
-                {{ getYearFromLabel(month) }}
+                [attr.colspan]="group.count"
+                [attr.aria-label]="'Year ' + group.year">
+                {{ group.year }}
               </th>
             </tr>
             <tr>

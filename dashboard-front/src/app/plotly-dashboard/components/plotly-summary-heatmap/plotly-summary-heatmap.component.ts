@@ -44,7 +44,26 @@ export class PlotlySummaryHeatmapComponent {
     return this.shouldUseFixedWidth ? 'auto' : 'visible';
   }
 
-
+  // Group months by year for merged year header cells
+  get yearGroups(): Array<{ year: string, startIndex: number, count: number }> {
+    const groups: Array<{ year: string, startIndex: number, count: number }> = [];
+    let lastYear = '';
+    let startIndex = 0;
+    for (let i = 0; i < this.months.length; i++) {
+      const year = this.getYearFromLabel(this.months[i]);
+      if (year !== lastYear) {
+        if (i > 0) {
+          groups.push({ year: lastYear, startIndex, count: i - startIndex });
+        }
+        lastYear = year;
+        startIndex = i;
+      }
+    }
+    if (lastYear && startIndex < this.months.length) {
+      groups.push({ year: lastYear, startIndex, count: this.months.length - startIndex });
+    }
+    return groups;
+  }
 
   // Returns the background color for a cell based on value, min, max
   getCellColor(value: number|null, min: number, max: number): string {
