@@ -176,6 +176,13 @@ export class PlotlyHumidityChartComponent implements OnChanges, AfterViewInit, O
     this.chartLayout.title.text = `Humidity (${groupLabel}) Analysis`;
     this.chartLayout.yaxis.title.text = `Humidity (${unit})`;
 
+    // Set x-axis label rotation based on grouping
+    if (this.groupBy === 'month') {
+      this.chartLayout.xaxis.tickangle = 0; // Horizontal for monthly view
+    } else {
+      this.chartLayout.xaxis.tickangle = -90; // Vertical for hourly and weekly views
+    }
+
     // Responsive title font size
     this.chartLayout.title.font.size = (typeof window !== 'undefined' && window.innerWidth <= 600) ? 13 : 18;
 
