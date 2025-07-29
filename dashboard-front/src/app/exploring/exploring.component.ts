@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import { RainfallService } from '../services/rainfall.service';
 import { CropsYieldService, CropYield } from '../services/crops-yield.service';
@@ -44,10 +45,17 @@ export class ExploringComponent implements OnInit, OnDestroy {
   constructor(
     private cropsYieldService: CropsYieldService,
     private rainfallService: RainfallService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    // Check if user is logged in, if not redirect to login page
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     this.loadInitialData();
   }
 
@@ -75,8 +83,7 @@ export class ExploringComponent implements OnInit, OnDestroy {
 
   loadCombinedData(): void {
     if (!this.authService.isLoggedIn()) {
-      this.error = 'Please log in to view rainfall data';
-      this.loading = false;
+      this.router.navigate(['/login']);
       return;
     }
 
