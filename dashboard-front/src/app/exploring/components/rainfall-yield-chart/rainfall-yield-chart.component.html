@@ -35,27 +35,27 @@
     <!-- Statistics Summary -->
     <div class="rainfall-yield-chart__stats">
       <div class="rainfall-yield-chart__stat-card">
-        <h4 class="rainfall-yield-chart__stat-title">Total Rainfall</h4>
+        <h4 class="rainfall-yield-chart__stat-title">Average Rainfall</h4>
         <p class="rainfall-yield-chart__stat-value">{{ getTotalRainfall() | number:'1.1' }} mm</p>
         <p class="rainfall-yield-chart__stat-label">Range: {{ getRainfallRange().min | number:'1.1' }} mm - {{ getRainfallRange().max | number:'1.1' }} mm</p>
       </div>
 
       <div class="rainfall-yield-chart__stat-card">
-        <h4 class="rainfall-yield-chart__stat-title">Total Corn Yield</h4>
+        <h4 class="rainfall-yield-chart__stat-title">Average Corn Yield</h4>
         <p class="rainfall-yield-chart__stat-value">{{ getTotalCornYield() | number:'1.1' }} bu/ac</p>
-        <p class="rainfall-yield-chart__stat-label">Corn production</p>
+        <p class="rainfall-yield-chart__stat-label">Average annual corn production</p>
       </div>
 
       <div class="rainfall-yield-chart__stat-card">
-        <h4 class="rainfall-yield-chart__stat-title">Total Soybean Yield</h4>
+        <h4 class="rainfall-yield-chart__stat-title">Average Soybean Yield</h4>
         <p class="rainfall-yield-chart__stat-value">{{ getTotalSoybeanYield() | number:'1.1' }} bu/ac</p>
-        <p class="rainfall-yield-chart__stat-label">Soybean production</p>
+        <p class="rainfall-yield-chart__stat-label">Average annual soybean production</p>
       </div>
 
       <div class="rainfall-yield-chart__stat-card">
-        <h4 class="rainfall-yield-chart__stat-title">Total Wheat Yield</h4>
+        <h4 class="rainfall-yield-chart__stat-title">Average Wheat Yield</h4>
         <p class="rainfall-yield-chart__stat-value">{{ getTotalWheatYield() | number:'1.1' }} bu/ac</p>
-        <p class="rainfall-yield-chart__stat-label">Wheat production</p>
+        <p class="rainfall-yield-chart__stat-label">Average annual wheat production</p>
       </div>
     </div>
   </div>
