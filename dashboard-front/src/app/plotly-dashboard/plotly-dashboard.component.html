@@ -44,6 +44,13 @@
     </button>
     <button 
       class="plotly-dashboard__tab" 
+      [class.plotly-dashboard__tab--active]="activeTab === 'air-temperature'"
+      (click)="setActiveTab('air-temperature')"
+    >
+      Air Temperature
+    </button>
+    <button 
+      class="plotly-dashboard__tab" 
       [class.plotly-dashboard__tab--active]="activeTab === 'humidity'"
       (click)="setActiveTab('humidity')"
     >
@@ -111,6 +118,18 @@
             class="plotly-dashboard__heatmap">
           </app-plotly-summary-heatmap>
         </div>
+      </div>
+    </div>
+
+    <!-- Air Temperature Tab -->
+    <div *ngIf="activeTab === 'air-temperature'" class="plotly-dashboard__chart-section">
+      <h3 class="plotly-dashboard__section-title">Air Temperature Analysis</h3>
+      <div class="plotly-dashboard__chart-container">
+        <app-plotly-air-temperature-chart
+          [startDate]="dateRange.start"
+          [endDate]="dateRange.end"
+          class="plotly-dashboard__chart">
+        </app-plotly-air-temperature-chart>
       </div>
     </div>
 

@@ -1,0 +1,44 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environments';
+import { AuthService } from './auth.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AirTemperatureService {
+  private baseUrl = environment.API_BASE_URL;
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
+  getAirTemperatureData(startDate: string, endDate: string, groupBy: string = 'day'): Observable<any> {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      throw new Error('Authentication required to access air temperature data');
+    }
+    
+    const params = new HttpParams()
+      .set('group_by', groupBy)
+      .set('start_date', startDate)
+      .set('end_date', endDate);
+
+    return this.http.get(`${this.baseUrl}/charts/air-temperature/`, { params });
+  }
+
+  getAirTemperatureDataByYear(year: string, groupBy: string = 'month'): Observable<any> {
+    // Check authentication before making request
+    if (!this.authService.isLoggedIn()) {
+      throw new Error('Authentication required to access air temperature data');
+    }
+    
+    const params = new HttpParams()
+      .set('year', year)
+      .set('group_by', groupBy);
+
+    return this.http.get(`${this.baseUrl}/charts/air-temperature/`, { params });
+  }
+} 
