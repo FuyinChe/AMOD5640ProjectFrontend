@@ -1,0 +1,139 @@
+<div class="temperature-yield-chart">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="temperature-yield-chart__loading">
+    <div class="temperature-yield-chart__loading-spinner"></div>
+    <p class="temperature-yield-chart__loading-text">Loading integrated data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="temperature-yield-chart__error">
+    <p class="temperature-yield-chart__error-message">{{ error }}</p>
+  </div>
+
+  <!-- Chart Content -->
+  <div *ngIf="!loading && !error && chartData.length > 0" class="temperature-yield-chart__content">
+    <!-- Chart Header -->
+    <div class="temperature-yield-chart__header">
+      <h3 class="temperature-yield-chart__title">
+        {{ selectedCrop | titlecase }} Yield vs Temperature ({{ startYear }} - {{ endYear }})
+      </h3>
+      <p class="temperature-yield-chart__subtitle">
+        Integrated analysis of agricultural productivity and environmental conditions
+      </p>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="temperature-yield-chart__stats">
+      <div class="temperature-yield-chart__stat-card">
+        <h4 class="temperature-yield-chart__stat-title">Correlation</h4>
+        <p class="temperature-yield-chart__stat-value" [class.temperature-yield-chart__stat-value--positive]="getCorrelation() > 0" [class.temperature-yield-chart__stat-value--negative]="getCorrelation() < 0">
+          {{ getCorrelation() | number:'1.3' }}
+        </p>
+        <p class="temperature-yield-chart__stat-label">
+          {{ getCorrelation() > 0 ? 'Positive' : getCorrelation() < 0 ? 'Negative' : 'No' }} correlation
+        </p>
+      </div>
+
+      <div class="temperature-yield-chart__stat-card">
+        <h4 class="temperature-yield-chart__stat-title">Avg Temperature</h4>
+        <p class="temperature-yield-chart__stat-value">{{ getAverageTemperature() | number:'1.1' }}°C</p>
+        <p class="temperature-yield-chart__stat-label">Range: {{ getTemperatureRange().min | number:'1.1' }}°C - {{ getTemperatureRange().max | number:'1.1' }}°C</p>
+      </div>
+
+      <div class="temperature-yield-chart__stat-card">
+        <h4 class="temperature-yield-chart__stat-title">Avg Yield</h4>
+        <p class="temperature-yield-chart__stat-value">{{ getAverageYield() | number:'1.1' }} bu/ac</p>
+        <p class="temperature-yield-chart__stat-label">Range: {{ getYieldRange().min | number:'1.1' }} - {{ getYieldRange().max | number:'1.1' }} bu/ac</p>
+      </div>
+    </div>
+
+    <!-- Data Visualization -->
+    <div class="temperature-yield-chart__visualization">
+      <div class="temperature-yield-chart__chart-container">
+        <!-- Temperature Line -->
+        <div class="temperature-yield-chart__temperature-line">
+          <div class="temperature-yield-chart__axis-label temperature-yield-chart__axis-label--temp">Temperature (°C)</div>
+          <div class="temperature-yield-chart__line-container">
+            <svg class="temperature-yield-chart__line-chart" viewBox="0 0 800 200">
+              <defs>
+                <linearGradient id="tempGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#3498db;stop-opacity:0.8" />
+                  <stop offset="100%" style="stop-color:#3498db;stop-opacity:0.3" />
+                </linearGradient>
+              </defs>
+              <polyline 
+                class="temperature-yield-chart__line temperature-yield-chart__line--temp"
+                [attr.points]="getTemperatureLinePoints()"
+                fill="none"
+                stroke="#3498db"
+                stroke-width="3"
+              />
+              <polygon 
+                class="temperature-yield-chart__area temperature-yield-chart__area--temp"
+                [attr.points]="getTemperatureAreaPoints()"
+                fill="url(#tempGradient)"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Yield Bars -->
+        <div class="temperature-yield-chart__yield-bars">
+          <div class="temperature-yield-chart__axis-label temperature-yield-chart__axis-label--yield">Yield (bu/ac)</div>
+          <div class="temperature-yield-chart__bars-container">
+            <div 
+              *ngFor="let point of chartData; let i = index" 
+              class="temperature-yield-chart__bar"
+              [style.height.%]="getBarHeight(point.yield)"
+              [style.left.%]="getBarPosition(i)"
+              [title]="point.year + ': ' + point.yield + ' bu/ac'"
+            >
+              <div class="temperature-yield-chart__bar-label">{{ point.year }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Year Labels -->
+        <div class="temperature-yield-chart__year-labels">
+          <span 
+            *ngFor="let point of chartData; let i = index"
+            class="temperature-yield-chart__year-label"
+            [style.left.%]="getBarPosition(i)"
+          >
+            {{ point.year }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="temperature-yield-chart__table-section">
+      <h4 class="temperature-yield-chart__table-title">Detailed Data</h4>
+      <div class="temperature-yield-chart__table-container">
+        <table class="temperature-yield-chart__table">
+          <thead class="temperature-yield-chart__table-header">
+            <tr class="temperature-yield-chart__table-row">
+              <th class="temperature-yield-chart__table-cell temperature-yield-chart__table-cell--header">Year</th>
+              <th class="temperature-yield-chart__table-cell temperature-yield-chart__table-cell--header">Temperature (°C)</th>
+              <th class="temperature-yield-chart__table-cell temperature-yield-chart__table-cell--header">Yield (bu/ac)</th>
+              <th class="temperature-yield-chart__table-cell temperature-yield-chart__table-cell--header">Crop</th>
+            </tr>
+          </thead>
+          <tbody class="temperature-yield-chart__table-body">
+            <tr *ngFor="let point of chartData" class="temperature-yield-chart__table-row">
+              <td class="temperature-yield-chart__table-cell">{{ point.year }}</td>
+              <td class="temperature-yield-chart__table-cell">{{ point.temperature | number:'1.1' }}</td>
+              <td class="temperature-yield-chart__table-cell">{{ point.yield | number:'1.1' }}</td>
+              <td class="temperature-yield-chart__table-cell">{{ point.crop | titlecase }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Data Message -->
+  <div *ngIf="!loading && !error && chartData.length === 0" class="temperature-yield-chart__no-data">
+    <p class="temperature-yield-chart__no-data-message">No data available for the selected parameters.</p>
+  </div>
+</div> 

@@ -20,6 +20,7 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/environmentalSampleData', pathMatch: 'full' },
   { path: 'welcome', loadComponent: () => import('./welcome/welcome.component').then(m => m.WelcomeComponent)},
   { path: 'download', loadComponent: () => import('./download/download.component').then(m => m.DownloadComponent) },
+  { path: 'exploring', loadComponent: () => import('./exploring/exploring.component').then(m => m.ExploringComponent) },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }
 ];

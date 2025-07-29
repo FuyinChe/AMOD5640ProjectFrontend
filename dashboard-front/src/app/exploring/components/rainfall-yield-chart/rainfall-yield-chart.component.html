@@ -1,0 +1,125 @@
+<div class="rainfall-yield-chart">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="rainfall-yield-chart__loading">
+    <div class="rainfall-yield-chart__loading-spinner"></div>
+    <p class="rainfall-yield-chart__loading-text">Loading integrated data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="rainfall-yield-chart__error">
+    <div class="rainfall-yield-chart__error-icon">⚠️</div>
+    <div class="rainfall-yield-chart__error-message">{{ error }}</div>
+    <div class="rainfall-yield-chart__error-help">
+      <p><strong>Troubleshooting Steps:</strong></p>
+      <ul>
+        <li>Ensure the Django backend server is running on localhost:8000</li>
+        <li>Check if you're logged in to the application</li>
+        <li>Verify the API endpoint is accessible: <code>http://localhost:8000/api/charts/rainfall/?group_by=year</code></li>
+        <li>Check browser console for detailed error information</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Chart Content -->
+  <div *ngIf="!loading && !error && chartData.length > 0" class="rainfall-yield-chart__content">
+    <!-- Chart Header -->
+    <div class="rainfall-yield-chart__header">
+      <h3 class="rainfall-yield-chart__title">
+        Rainfall vs Crop Yields ({{ startYear }} - {{ endYear }})
+      </h3>
+      <p class="rainfall-yield-chart__subtitle">
+        Integrated analysis of rainfall and agricultural productivity across multiple crops
+      </p>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="rainfall-yield-chart__stats">
+      <div class="rainfall-yield-chart__stat-card">
+        <h4 class="rainfall-yield-chart__stat-title">Total Rainfall</h4>
+        <p class="rainfall-yield-chart__stat-value">{{ getTotalRainfall() | number:'1.1' }} mm</p>
+        <p class="rainfall-yield-chart__stat-label">Range: {{ getRainfallRange().min | number:'1.1' }} mm - {{ getRainfallRange().max | number:'1.1' }} mm</p>
+      </div>
+
+      <div class="rainfall-yield-chart__stat-card">
+        <h4 class="rainfall-yield-chart__stat-title">Total Corn Yield</h4>
+        <p class="rainfall-yield-chart__stat-value">{{ getTotalCornYield() | number:'1.1' }} bu/ac</p>
+        <p class="rainfall-yield-chart__stat-label">Corn production</p>
+      </div>
+
+      <div class="rainfall-yield-chart__stat-card">
+        <h4 class="rainfall-yield-chart__stat-title">Total Soybean Yield</h4>
+        <p class="rainfall-yield-chart__stat-value">{{ getTotalSoybeanYield() | number:'1.1' }} bu/ac</p>
+        <p class="rainfall-yield-chart__stat-label">Soybean production</p>
+      </div>
+
+      <div class="rainfall-yield-chart__stat-card">
+        <h4 class="rainfall-yield-chart__stat-title">Total Wheat Yield</h4>
+        <p class="rainfall-yield-chart__stat-value">{{ getTotalWheatYield() | number:'1.1' }} bu/ac</p>
+        <p class="rainfall-yield-chart__stat-label">Wheat production</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Visualization - Always present in DOM -->
+  <div class="rainfall-yield-chart__visualization" [class.hidden]="loading || error || chartData.length === 0">
+    <div class="rainfall-yield-chart__chart-container">
+      <!-- Plotly Chart Container -->
+      <div #chartContainer class="rainfall-yield-chart__plotly-container"></div>
+      
+              <!-- Download Buttons -->
+        <div class="rainfall-yield-chart__download-buttons" *ngIf="!loading && !error && chartData.length > 0">
+          <button class="rainfall-yield-chart__download-btn rainfall-yield-chart__download-btn--csv" (click)="downloadCSV()">
+            <i class="fas fa-file-csv"></i>
+            CSV
+          </button>
+          <button class="rainfall-yield-chart__download-btn rainfall-yield-chart__download-btn--png" (click)="downloadPNGTransparent()">
+            <i class="fas fa-file-image"></i>
+            PNG (Transparent)
+          </button>
+          <button class="rainfall-yield-chart__download-btn rainfall-yield-chart__download-btn--png-white" (click)="downloadPNGWhite()">
+            <i class="fas fa-file-image"></i>
+            PNG (White)
+          </button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div *ngIf="!loading && !error && chartData.length > 0" class="rainfall-yield-chart__table-section">
+      <h4 class="rainfall-yield-chart__table-title">Detailed Data</h4>
+      <div class="rainfall-yield-chart__table-container">
+        <table class="rainfall-yield-chart__table">
+          <thead class="rainfall-yield-chart__table-header">
+            <tr class="rainfall-yield-chart__table-row">
+              <th class="rainfall-yield-chart__table-cell rainfall-yield-chart__table-cell--header">Year</th>
+              <th class="rainfall-yield-chart__table-cell rainfall-yield-chart__table-cell--header">Total Rainfall (mm)</th>
+              <th class="rainfall-yield-chart__table-cell rainfall-yield-chart__table-cell--header">Total Corn Yield (bu/ac)</th>
+              <th class="rainfall-yield-chart__table-cell rainfall-yield-chart__table-cell--header">Total Soybean Yield (bu/ac)</th>
+              <th class="rainfall-yield-chart__table-cell rainfall-yield-chart__table-cell--header">Total Wheat Yield (bu/ac)</th>
+            </tr>
+          </thead>
+          <tbody class="rainfall-yield-chart__table-body">
+            <tr *ngFor="let point of chartData" class="rainfall-yield-chart__table-row">
+              <td class="rainfall-yield-chart__table-cell">{{ point.year }}</td>
+              <td class="rainfall-yield-chart__table-cell">{{ point.rainfall | number:'1.1' }}</td>
+              <td class="rainfall-yield-chart__table-cell">{{ point.cornYield | number:'1.1' }}</td>
+              <td class="rainfall-yield-chart__table-cell">{{ point.soybeanYield | number:'1.1' }}</td>
+              <td class="rainfall-yield-chart__table-cell">{{ point.wheatYield | number:'1.1' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Data Source Note -->
+      <div class="rainfall-yield-chart__data-source">
+        <p class="rainfall-yield-chart__data-source-text">
+          <strong>Data Sources:</strong> Crop yield data sourced from the <a href="https://data.ontario.ca/dataset/" target="_blank" rel="noopener noreferrer">Ontario Data Catalogue</a> (Ministry of Agriculture, Food and Agribusiness) for Peterborough County, Ontario. 
+        </p>
+      </div>
+    </div>
+
+  <!-- No Data Message -->
+  <div *ngIf="!loading && !error && chartData.length === 0" class="rainfall-yield-chart__no-data">
+    <p class="rainfall-yield-chart__no-data-message">No data available for the selected parameters.</p>
+  </div>
+</div> 
