@@ -97,7 +97,7 @@ export class PlotlyAtmosphericPressureChartComponent implements OnChanges {
         filename: 'atmospheric_pressure_chart',
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
   }
@@ -274,7 +274,7 @@ export class PlotlyAtmosphericPressureChartComponent implements OnChanges {
         filename: `atmospheric_pressure_chart_${this.startDate}_${this.endDate}`,
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       });
     }
   }

@@ -238,7 +238,7 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
         filename: `boxplot_chart_${this.startDate}_${this.endDate}`,
         height: 600,
         width: 1100,
-        scale: 2
+        scale: 4
       });
     }
   }

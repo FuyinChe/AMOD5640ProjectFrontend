@@ -262,7 +262,8 @@ export class PlotlyAirTemperatureChartComponent implements OnChanges, AfterViewI
         format: 'png',
         filename: `air_temperature_chart_${this.startDate}_to_${this.endDate}`,
         height: 600,
-        width: 800
+        width: 800,
+        scale: 4
       });
     }
   }

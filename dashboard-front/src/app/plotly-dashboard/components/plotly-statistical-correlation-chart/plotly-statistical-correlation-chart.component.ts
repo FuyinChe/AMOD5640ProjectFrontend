@@ -253,7 +253,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         filename: `correlation_matrix_${new Date().toISOString().split('T')[0]}`,
         height: 600,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
 
@@ -377,7 +377,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         filename: `pairwise_correlations_${new Date().toISOString().split('T')[0]}`,
         height: 600,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
 
@@ -448,7 +448,8 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         format: 'png',
         filename: `correlation_analysis_${this.activeView}_${new Date().toISOString().split('T')[0]}`,
         height: 600,
-        width: 800
+        width: 800,
+        scale: 4
       });
     }
   }

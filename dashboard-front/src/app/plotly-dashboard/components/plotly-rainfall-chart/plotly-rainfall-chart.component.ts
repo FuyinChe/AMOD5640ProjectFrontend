@@ -97,7 +97,7 @@ export class PlotlyRainfallChartComponent implements OnChanges {
         filename: 'rainfall_chart',
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
   }
@@ -268,12 +268,12 @@ export class PlotlyRainfallChartComponent implements OnChanges {
   // Download PNG image
   downloadPNG(): void {
     if (this.chartContainer && this.chartContainer.nativeElement) {
-      Plotly.downloadImage(this.chartContainer.nativeElement, {
+            Plotly.downloadImage(this.chartContainer.nativeElement, {
         format: 'png',
-                filename: `rainfall_chart_${this.startDate}_${this.endDate}`,
+        filename: `rainfall_chart_${this.startDate}_${this.endDate}`,
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       });
     }
   }
