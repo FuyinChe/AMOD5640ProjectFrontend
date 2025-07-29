@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PlotlyAirTemperatureChartComponent } from './components/plotly-air-temperature-chart/plotly-air-temperature-chart.component';
 import { PlotlyHumidityChartComponent } from './components/plotly-humidity-chart/plotly-humidity-chart.component';
 import { PlotlyRainfallChartComponent } from './components/plotly-rainfall-chart/plotly-rainfall-chart.component';
 import { PlotlySoilTempChartComponent } from './components/plotly-soil-temp-chart/plotly-soil-temp-chart.component';
@@ -22,6 +23,7 @@ import { AuthService } from '../services/auth.service';
   imports: [
     CommonModule,
     FormsModule,
+    PlotlyAirTemperatureChartComponent,
     PlotlyHumidityChartComponent,
     PlotlyRainfallChartComponent,
     PlotlySoilTempChartComponent,
@@ -49,6 +51,7 @@ export class PlotlyDashboardComponent implements OnInit {
   tabOptions = [
     { label: 'Overview', value: 'overview' },
     { label: 'Statistical Analysis', value: 'statistical-analysis' },
+    { label: 'Air Temperature', value: 'air-temperature' },
     { label: 'Humidity', value: 'humidity' },
     { label: 'Rainfall', value: 'rainfall' },
     { label: 'Soil Temperature', value: 'soil-temp' },

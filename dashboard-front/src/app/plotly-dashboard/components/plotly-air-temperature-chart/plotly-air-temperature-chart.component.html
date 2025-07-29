@@ -1,0 +1,14 @@
+<app-plotly-chart-card 
+  [chartTitle]="'Air Temperature Analysis'"
+  [chartData]="chartData"
+  (downloadCSV)="downloadCSV()"
+  (downloadPNG)="downloadPNG()">
+  <div class="plotly-air-temperature-chart">
+    <div class="plotly-air-temperature-chart__groupby-btns">
+      <button [class.active]="groupBy === 'hour'" (click)="setGroupBy('hour')">Hourly</button>
+      <button [class.active]="groupBy === 'weekly'" (click)="setGroupBy('weekly')">Weekly</button>
+      <button [class.active]="groupBy === 'month'" (click)="setGroupBy('month')">Monthly</button>
+    </div>
+    <div #chartContainer class="plotly-air-temperature-chart__container"></div>
+  </div>
+</app-plotly-chart-card> 

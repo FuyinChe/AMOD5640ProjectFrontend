@@ -31,8 +31,8 @@
         <table #heatmapTable class="summary-heatmap-table" role="table" aria-label="Environmental Data Overview" [style.width]="tableWidth">
           <thead>
             <tr>
-              <th class="summary-heatmap-table__metric-header" scope="col" rowspan="2">Metric Group</th>
-              <th class="summary-heatmap-table__submetric-header" scope="col" rowspan="2">Sub-metric</th>
+              <th class="summary-heatmap-table__metric-header" scope="col" rowspan="2">Measurement</th>
+              <th class="summary-heatmap-table__submetric-header" scope="col" rowspan="2">Parameter</th>
               <th 
                 *ngFor="let group of yearGroups"
                 class="summary-heatmap-table__year-header" 

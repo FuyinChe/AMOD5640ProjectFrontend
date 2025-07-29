@@ -1,4 +1,4 @@
-.plotly-rainfall-chart {
+.plotly-air-temperature-chart {
   width: 100%;
   height: 100%;
 
@@ -43,7 +43,7 @@
 
 // Responsive design
 @media (max-width: 768px) {
-  .plotly-rainfall-chart {
+  .plotly-air-temperature-chart {
     &__groupby-btns {
       gap: 0.25rem;
       
@@ -56,7 +56,7 @@
 }
 
 @media (max-width: 480px) {
-  .plotly-rainfall-chart {
+  .plotly-air-temperature-chart {
     &__groupby-btns {
       flex-direction: column;
       align-items: center;

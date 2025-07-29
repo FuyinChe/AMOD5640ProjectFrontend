@@ -141,7 +141,7 @@ export class PlotlyStatisticalHistogramChartComponent implements OnChanges, Afte
           filename: `histogram_chart_${hist.metric}_${this.startDate}_${this.endDate}`,
           height: 400,
           width: 500,
-          scale: 2
+          scale: 4
         });
       }
     });

@@ -97,7 +97,7 @@ export class PlotlySoilTempChartComponent implements OnChanges {
         filename: 'soil_temp_chart',
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
   }
@@ -166,6 +166,13 @@ export class PlotlySoilTempChartComponent implements OnChanges {
     else if (this.groupBy === 'month') groupLabel = 'Monthly';
     this.chartLayout.title.text = `Soil Temperature (${groupLabel}) Analysis`;
     this.chartLayout.yaxis.title.text = `Soil Temperature (${unit})`;
+
+    // Set x-axis label rotation based on grouping
+    if (this.groupBy === 'month') {
+      this.chartLayout.xaxis.tickangle = 0; // Horizontal for monthly view
+    } else {
+      this.chartLayout.xaxis.tickangle = -90; // Vertical for hourly and weekly views
+    }
 
     // Responsive title font size
     this.chartLayout.title.font.size = (typeof window !== 'undefined' && window.innerWidth <= 600) ? 13 : 18;
@@ -261,12 +268,12 @@ export class PlotlySoilTempChartComponent implements OnChanges {
   // Download PNG image
   downloadPNG(): void {
     if (this.chartContainer && this.chartContainer.nativeElement) {
-      Plotly.downloadImage(this.chartContainer.nativeElement, {
+            Plotly.downloadImage(this.chartContainer.nativeElement, {
         format: 'png',
-                filename: `soil_temp_chart_${this.startDate}_${this.endDate}`,
+        filename: `soil_temp_chart_${this.startDate}_${this.endDate}`,
         height: 500,
         width: 800,
-        scale: 2
+        scale: 4
       });
     }
   }

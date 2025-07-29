@@ -218,7 +218,7 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
       },
       xaxis: {
         tickfont: { size: 11, color: '#22223b' },
-        tickangle: -30 // Rotate labels to prevent overlap
+        tickangle: -90 // Vertical labels (same as humidity chart)
       },
       boxmode: 'group',
       showlegend: false,
@@ -238,7 +238,7 @@ export class PlotlyStatisticalBoxplotChartComponent implements OnChanges, AfterV
         filename: `boxplot_chart_${this.startDate}_${this.endDate}`,
         height: 600,
         width: 1100,
-        scale: 2
+        scale: 4
       });
     }
   }

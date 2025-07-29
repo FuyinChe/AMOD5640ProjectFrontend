@@ -121,9 +121,11 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
       y: metricNames,
       type: 'heatmap',
       colorscale: [
-        [0, '#313695'],    // Dark blue for negative correlations
-        [0.5, '#ffffff'],  // White for zero correlation
-        [1, '#a50026']     // Dark red for positive correlations
+        [0, '#1f77b4'],    // Blue for negative correlations
+        [0.25, '#7fb3d3'], // Light blue
+        [0.5, '#f7f7f7'],  // Light gray for zero correlation
+        [0.75, '#f4a582'], // Light orange
+        [1, '#d62728']     // Red for positive correlations
       ],
       zmid: 0,
       hoverongaps: false,
@@ -137,16 +139,21 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
           text: 'Correlation Coefficient',
           font: {
             size: this.isSmallScreen() ? 10 : 12,
-            color: '#34495e'
+            color: '#2c3e50',
+            family: 'Arial, sans-serif'
           }
         },
         titleside: 'right',
-        thickness: 15,
-        len: 0.5,
+        thickness: 20,
+        len: 0.6,
+        outlinewidth: 1,
+        outlinecolor: '#bdc3c7',
         tickfont: {
           size: this.isSmallScreen() ? 8 : 10,
-          color: '#7f8c8d'
-        }
+          color: '#2c3e50',
+          family: 'Arial, sans-serif'
+        },
+        tickformat: '.3f'
       }
     }];
 
@@ -164,7 +171,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
       width: undefined,
       height: undefined,
       margin: {
-        l: 100,
+        l: 150,
         r: 100,
         t: 70,
         b: 100
@@ -175,9 +182,10 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
           font: {
             size: this.isSmallScreen() ? 10 : 12,
             color: '#34495e'
-          }
+          },
+          standoff: 20
         },
-        tickangle: -45,
+        tickangle: -90,
         side: 'bottom',
         tickfont: {
           size: this.isSmallScreen() ? 7 : this.isMediumScreen() ? 8 : 10,
@@ -189,13 +197,6 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         tickvals: metricNames
       },
       yaxis: {
-        title: {
-          text: 'Metrics',
-          font: {
-            size: this.isSmallScreen() ? 10 : 12,
-            color: '#34495e'
-          }
-        },
         autorange: 'reversed',
         tickfont: {
           size: this.isSmallScreen() ? 7 : this.isMediumScreen() ? 8 : 10,
@@ -203,7 +204,10 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         },
         tickmode: 'array',
         ticktext: metricNames.map(name => name.replace('_', ' ').toUpperCase()),
-        tickvals: metricNames
+        tickvals: metricNames,
+        automargin: true,
+        side: 'left',
+        tickangle: 0
       },
       annotations: [] as any[],
       plot_bgcolor: '#ffffff',
@@ -223,9 +227,10 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
           text: `${value.toFixed(3)}${significance}`,
           showarrow: false,
           font: {
-            color: Math.abs(value) > 0.5 ? 'white' : '#2c3e50',
+            color: Math.abs(value) > 0.6 ? 'white' : '#2c3e50',
             size: this.isSmallScreen() ? 8 : 9,
-            family: 'Arial, sans-serif'
+            family: 'Arial, sans-serif',
+            weight: Math.abs(value) > 0.4 ? 'bold' : 'normal'
           }
         });
       }
@@ -248,7 +253,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         filename: `correlation_matrix_${new Date().toISOString().split('T')[0]}`,
         height: 600,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
 
@@ -328,7 +333,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
             color: '#34495e'
           }
         },
-        tickangle: -45,
+        tickangle: -90,
         automargin: true,
         tickfont: {
           size: this.isSmallScreen() ? 7 : 9,
@@ -372,7 +377,7 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         filename: `pairwise_correlations_${new Date().toISOString().split('T')[0]}`,
         height: 600,
         width: 800,
-        scale: 2
+        scale: 4
       }
     };
 
@@ -443,7 +448,8 @@ export class PlotlyStatisticalCorrelationChartComponent implements OnInit, OnDes
         format: 'png',
         filename: `correlation_analysis_${this.activeView}_${new Date().toISOString().split('T')[0]}`,
         height: 600,
-        width: 800
+        width: 800,
+        scale: 4
       });
     }
   }
