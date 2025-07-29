@@ -159,6 +159,13 @@ export class PlotlyAirTemperatureChartComponent implements OnChanges, AfterViewI
       else if (this.groupBy === 'month') groupLabel = 'Monthly';
       this.chartLayout.title.text = `Air Temperature (${groupLabel})`;
       
+      // Set x-axis label rotation based on grouping (same as humidity chart)
+      if (this.groupBy === 'month') {
+        this.chartLayout.xaxis.tickangle = 0; // Horizontal for monthly view
+      } else {
+        this.chartLayout.xaxis.tickangle = -90; // Vertical for hourly and weekly views
+      }
+      
       this.renderChart();
     } else {
       console.error('Invalid response format:', response);
