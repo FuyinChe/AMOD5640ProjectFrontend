@@ -52,6 +52,8 @@ export class ExploringComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Check if user is logged in, if not redirect to login page
     if (!this.authService.isLoggedIn()) {
+      // Store the intended destination before redirecting to login
+      localStorage.setItem('intendedDestination', '/exploring');
       this.router.navigate(['/login']);
       return;
     }
@@ -83,6 +85,8 @@ export class ExploringComponent implements OnInit, OnDestroy {
 
   loadCombinedData(): void {
     if (!this.authService.isLoggedIn()) {
+      // Store the intended destination before redirecting to login
+      localStorage.setItem('intendedDestination', '/exploring');
       this.router.navigate(['/login']);
       return;
     }

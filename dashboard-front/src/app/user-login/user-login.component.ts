@@ -122,6 +122,8 @@ export class UserLoginComponent {
         return 'Environmental Data page';
       case '/environmentalSampleData':
         return 'Environmental Sample Data page';
+      case '/exploring':
+        return 'Exploring page';
       default:
         return destination.replace('/', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
