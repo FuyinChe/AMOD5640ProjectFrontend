@@ -1,0 +1,33 @@
+<div class="exploring">
+  <div class="exploring__header">
+    <h1 class="exploring__title">Exploring Agricultural Data</h1>
+    <p class="exploring__subtitle">Analyze the relationship between rainfall and crop yields in Peterborough County</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="exploring__loading">
+    <div class="exploring__loading-spinner"></div>
+    <p class="exploring__loading-text">Loading data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="exploring__error">
+    <p class="exploring__error-message">{{ error }}</p>
+    <button class="exploring__error-retry" (click)="loadInitialData()">Retry</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="exploring__content">
+    <!-- Integrated Rainfall-Yield Chart -->
+    <app-rainfall-yield-chart
+      [startYear]="startYear"
+      [endYear]="endYear">
+    </app-rainfall-yield-chart>
+
+   
+    <!-- No Data Message -->
+    <div *ngIf="!combinedData || (!combinedData.crops?.length && !combinedData.rainfalls?.length)" class="exploring__no-data">
+      <p class="exploring__no-data-message">No data available for the selected year range.</p>
+    </div>
+  </div>
+</div> 
