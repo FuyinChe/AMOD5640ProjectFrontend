@@ -65,7 +65,7 @@ export class RainfallYieldChartComponent implements OnInit, OnDestroy, AfterView
         height: 600,
         margin: {
           l: 80,
-          r: 180, // Ensure right margin is maintained on resize
+          r: 200, // Ensure right margin is maintained on resize
           t: 80,
           b: 150
         }
@@ -364,7 +364,10 @@ export class RainfallYieldChartComponent implements OnInit, OnDestroy, AfterView
         side: 'right' as const,
         overlaying: 'y' as const,
         anchor: 'x',
-        position: 1
+        position: 1,
+        showticklabels: true,
+        tickmode: 'auto' as const,
+        nticks: 8
       },
       legend: {
         x: 0.5,
@@ -382,7 +385,7 @@ export class RainfallYieldChartComponent implements OnInit, OnDestroy, AfterView
       paper_bgcolor: 'rgba(0,0,0,0)', // Transparent background
       margin: {
         l: 80,
-        r: 180, // Increased right margin to ensure right y-axis is fully visible
+        r: 200, // Increased right margin to ensure right y-axis is fully visible
         t: 80,
         b: 150
       }
