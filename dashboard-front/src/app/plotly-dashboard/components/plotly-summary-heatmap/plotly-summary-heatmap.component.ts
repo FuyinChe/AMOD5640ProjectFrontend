@@ -12,6 +12,7 @@ export class PlotlySummaryHeatmapComponent {
   @Input() metrics: Array<{name: string, unit: string, values: (number | null)[]}> = [];
   @Input() months: string[] = [];
   @ViewChild('heatmapTable', { static: false }) heatmapTableRef!: ElementRef;
+  @ViewChild('legendContainer', { static: false }) legendContainerRef!: ElementRef;
   isLoading = false;
   error: string | null = null;
 
@@ -228,6 +229,8 @@ export class PlotlySummaryHeatmapComponent {
   async downloadPNG(): Promise<void> {
     const html2canvas = (await import('html2canvas')).default;
     const tableElem = this.heatmapTableRef?.nativeElement as HTMLElement;
+    const legendElem = this.legendContainerRef?.nativeElement as HTMLElement;
+    
     if (!tableElem) return;
     
     // Store original styles to restore later
@@ -247,14 +250,58 @@ export class PlotlySummaryHeatmapComponent {
     });
     
     try {
-      const canvas = await html2canvas(tableElem, {
+      // Create a temporary container to hold both legend and table
+      const tempContainer = document.createElement('div');
+      tempContainer.style.position = 'absolute';
+      tempContainer.style.left = '-9999px';
+      tempContainer.style.top = '0';
+      tempContainer.style.background = '#fff';
+      tempContainer.style.padding = '20px';
+      tempContainer.style.fontFamily = 'Museo Sans, Arial, sans-serif';
+      
+      // Clone the legend and table
+      const legendClone = legendElem ? legendElem.cloneNode(true) as HTMLElement : null;
+      const tableClone = tableElem.cloneNode(true) as HTMLElement;
+      
+      // Fix table layout for PNG export
+      tableClone.style.width = 'auto';
+      tableClone.style.minWidth = 'auto';
+      tableClone.style.maxWidth = 'none';
+      tableClone.style.tableLayout = 'auto';
+      
+      // Fix metric column width
+      const metricHeaders = tableClone.querySelectorAll('.summary-heatmap-table__metric-header, .summary-heatmap-table__metric-group, .summary-heatmap-table__metric-name');
+      metricHeaders.forEach((element: Element) => {
+        const el = element as HTMLElement;
+        el.style.position = 'static';
+        el.style.width = 'auto';
+        el.style.minWidth = 'auto';
+        el.style.maxWidth = 'none';
+        el.style.left = '';
+        el.style.zIndex = '';
+      });
+      
+      // Add some spacing between legend and table
+      if (legendClone) {
+        legendClone.style.marginBottom = '20px';
+        tempContainer.appendChild(legendClone);
+      }
+      
+      tempContainer.appendChild(tableClone);
+      document.body.appendChild(tempContainer);
+      
+      // Capture the combined image
+      const canvas = await html2canvas(tempContainer, {
         useCORS: true,
         allowTaint: true
       });
       
+      // Clean up
+      document.body.removeChild(tempContainer);
+      
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
-      link.download = 'plotly_summary_heatmap.png';
+      link.download = 'plotly_summary_heatmap_with_legend.png';
       link.click();
     } finally {
       // Restore original styles

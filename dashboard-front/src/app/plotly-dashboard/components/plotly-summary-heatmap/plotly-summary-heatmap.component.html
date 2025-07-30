@@ -26,6 +26,39 @@
       </button>
     </div>
     
+    <div class="summary-heatmap-table__legend" #legendContainer>
+      <div class="summary-heatmap-table__legend-title">Color Scale (per metric row):</div>
+      <div class="summary-heatmap-table__legend-items">
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #1e40af;"></div>
+          <span>Lowest values</span>
+        </div>
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #3b82f6;"></div>
+          <span>Low values</span>
+        </div>
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #ffffff; border: 1px solid #e2e8f0;"></div>
+          <span>Middle values</span>
+        </div>
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #f97316;"></div>
+          <span>High values</span>
+        </div>
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #ea580c;"></div>
+          <span>Highest values</span>
+        </div>
+        <div class="summary-heatmap-table__legend-item">
+          <div class="summary-heatmap-table__legend-color" style="background: #f8fafc;"></div>
+          <span>No data</span>
+        </div>
+      </div>
+      <div class="summary-heatmap-table__legend-note">
+        <small>* Colors are relative to each metric's min/max range across all displayed data</small>
+      </div>
+    </div>
+    
     <div class="summary-heatmap-table__container" [style.overflow-x]="containerOverflow">
       <div class="summary-heatmap-table__inner-wrapper">
         <table #heatmapTable class="summary-heatmap-table" role="table" aria-label="Environmental Data Overview" [style.width]="tableWidth">

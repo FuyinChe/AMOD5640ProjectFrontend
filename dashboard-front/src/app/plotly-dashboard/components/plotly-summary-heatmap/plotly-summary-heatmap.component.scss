@@ -287,6 +287,55 @@
   flex-wrap: wrap;
 }
 
+.summary-heatmap-table__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'Museo Sans', Arial, sans-serif;
+}
+
+.summary-heatmap-table__legend-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.summary-heatmap-table__legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.summary-heatmap-table__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.summary-heatmap-table__legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e0;
+  flex-shrink: 0;
+}
+
+.summary-heatmap-table__legend-note {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
 .summary-heatmap-table__download-btn {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid #185a9d;
@@ -387,6 +436,18 @@
     padding: 0.75rem 0;
   }
   
+  .summary-heatmap-table__legend {
+    padding: 0.75rem;
+  }
+  
+  .summary-heatmap-table__legend-items {
+    gap: 0.75rem;
+  }
+  
+  .summary-heatmap-table__legend-item {
+    font-size: 0.75rem;
+  }
+  
   .summary-heatmap-table {
     font-size: 0.8rem;
     min-width: 1400px; // Adjusted for medium screens with optimized widths
@@ -418,6 +479,25 @@
 @media (max-width: 768px) {
   .summary-heatmap-table__wrapper {
     padding: 0.5rem 0;
+  }
+  
+  .summary-heatmap-table__legend {
+    padding: 0.5rem;
+  }
+  
+  .summary-heatmap-table__legend-items {
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .summary-heatmap-table__legend-item {
+    font-size: 0.7rem;
+  }
+  
+  .summary-heatmap-table__legend-color {
+    width: 16px;
+    height: 16px;
   }
   
   .summary-heatmap-table {
@@ -454,6 +534,27 @@
 @media (max-width: 480px) {
   .summary-heatmap-table__wrapper {
     padding: 0.25rem 0;
+  }
+  
+  .summary-heatmap-table__legend {
+    padding: 0.25rem;
+  }
+  
+  .summary-heatmap-table__legend-title {
+    font-size: 0.8rem;
+  }
+  
+  .summary-heatmap-table__legend-item {
+    font-size: 0.65rem;
+  }
+  
+  .summary-heatmap-table__legend-color {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .summary-heatmap-table__legend-note {
+    font-size: 0.65rem;
   }
   
   .summary-heatmap-table {
