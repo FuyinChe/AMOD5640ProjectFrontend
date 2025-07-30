@@ -283,6 +283,10 @@ export class PlotlySummaryHeatmapComponent {
       tempContainer.style.background = '#fff';
       tempContainer.style.padding = '20px';
       tempContainer.style.fontFamily = 'Museo Sans, Arial, sans-serif';
+      tempContainer.style.fontSize = '14px';
+      tempContainer.style.lineHeight = '1.4';
+      tempContainer.style.borderRadius = '8px';
+      tempContainer.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
       
       // Clone the legend and table
       const legendClone = legendElem ? legendElem.cloneNode(true) as HTMLElement : null;
@@ -315,17 +319,35 @@ export class PlotlySummaryHeatmapComponent {
       tempContainer.appendChild(tableClone);
       document.body.appendChild(tempContainer);
       
-      // Capture the combined image
+      // Capture the combined image with high quality settings
       const canvas = await html2canvas(tempContainer, {
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        logging: false,
+        width: tempContainer.offsetWidth,
+        height: tempContainer.offsetHeight
       });
       
       // Clean up
       document.body.removeChild(tempContainer);
       
+      // Create high-resolution canvas for better quality (similar to scale: 4)
+      const highResCanvas = document.createElement('canvas');
+      const ctx = highResCanvas.getContext('2d');
+      const scale = 4; // High DPI scaling factor
+      
+      highResCanvas.width = canvas.width * scale;
+      highResCanvas.height = canvas.height * scale;
+      
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(canvas, 0, 0, highResCanvas.width, highResCanvas.height);
+      }
+      
+      // Create high-quality PNG with maximum quality
       const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
+      link.href = highResCanvas.toDataURL('image/png', 1.0); // Maximum quality
       link.download = 'plotly_summary_heatmap_with_legend.png';
       link.click();
     } finally {
