@@ -30,23 +30,23 @@
       <div class="summary-heatmap-table__legend-title">Color Scale (per metric row):</div>
       <div class="summary-heatmap-table__legend-items">
         <div class="summary-heatmap-table__legend-item">
-          <div class="summary-heatmap-table__legend-color" style="background: #1e40af;"></div>
+          <div class="summary-heatmap-table__legend-color" style="background: #0f172a;"></div>
           <span>Lowest values</span>
         </div>
         <div class="summary-heatmap-table__legend-item">
-          <div class="summary-heatmap-table__legend-color" style="background: #3b82f6;"></div>
+          <div class="summary-heatmap-table__legend-color" style="background: #1e40af;"></div>
           <span>Low values</span>
         </div>
         <div class="summary-heatmap-table__legend-item">
-          <div class="summary-heatmap-table__legend-color" style="background: #ffffff; border: 1px solid #e2e8f0;"></div>
-          <span>Middle values</span>
+          <div class="summary-heatmap-table__legend-color" style="background: #3b82f6;"></div>
+          <span>Low-mid values</span>
         </div>
         <div class="summary-heatmap-table__legend-item">
           <div class="summary-heatmap-table__legend-color" style="background: #f97316;"></div>
           <span>High values</span>
         </div>
         <div class="summary-heatmap-table__legend-item">
-          <div class="summary-heatmap-table__legend-color" style="background: #ea580c;"></div>
+          <div class="summary-heatmap-table__legend-color" style="background: #dc2626;"></div>
           <span>Highest values</span>
         </div>
         <div class="summary-heatmap-table__legend-item">
@@ -102,7 +102,10 @@
                   <ng-container *ngIf="getRowMinMax(metric.values) as minmax">
                     <td 
                       *ngFor="let value of metric.values; let colIndex = index"
-                      [ngStyle]="{'background': getCellColor(value, minmax.min, minmax.max)}"
+                      [ngStyle]="{
+                        'background': getCellColor(value, minmax.min, minmax.max),
+                        'color': getTextColor(getCellColor(value, minmax.min, minmax.max))
+                      }"
                       class="summary-heatmap-table__cell"
                       [attr.aria-label]="getCellAriaLabel(value, metric.name, months[colIndex])"
                       role="cell">
