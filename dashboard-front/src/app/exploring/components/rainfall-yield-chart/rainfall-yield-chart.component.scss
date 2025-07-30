@@ -167,7 +167,7 @@
     background: #ffffff;
     border-radius: 8px;
     border: 1px solid #e9ecef;
-    overflow: hidden; // Prevent chart from overflowing
+    overflow: visible; // Allow right y-axis to be visible
     min-width: 100%;
     max-width: 100%;
   }
@@ -178,7 +178,7 @@
     min-height: 600px;
     min-width: 100%;
     max-width: 100%;
-    overflow: hidden; // Ensure Plotly chart doesn't overflow
+    overflow: visible; // Allow right y-axis to be visible
   }
 
   &__download-buttons {
@@ -389,7 +389,7 @@
       width: 100%;
       min-width: 100%;
       max-width: 100%;
-      overflow: hidden; // Prevent chart from overflowing on mobile
+      overflow: visible; // Allow right y-axis to be visible on mobile
     }
 
     &__plotly-container {
@@ -397,7 +397,7 @@
       width: 100%;
       min-width: 100%;
       max-width: 100%;
-      overflow: hidden; // Ensure Plotly chart doesn't overflow on mobile
+      overflow: visible; // Allow right y-axis to be visible on mobile
     }
 
     &__download-buttons {
@@ -431,6 +431,38 @@
 
     &__data-source-text {
       font-size: 0.8rem;
+    }
+  }
+}
+
+// Large screen optimization for better chart display
+@media (min-width: 1800px) {
+  .rainfall-yield-chart {
+    width: 100%;
+    max-width: 100%;
+    padding: 32px;
+    margin-bottom: 32px;
+
+    &__chart-container {
+      height: 700px;
+      min-height: 700px;
+    }
+
+    &__plotly-container {
+      min-height: 700px;
+    }
+
+    &__stats {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    &__stat-card {
+      padding: 20px;
+
+      &-value {
+        font-size: 28px;
+      }
     }
   }
 } 

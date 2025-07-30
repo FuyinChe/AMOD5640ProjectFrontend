@@ -1,6 +1,6 @@
 .exploring {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Museo Sans', sans-serif;
@@ -262,5 +262,13 @@
     &__table-cell {
       padding: 0.5rem;
     }
+  }
+}
+
+// Large screen optimization
+@media (min-width: 1800px) {
+  .exploring {
+    max-width: 95vw;
+    padding: 2rem 3rem;
   }
 } 
