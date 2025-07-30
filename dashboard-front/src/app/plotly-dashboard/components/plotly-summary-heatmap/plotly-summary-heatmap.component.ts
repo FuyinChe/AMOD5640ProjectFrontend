@@ -105,28 +105,53 @@ export class PlotlySummaryHeatmapComponent {
     // Normalize value to 0-1 range
     const normalizedValue = (value - min) / (max - min);
     
-    // Use a more modern and vibrant color scale
-    if (normalizedValue <= 0.3) {
-      // Deep blue to light blue (low values)
-      const t = normalizedValue / 0.3;
+    // Use a high contrast color scale with more vibrant colors
+    if (normalizedValue <= 0.25) {
+      // Deep navy to medium blue (low values)
+      const t = normalizedValue / 0.25;
+      return this.interpolateColor('#0f172a', '#1e40af', t);
+    } else if (normalizedValue <= 0.5) {
+      // Medium blue to light blue (low-mid values)
+      const t = (normalizedValue - 0.25) / 0.25;
       return this.interpolateColor('#1e40af', '#3b82f6', t);
-    } else if (normalizedValue <= 0.7) {
-      // Light blue to white to light orange (mid values)
-      const t = (normalizedValue - 0.3) / 0.4;
-      if (t <= 0.5) {
-        // Blue to white
-        const t2 = t * 2;
-        return this.interpolateColor('#3b82f6', '#ffffff', t2);
+    } else if (normalizedValue <= 0.75) {
+      // Light blue to light orange (mid-high values)
+      const t = (normalizedValue - 0.5) / 0.25;
+      return this.interpolateColor('#3b82f6', '#f97316', t);
+    } else {
+      // Light orange to deep red (high values)
+      const t = (normalizedValue - 0.75) / 0.25;
+      return this.interpolateColor('#f97316', '#dc2626', t);
+    }
+  }
+
+  // Returns the appropriate text color for a given background color
+  getTextColor(backgroundColor: string): string {
+    let rgb: {r: number, g: number, b: number};
+    
+    // Handle both hex and RGB color formats
+    if (backgroundColor.startsWith('rgb(')) {
+      // Parse RGB format: "rgb(r, g, b)"
+      const matches = backgroundColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (matches) {
+        rgb = {
+          r: parseInt(matches[1]),
+          g: parseInt(matches[2]),
+          b: parseInt(matches[3])
+        };
       } else {
-        // White to orange
-        const t2 = (t - 0.5) * 2;
-        return this.interpolateColor('#ffffff', '#f97316', t2);
+        // Fallback to default
+        return '#1e293b';
       }
     } else {
-      // Light orange to deep orange (high values)
-      const t = (normalizedValue - 0.7) / 0.3;
-      return this.interpolateColor('#f97316', '#ea580c', t);
+      // Handle hex format
+      rgb = this.hexToRgb(backgroundColor);
     }
+    
+    // Calculate relative luminance using the sRGB formula
+    const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+    // Use white text for dark backgrounds, dark text for light backgrounds
+    return luminance > 0.5 ? '#1e293b' : '#ffffff';
   }
 
   // Linear interpolation between two hex colors

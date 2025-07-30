@@ -238,7 +238,7 @@
 .summary-heatmap-table__cell {
   padding: 18px 16px 0px 16px; // Increased top/bottom padding for more height
   text-align: center;
-  font-weight: 300;
+  font-weight: 400; // Reduced font weight for lighter appearance
   border: 1px solid #e2e8f0;
   min-width: 75px; // Reduced to ensure all 12 months fit for single year
   max-width: 75px; // Reduced width
@@ -247,7 +247,7 @@
   text-overflow: ellipsis;
   position: relative;
   transition: all 0.2s ease;
-  color: #1e293b;
+  color: #1e293b; // Default color, will be overridden by inline styles
   vertical-align: middle; // Ensure vertical centering
   
   &:hover {
@@ -260,7 +260,7 @@
     display: block;
     font-size: 0.9rem;
     line-height: 1.4;
-    font-weight: 300;
+    font-weight: 400; // Reduced font weight for lighter appearance
   }
 }
 
@@ -273,9 +273,10 @@
 }
 
 .summary-heatmap-table__cell span {
-  display: inline-block;
+  display: block;
   min-width: 35px;
   text-align: center;
+  width: 100%;
 }
 
 .summary-heatmap-table__download-buttons {
@@ -473,6 +474,7 @@
     min-width: 70px;
     max-width: 90px;
     font-size: 0.75rem;
+    font-weight: 400; // Ensure consistent font weight
   }
 }
 
@@ -528,6 +530,7 @@
     max-width: 80px;
     font-size: 0.7rem;
     padding: 8px 12px;
+    font-weight: 400; // Ensure consistent font weight
   }
 }
 
@@ -583,6 +586,7 @@
     max-width: 50px;
     padding: 0.3rem 0.15rem;
     font-size: 0.55rem;
+    font-weight: 400; // Ensure consistent font weight
   }
   
   .summary-heatmap-table__cell span {
