@@ -4,6 +4,19 @@
   margin: 0 auto;
   padding: 0 1rem 4rem 1rem;
   font-family: 'Montserrat', Arial, sans-serif;
+  
+  // Add responsive padding to prevent overlap with header
+  @media (max-width: 900px) {
+    padding-top: 1rem;
+  }
+  
+  @media (max-width: 600px) {
+    padding-top: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    padding-top: 2rem;
+  }
 
   &__hero {
     background: url('/assets/farm.jpg') no-repeat center center/cover;
