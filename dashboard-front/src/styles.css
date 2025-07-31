@@ -80,3 +80,25 @@
 .chart__download-btn i {
   font-size: 0.9em;
 }
+
+/* Global responsive spacing to prevent header overlap */
+@media (max-width: 900px) {
+  router-outlet {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  router-outlet {
+    display: block;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  router-outlet {
+    display: block;
+    margin-top: 1.5rem;
+  }
+}
